@@ -6,6 +6,18 @@
  */
 
 
+
+/**
+ * Planilha USUARIOS
+ */
+const PLANILHA_USUARIOS_ID        =  "14945tdk0asP0ySI2CxLvyflIPbIM569myEpK8nTUqcg";
+const PLANILHA_USUARIOS           =  SpreadsheetApp.openById(PLANILHA_USUARIOS_ID);
+const TABELA_USUARIOS             =  PLANILHA_USUARIOS.getSheetByName('USUARIOS');
+const BUFFER_USUARIOS             =  TABELA_USUARIOS.getDataRange().getDisplayValues().splice(1);
+const NUM_USUARIOS                =  BUFFER_USUARIOS.length;
+
+
+
 /**
  * Planilha CODIGOS contendo as tabelas 
  */
@@ -29,17 +41,6 @@ const NUM_ORGAOS_ENCAMINHADORES  =  BUFFER_ORGAOS_ENCAMINHADORES.length;
 const NUM_SITUACOES_BENEFICIO    =  BUFFER_SITUACOES_BENEFICIO.length;
 const NUM_INTERVALOS_DE_TEMPO    =  BUFFER_INTERVALOS_DE_TEMPO.length;
 const NUM_PARAMETROS             =  BUFFER_PARAMETROS.length;
-
-
-
-/**
- * Planilha USUARIOS
- */
-const PLANILHA_USUARIOS_ID        =  "14945tdk0asP0ySI2CxLvyflIPbIM569myEpK8nTUqcg";
-const PLANILHA_USUARIOS           =  SpreadsheetApp.openById(PLANILHA_USUARIOS_ID);
-const TABELA_USUARIOS             =  PLANILHA_USUARIOS.getSheetByName('USUARIOS');
-const BUFFER_USUARIOS             =  TABELA_USUARIOS.getDataRange().getDisplayValues().splice(1);
-const NUM_USUARIOS                =  BUFFER_USUARIOS.length;
 
 
 
