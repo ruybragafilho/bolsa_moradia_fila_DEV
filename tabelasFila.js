@@ -229,6 +229,8 @@ function obterFila() {
       id_situacao_beneficio: caso[SITUACAO_BENEFICIO], 
         
       data_ultima_evolucao: caso[DATA_ULTIMA_EVOLUCAO],
+        
+      data_limite: caso[DATA_LIMITE],
 
       id_doc_pendente: caso[DOC_PENDENTE],
 
