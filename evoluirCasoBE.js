@@ -11,8 +11,9 @@
  *  
  * @param {String} idCaso: id do caso de será evoluido
  * @param {String} idEvolucao: id da evolucao
+ * @param {Data} dataLimite: data limite, caso o tipo de evolução seja Convocado par Acesso* 
  */
-function evoluirCasoBE( idCaso, idEvolucao ) {
+function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
 
   // Converte o id para Integer
   const id = parseInt(idCaso);  
@@ -41,6 +42,14 @@ function evoluirCasoBE( idCaso, idEvolucao ) {
       // Gera e grava o id da evolução do caso  
       const campo_SituacaoBeneficio = TABELA_FILA.getRange( id+1, SITUACAO_BENEFICIO+1 );
       campo_SituacaoBeneficio.setValue( idEvolucao );      
+
+
+      // Grava a data limite para evolução do tipo CONVOCADO PARA ACESSO
+      const campo_data_limite = TABELA_FILA.getRange( id+1, DATA_LIMITE+1 );
+      //campo_data_limite.setValue( dataLimite );          
+      let auxDataLimite = new Date( dataLimite );  
+      auxDataLimite.setDate( auxDataLimite.getDate() + 1 );      
+      campo_data_limite.setValue( new Date(auxDataLimite).toLocaleString("pt-BR", {dateStyle: "short"}) );          
         
   
       // Envia email para o órgão encaminhador e para a instituição,
@@ -95,10 +104,11 @@ function evoluirCasoBE( idCaso, idEvolucao ) {
 function teste_evoluirCasoBE() {
 
   let idCaso = "23";
-  let idEvolucao = "3";   
+  let idEvolucao = "5";   
+  let dataLimite = "";
 
   try {
-    evoluirCasoBE( idCaso, idEvolucao );
+    evoluirCasoBE( idCaso, idEvolucao, dataLimite );
   } catch( error ) {
     console.log( "teste_evoluirCasoBE - " + error.message );
   }

@@ -12,8 +12,9 @@
  *  
  * @param {String} idsCasos: ids dos casos de serão evoluidos
  * @param {String} idEvolucao: id da evolucao
+ * @param {Data} dataLimite: data limite, caso o tipo de evolução seja Convocado par Acesso
  */
-function evoluirMultiplosCasosBE( idsCasos, idEvolucao ) {
+function evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite ) {
 
   // Verifica se o usuário do app tem permissão para evoluir casos
   const usuarioLogado = JSON.parse( autenticarUsuario() );
@@ -25,7 +26,7 @@ function evoluirMultiplosCasosBE( idsCasos, idEvolucao ) {
   idsCasos.forEach( idCaso => {
 
     try {
-      evoluirCasoBE( idCaso, idEvolucao );
+      evoluirCasoBE( idCaso, idEvolucao, dataLimite );
     } catch( error ) {
       throw( "evoluirMultiplosCasosBE - " + error.message );
     } 
@@ -48,10 +49,11 @@ function evoluirMultiplosCasosBE( idsCasos, idEvolucao ) {
 function teste_evoluirMultiplosCasosBE() {
 
   let idsCasos = [ "3", "5", "9", "12" ];
-  let idEvolucao = "3";   
+  let idEvolucao = "5";   
+  let dataLimite = "";
 
   try {
-    evoluirMultiplosCasosBE( idsCasos, idEvolucao );
+    evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite );
   } catch( error ) {
     console.log( "teste_evoluirMultiplosCasosBE - " + error.message );
   }

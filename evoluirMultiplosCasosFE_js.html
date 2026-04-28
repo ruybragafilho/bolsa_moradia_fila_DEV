@@ -13,6 +13,9 @@
     const idEvolucao = document.getElementById("select_evolucao_multipla").value;         
     console.log( "Id Evolucao: " + idEvolucao );
 
+    const dataLimite = (idEvolucao == "3") ? document.getElementById("data_limite_input").value : "";
+    console.log( "Data Limite: " + dataLimite );
+
     const idsCasos = Array.from(document.getElementsByName("checkbox_evolucao_multipla")).filter(c => c.checked).map(c => c.value);
     console.log( "Ids Casos: " + idsCasos );    
 
@@ -50,7 +53,7 @@
   
                    })
                    // Chama a função backend que designa o caso
-                   .evoluirMultiplosCasosBE( idsCasos, idEvolucao );  
+                   .evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite );  
 
 
     }    

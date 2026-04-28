@@ -22,6 +22,9 @@
       cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;
     }
 
+    document.getElementById("data_limite").style.display = "none";  
+    document.getElementById("data_limite_label").style.display = "none";  
+    document.getElementById("data_limite_input").style.display = "none";  
 
     // Configura a página para trabalhador da root
     if( usuarioLogado.tipo == "0" ) {            
@@ -299,6 +302,23 @@
 
   } // Fim da função redirecionarParaTelaResumosDosCasos
 
+
+
+  function exibirCampoDataLimite() {
+
+    let tipoEvolucao = document.getElementById("select_evolucao_multipla").value;
+
+    if( tipoEvolucao == "3" ) {
+      document.getElementById("data_limite").style.display        =  "";
+      document.getElementById("data_limite_label").style.display  =  "";  
+      document.getElementById("data_limite_input").style.display  =  "";  
+    } else {
+      document.getElementById("data_limite").style.display        =  "none";
+      document.getElementById("data_limite_label").style.display  =  "none";  
+      document.getElementById("data_limite_input").style.display  =  "none";        
+    }
+
+  }
 
 
 </script>

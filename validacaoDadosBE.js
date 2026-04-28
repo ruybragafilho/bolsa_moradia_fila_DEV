@@ -37,6 +37,19 @@ function isEmailValidBE(enderecoEmail) {
   return ( isStringValidBE(enderecoEmail) && regex.test( enderecoEmail ) );
 
 } // Fim da função validarEmail
+
+
+// Função de sanitização - eliminação de caracteres html de um string
+function escapeHtml(unsafe) {
+
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    
+} // Fim da função escapeHtml
     
 
 

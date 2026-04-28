@@ -63,24 +63,22 @@
 
       <hr><div class="text-center mt-1 mb-1 text-danger">* A habilitação poderá sofrer alterações se, após análise da Urbel, for identificada alguma questão decorrente de atendimento habitacional anterior.</div>
 
-      <hr><h5 class="text-center mt-1 mb-1" id="totalizacaoResumosDosCasos"></h5><hr><br>   
+      <hr><h5 class="text-center mt-2 mb-2" id="totalizacaoResumosDosCasos"></h5><hr><br>   
       
       <div class="d-flex align-items-center justify-content-center" style="gap: 4px;" id="evolucao_multipla"> 
-        <select class="form-select form-select-sm py-0" style="width: 200px; height: 28px;"  id="select_evolucao_multipla">               
+        <select class="form-select form-select-sm py-0" style="width: 200px; height: 28px;"  id="select_evolucao_multipla" onchange="exibirCampoDataLimite()">               
           <?!= gerarSelectBackend( BUFFER_SITUACOES_BENEFICIO ); ?>
         </select>
         <button class="btn btn-sm btn-primary" id="bt_evolucao_multipla" onclick="evoluirMultiplosCasosFE()">Evoluir</button>
       </div>
-      <div class="container" id="data_limite">
-        <div class="row">
-          <div class="col-md-4"></div>
-          <label for="data_limite_input" class="form-label fw-bold col-md-2">Data Limite</label>
-          <div class="col-md-2">
-            <input type="date" class="form-control" id="data_limite_input">
-          </div>          
-          <div class="col-md-4"></div>
-        </div>  
+
+      <br>
+
+      <div class="d-flex justify-content-center align-items-center" style="gap: 10px;" id="data_limite"> 
+        <label for="data_limite_input" class="form-label fw-bold text-danger" id="data_limite_label">Data Limite</label>
+        <input type="date" class="form-control form-control-sm" style="width: 140px;" id="data_limite_input">        
       </div>
+
       <br><hr><br>   
 
       <table id="resumosDosCasos" class="table table-striped table-hover text-center">    
