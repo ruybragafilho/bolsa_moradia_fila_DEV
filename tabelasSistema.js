@@ -10,7 +10,7 @@
 /**
  * Planilha USUARIOS
  */
-const PLANILHA_USUARIOS_ID        =  "14945tdk0asP0ySI2CxLvyflIPbIM569myEpK8nTUqcg";
+const PLANILHA_USUARIOS_ID        =  "1CGr1GnSEe1KS0c7OgOWRX5SNkPWpVS3WB00sZtjNdU0";
 const PLANILHA_USUARIOS           =  SpreadsheetApp.openById(PLANILHA_USUARIOS_ID);
 const TABELA_USUARIOS             =  PLANILHA_USUARIOS.getSheetByName('USUARIOS');
 const BUFFER_USUARIOS             =  TABELA_USUARIOS.getDataRange().getDisplayValues().splice(1);

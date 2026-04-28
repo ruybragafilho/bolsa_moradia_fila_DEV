@@ -10,8 +10,6 @@
 /**
  * Planilha CASOS EXTERNOS - TRABALHADORES EXTERNOS (casos registrados por trabalhadores externos)
  */
-//const PLANILHA_CASOS_EXTERNOS_ID   =  "1qZjH09l2Nzr28k4ucv9-ecAn9N5fXomtLOj7rWJoPBM";
-//const PLANILHA_CASOS_EXTERNOS_ID   =  "18Ho7ztSVJtBxf_1T6ycj1WbGp7UrzV4G_WAOXjP6kJw";
 const PLANILHA_CASOS_EXTERNOS_ID   =  "1M4JJvQSfZ9Z4LMfi_lsbmdMP53edSWLvwTPw2_dGK8w";
 const PLANILHA_CASOS_EXTERNOS      =  SpreadsheetApp.openById(PLANILHA_CASOS_EXTERNOS_ID);
 
@@ -23,8 +21,6 @@ const NUM_LINHAS_TABELA_CASOS_EXTERNOS  =  BUFFER_CASOS_EXTERNOS.length;
 /**
  * Planilha CASOS PBH - TRABALHADORES PBH (casos registrados por trabalhadores PBH)
  */
-//const PLANILHA_CASOS_PBH_ID   =  "1w-mJ-7IznF7K0DGx1no1EzHq3gt_yINw_H4O2X87vGs";
-//const PLANILHA_CASOS_PBH_ID   =  "1svER6GfEH7uFYBLBcX6En4m4V9Sb5rollaTNxMo6Dn4";
 const PLANILHA_CASOS_PBH_ID   =  "1Ud6_qdKgt9jTeDOjdQWbjwBq7KUaSiaI2jsjTkNoxFA";
 const PLANILHA_CASOS_PBH      =  SpreadsheetApp.openById(PLANILHA_CASOS_PBH_ID);
 

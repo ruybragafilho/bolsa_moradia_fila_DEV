@@ -15,7 +15,7 @@ const PLANILHA_FILA           =  SpreadsheetApp.openById(PLANILHA_FILA_ID);
 const TABELA_FILA             =  PLANILHA_FILA.getSheetByName('FILA');
 let BUFFER_FILA               =  TABELA_FILA.getDataRange().getDisplayValues().splice(1);
 let TAMANHO_FILA              =  BUFFER_FILA.length;
-const NUM_COLUNAS_TABELA_FILA =  16;
+const NUM_COLUNAS_TABELA_FILA =  17;
 
 function refreshBufferFila() {
   BUFFER_FILA  =  TABELA_FILA.getDataRange().getDisplayValues().splice(1);
@@ -43,6 +43,7 @@ const SITUACAO_BENEFICIO         = 12;
 const DATA_ULTIMA_EVOLUCAO       = 13;
 const DOC_PENDENTE               = 14;
 const EMAIL_ORGAO_ENCAMINHADOR   = 15;
+const DATA_LIMITE                = 16;
 
 
 
