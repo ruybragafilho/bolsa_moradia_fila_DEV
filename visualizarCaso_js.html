@@ -13,7 +13,10 @@
   function configurarPaginaVisualizarCaso() {
 
     // Configura o Título da Página
-    //document.getElementById( "tituloPagina" ).innerHTML = "VISUALIZAÇÃO DE CASO";
+    document.getElementById("data_limite_edicao").style.display          =  "none";
+    document.getElementById("data_limite_edicao_input").style.display    =  "none";
+    document.getElementById("justificativaAlteracaoDataLimite").style.display  =  "none";
+    
 
   } // Fim da função configurarPaginaVisualizarCaso
 
@@ -42,7 +45,17 @@
       // Exibe os dados na página de visualização de caso
       document.getElementById( "nome_referenciaFamiliarInput" ).value = cache_CasoEmVisualizacao.referencia_familiar;
       document.getElementById( "cpf_referenciaFamiliarInput" ).value  = cache_CasoEmVisualizacao.cpf_rf;
-  
+      document.getElementById( "situacaoBeneficioInput" ).value  = idToNomeFE( cache_CasoEmVisualizacao.id_situacao_beneficio, "SITUACOES_BENEFICIO" );
+        
+      // Mostra os campos referentes à data limite
+      // apenas para situação == Convocado para Acesso
+      if( cache_CasoEmVisualizacao.id_situacao_beneficio == "3" ) {
+        visualizarDataLimite( cache_CasoEmVisualizacao );
+        console.log("Visualizar data limite");
+      } else {
+        console.log("NÃO Visualizar data limite");
+      }
+      
       // Mostra os parâmetros do caso
       visualizarParametroCaso( cache_CasoEmVisualizacao );
   
@@ -59,6 +72,33 @@
     }
 
   } // Fim da função visualizarCaso
+
+  
+
+  /**
+   * Função que mostra a data limite
+   */    
+  function visualizarDataLimite( caso ) {
+
+    // Obtém os elementos dataLimite e justificatida da página
+    let dataLimite = document.getElementById("data_limite_edicao_input");
+    let justificativa = document.getElementById("justificativaAlteracaoDataLimite");
+
+    // Ajusta o display dos elementos para que eles sejam exibidos 
+    document.getElementById("data_limite_edicao").style.display          =  "";
+    dataLimite.style.display     =  "";
+    justificativa.style.display  =  "";    
+
+    // Exibe a data limite
+    if(caso.data_limite != "") {
+      let data = caso.data_limite.split("/");
+      dataLimite.value = `${data[2]}-${data[1]}-${data[0]}`;
+    }
+    
+    // Exibe a justificativa para alteração da data limite
+    justificativa.value = caso.justificativa_alteracao_data_limite;
+
+  } // Fim da função visualizarDataLimite
 
 
 

@@ -13,7 +13,7 @@
     const idEvolucao = document.getElementById("select_evolucao_multipla").value;         
     console.log( "Id Evolucao: " + idEvolucao );
 
-    const dataLimite = (idEvolucao == "3") ? document.getElementById("data_limite_input").value : "";
+    const dataLimite = (idEvolucao == "3") ? document.getElementById("data_limite_insercao_input").value : "";
     console.log( "Data Limite: " + dataLimite );
 
     const idsCasos = Array.from(document.getElementsByName("checkbox_evolucao_multipla")).filter(c => c.checked).map(c => c.value);

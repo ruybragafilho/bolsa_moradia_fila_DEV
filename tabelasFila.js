@@ -15,7 +15,7 @@ const PLANILHA_FILA           =  SpreadsheetApp.openById(PLANILHA_FILA_ID);
 const TABELA_FILA             =  PLANILHA_FILA.getSheetByName('FILA');
 let BUFFER_FILA               =  TABELA_FILA.getDataRange().getDisplayValues().splice(1);
 let TAMANHO_FILA              =  BUFFER_FILA.length;
-const NUM_COLUNAS_TABELA_FILA =  17;
+const NUM_COLUNAS_TABELA_FILA =  18;
 
 function refreshBufferFila() {
   BUFFER_FILA  =  TABELA_FILA.getDataRange().getDisplayValues().splice(1);
@@ -44,6 +44,7 @@ const DATA_ULTIMA_EVOLUCAO       = 13;
 const DOC_PENDENTE               = 14;
 const EMAIL_ORGAO_ENCAMINHADOR   = 15;
 const DATA_LIMITE                = 16;
+const JUSTIFICATIVA_ALTERACAO_DATA_LIMITE = 17;
 
 
 
@@ -231,6 +232,8 @@ function obterFila() {
       data_ultima_evolucao: caso[DATA_ULTIMA_EVOLUCAO],
         
       data_limite: caso[DATA_LIMITE],
+
+      justificativa_alteracao_data_limite: caso[JUSTIFICATIVA_ALTERACAO_DATA_LIMITE],      
 
       id_doc_pendente: caso[DOC_PENDENTE],
 

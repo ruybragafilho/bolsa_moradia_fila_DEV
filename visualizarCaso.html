@@ -23,29 +23,68 @@
 
     <br><hr><br>          
 
-
-    <!-- Dados da RF - Início -->
-    <section class="row">  
-      <div class="col-md-4 mb-3">
+    <!-- Dados do Caso - Início -->
+    <section class="row mb-5">  
+      <div class="col-md-4">
         <label for="nome_referenciaFamiliarInput" class="form-label fw-bold">NOME REFERÊNCIA FAMILIAR</label>
         <input type="text" class="form-control" id="nome_referenciaFamiliarInput" disabled>
       </div>
 
-      <div class="col-md-4 mb-3">
+      <div class="col-md-1"></div>
+      <div class="col-md-3">
         <label for="cpf_referenciaFamiliarInput" class="form-label fw-bold">CPF REFERÊNCIA FAMILIAR</label>
         <input type="text" class="form-control" id="cpf_referenciaFamiliarInput" disabled>
       </div>            
+
+      <div class="col-md-1"></div>
+      <div class="col-md-3">
+        <label for="situacaoBeneficioInput" class="form-label fw-bold">SITUAÇÃO BENEFÍCIO</label>
+        <input type="text" class="form-control" id="situacaoBeneficioInput" disabled>
+      </div>      
     </section>  
-    <!-- Dados da RF - Fim -->
-
-    <br><hr><br>        
+    <!-- Dados do Caso - Fim -->
     
+
+    <!-- Data limite - Início -->
+    <section id="data_limite_edicao" >  
+
+      <div class="row mb-5">
+        <div class="col-md-1"></div>      
+        <div class="col-md-2"> 
+          <label for="data_limite_edicao_input" class="form-label fw-bold" id="data_limite_label">DATA LIMITE</label>
+          <input type="date" class="form-control form-control-sm" id="data_limite_edicao_input">        
+        </div>
+  
+        <div class="col-md-1"></div>
+  
+        <div class="col-md-7">
+          <label for="justificativaAlteracaoDataLimite" class="form-label fw-bold">JUSTIFICATIVA ALTERAÇÃO DATA LIMITE</label>
+          <textarea class="form-control" id="justificativaAlteracaoDataLimite" rows="3" maxlength="1000"></textarea>
+        </div>            
+        <div class="col-md-1"></div>              
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-5"></div>
+        <div class="col-md-3">
+          <button class="btn btn-sm btn-primary" id="bt_alterarDataLimite" onclick="alterarDataLimiteFE()">Gravar Nova Data Limite</button>              
+        </div>        
+        <div class="col-md-4"></div>
+      </div>  
+
+    </section>  
+    <!-- Data limite - Fim -->
+
+    
+    <br><br>
+
+
     <!-- Tabela com Parâmetros + Pontuação do caso - Início -->    
-    <section class="mt-4 mb-4">
+    <section class="mt-5 mb-4">
 
-      <h5 class="text-center mt-5 mb-4" id="headerParametrosDoCaso">PARÂMETROS DO CASO</h5>    
+      <h5 class="text-center mt-5 mb-5" id="headerParametrosDoCaso">PARÂMETROS DO CASO</h5><br>    
 
-      <hr><h6 class="text-center mt-1 mb-1" id="totalizacaoParametrosDoCaso"></h6><hr><br>   
+      <hr><h6 class="text-center mt-2 mb-2" id="totalizacaoParametrosDoCaso"></h6><hr><br>   
 
       <table class="table table-striped table-hover text-center" id="parametrosDoCaso">    
 

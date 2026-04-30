@@ -46,10 +46,13 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
 
       // Grava a data limite para evolução do tipo CONVOCADO PARA ACESSO
       const campo_data_limite = TABELA_FILA.getRange( id+1, DATA_LIMITE+1 );
-      //campo_data_limite.setValue( dataLimite );          
-      let auxDataLimite = new Date( dataLimite );  
-      auxDataLimite.setDate( auxDataLimite.getDate() + 1 );      
-      campo_data_limite.setValue( new Date(auxDataLimite).toLocaleString("pt-BR", {dateStyle: "short"}) );          
+      if(dataLimite != "") {
+        let auxDataLimite = new Date( dataLimite );  
+        auxDataLimite.setDate( auxDataLimite.getDate() + 1 );      
+        campo_data_limite.setValue( new Date(auxDataLimite).toLocaleString("pt-BR", {dateStyle: "short"}) );          
+      } else {
+        campo_data_limite.setValue( "" );          
+      }
         
   
       // Envia email para o órgão encaminhador e para a instituição,

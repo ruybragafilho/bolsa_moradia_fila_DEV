@@ -1,0 +1,47 @@
+<script>
+
+  "use strict";
+  
+  /**
+   * Função frontend que altera a data limite do caso  
+   */  
+  function alterarDataLimiteFE() {
+
+    console.log( "alterarDataLimiteFE_js - INÍCIO" );
+    
+
+    // Obtém os dados a serem passados para a função backend alterarDataLimiteBE
+    let idCaso = cache_CasoEmVisualizacao.id;
+    let dataLimite = document.getElementById("data_limite_edicao_input").value;
+    let justificativa = document.getElementById("justificativaAlteracaoDataLimite").value;
+
+    // mostra modal com mensagem de alteração de data limite
+    mostrarModalMensagem( "Alterando a data limite, por favor aguarde..." );                               
+
+    // Chama a função back end para alterar a data limite do caso
+    google.script.run
+                 .withSuccessHandler( () => {
+  
+                   // Volta para a tela de resumos de casos                     
+                   redirecionarParaTelaResumosDosCasos( 1 );                     
+  
+                 })
+                 .withFailureHandler( erro => {
+  
+                   // mostra modal com mensagem de erro
+                   mostrarModalErro( "alterarDataLimiteFE_js - " + erro.message );
+                   redirecionarParaTelaResumosDosCasos( 0 );
+  
+                 })
+                 // Chama a função backend que altera a data limite
+                 .alterarDataLimiteBE( idCaso, dataLimite, justificativa );  
+
+
+    console.log( "alterarDataLimiteFE_js - FIM" );
+
+  } // Fim da função alterarDataLimiteFE
+
+
+
+
+</script>
