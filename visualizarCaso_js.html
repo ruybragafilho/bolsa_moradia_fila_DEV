@@ -12,12 +12,17 @@
    */
   function configurarPaginaVisualizarCaso() {
 
-    // Configura o Título da Página
-    document.getElementById("data_limite_edicao").style.display          =  "none";
-    document.getElementById("data_limite_edicao_input").style.display    =  "none";
-    document.getElementById("justificativaAlteracaoDataLimite").style.display  =  "none";
-    
+    // Não mostra os campos referentes à data limite por padrão. Mostra apenas para 
+    // situação == Convocado para Acesso E para técnicas da DPOP
+    document.getElementById("data_limite_edicao").style.display   =  "none";
 
+    // Não mostra os campos referentes às vistorias por padrão. Mostra apenas para 
+    // técnicas da DPOP    
+    document.getElementById("headerVistoriasDoCaso").style.display   =  "none";    
+    document.getElementById("vistoriasDoCaso").style.display   =  "none";    
+    document.getElementById("vistoria_traco_inicio").style.display   =  "none";   
+    document.getElementById("vistoria_traco_fim").style.display   =  "none";   
+    
   } // Fim da função configurarPaginaVisualizarCaso
 
 
@@ -49,11 +54,12 @@
         
       // Mostra os campos referentes à data limite
       // apenas para situação == Convocado para Acesso
-      if( cache_CasoEmVisualizacao.id_situacao_beneficio == "3" ) {
+      // e apenas para trabalhadores técnicas da DPOP
+      if( cache_CasoEmVisualizacao.id_situacao_beneficio == "3" && 
+          usuarioLogado.instituicao == "0") {
+
         visualizarDataLimite( cache_CasoEmVisualizacao );
-        console.log("Visualizar data limite");
-      } else {
-        console.log("NÃO Visualizar data limite");
+
       }
       
       // Mostra os parâmetros do caso
@@ -63,7 +69,9 @@
       document.getElementById('totalizacaoParametrosDoCaso').innerHTML = `PONTUAÇÃO DO CASO: ${cache_CasoEmVisualizacao.pontuacao}`;
 
       // Mostra as vistorias do caso
-      visualizarVistoriasCaso( cache_CasoEmVisualizacao )
+      if( usuarioLogado.instituicao == "0") {      
+        visualizarVistoriasCaso( cache_CasoEmVisualizacao )
+      }
 
     } else {
       // Exibe modal de erro caso o tipo de evolução não tenha sido selecionado
@@ -85,7 +93,7 @@
     let justificativa = document.getElementById("justificativaAlteracaoDataLimite");
 
     // Ajusta o display dos elementos para que eles sejam exibidos 
-    document.getElementById("data_limite_edicao").style.display          =  "";
+    document.getElementById("data_limite_edicao").style.display   =  "";
     dataLimite.style.display     =  "";
     justificativa.style.display  =  "";    
 
@@ -154,6 +162,11 @@
    * Função que renderiza uma tabela com as vistorias do caso
    */    
   function visualizarVistoriasCaso( caso ) {
+
+    document.getElementById("headerVistoriasDoCaso").style.display   =  "";    
+    document.getElementById("vistoriasDoCaso").style.display   =  "";   
+    document.getElementById("vistoria_traco_inicio").style.display   =  "";   
+    document.getElementById("vistoria_traco_fim").style.display   =  "";   
 
     if( caso.vistorias.length < 1 ) {
       console.log( "visualizarVistoriasCaso - Sem Vistorias" );

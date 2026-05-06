@@ -51,7 +51,7 @@
       <div class="row mb-5">
         <div class="col-md-1"></div>      
         <div class="col-md-2"> 
-          <label for="data_limite_edicao_input" class="form-label fw-bold" id="data_limite_label">DATA LIMITE</label>
+          <label for="data_limite_edicao_input" class="form-label fw-bold" id="data_limite_edicao_label">DATA LIMITE</label>
           <input type="date" class="form-control form-control-sm" id="data_limite_edicao_input">        
         </div>
   
@@ -82,7 +82,7 @@
     <!-- Tabela com Parâmetros + Pontuação do caso - Início -->    
     <section class="mt-5 mb-4">
 
-      <h5 class="text-center mt-5 mb-5" id="headerParametrosDoCaso">PARÂMETROS DO CASO</h5><br>    
+      <h5 class="text-center mt-5 mb-2" id="headerParametrosDoCaso">PARÂMETROS DO CASO</h5><br>    
 
       <hr><h6 class="text-center mt-2 mb-2" id="totalizacaoParametrosDoCaso"></h6><hr><br>   
 
@@ -112,7 +112,8 @@
     <!-- Tabela com dados das vistorias do caso - Início -->    
     <section class="mt-4 mb-4">
 
-      <h5 class="text-center mt-5 mb-4" id="headerVistoriasDoCaso">VISTORIAS</h5><hr>    
+      <h5 class="text-center mt-5 mb-4" id="headerVistoriasDoCaso">VISTORIAS</h5>
+      <div id="vistoria_traco_inicio"><hr></div>            
 
       <table class="table table-striped table-hover text-center mt-1" id="vistoriasDoCaso">    
 
@@ -132,9 +133,12 @@
       </table>
       
     </section>  
+
+    <div id="vistoria_traco_fim"><br><hr><br></div>            
+
     <!-- Tabela com dados das vistorias do caso - Fim -->    
 
-    <br><hr><br>            
+
 
   </main> 
   <!-- Main - Parte principal da tela Visualização de Caso - Fim -->
