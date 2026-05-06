@@ -41,8 +41,11 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
 
       
       // Grava a justificativa da alteração da data limite
+      let justificativaFormatada = justificativa.length > 0 ? 
+                                   justificativa.trim().toUpperCase().substring(0, 512) :
+                                   "SEM JUSTIFICATIVA";
       const campo_justificativa = TABELA_FILA.getRange( id+1, JUSTIFICATIVA_ALTERACAO_DATA_LIMITE+1 );
-      campo_justificativa.setValue( justificativa );            
+      campo_justificativa.setValue( justificativaFormatada );            
 
       
       // SOLTA O LOCK

@@ -13,7 +13,10 @@
     // Obtém os dados a serem passados para a função backend alterarDataLimiteBE
     let idCaso = cache_CasoEmVisualizacao.id;
     let dataLimite = document.getElementById("data_limite_edicao_input").value;
-    let justificativa = document.getElementById("justificativaAlteracaoDataLimite").value;
+    let justificativa = document.getElementById("justificativaAlteracaoDataLimite").value;    
+    if( justificativa.length > 512 ) {
+      justificativa = justificativa.substring(0, 512);
+    }    
 
     // mostra modal com mensagem de alteração de data limite
     mostrarModalMensagem( "Alterando a data limite, por favor aguarde..." );                               
