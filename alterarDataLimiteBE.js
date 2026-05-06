@@ -23,6 +23,12 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
     throw( new Error( "alterarDataLimiteBE - ID Inválido" ) );
   }  
 
+  // Verifica se o usuário do app tem permissão para registrar Documentação Pendente
+  const usuarioLogado = JSON.parse( autenticarUsuario() );
+  if( usuarioLogado.instituicao != "0" || usuarioLogado.tipo != "1" ) {
+    throw( new Error( "Usuário sem permissão para registrar Documentação Pendente" ) );
+  }  
+
   try {
 
     // TENTA PEGAR O LOCK
