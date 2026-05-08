@@ -61,6 +61,53 @@ function pesquisarVistoriasPorCPF( cpf ) {
 
 
 /**
+ * Função que retorn a a situação da última vistoria de um caso, a partir do histórico de vistorias do caso
+ * @param {Array de vistorias} vistoriasCaso - Array com o historico de vistorias do caso
+ * @returns Status da últimaVistoria do caso
+ */
+function getSituacaoVistoria( vistoriasCaso ) {
+
+  if( vistoriasCaso.length == 0 ) {
+    return "";  
+  }
+  
+  let ultimaVistoria = vistoriasCaso[0];
+
+  let dataSolicitacao = ultimaVistoria.dataSolicitacao != "";
+  let dataVistoria = ultimaVistoria.dataVistoria != "";
+  let dataLaudo = ultimaVistoria.dataLaudo != "";
+
+  if( dataLaudo ) {
+
+    if( ultimaVistoria.descricaoLaudo.includes("Aprovado")  ) {
+      return BUFFER_SITUACOES_VISTORIA[3][NOME];         }
+    else if( ultimaVistoria.descricaoLaudo.includes("Reprovado") ) {
+      return BUFFER_SITUACOES_VISTORIA[2][NOME];     
+    } else if( ultimaVistoria.descricaoLaudo.includes("Passível") ) {
+      return BUFFER_SITUACOES_VISTORIA[1][NOME];     
+    } else {
+      return "INDEFINIDO"    
+    }
+
+  }
+
+  if( dataVistoria ) {
+    // Última vistoria passível de aprovação
+    return BUFFER_SITUACOES_VISTORIA[1][NOME];             
+  }  
+
+  if( dataSolicitacao ) {
+    // Vistoria solicitada
+    return BUFFER_SITUACOES_VISTORIA[0][NOME];             
+  }
+
+  return "";
+
+} // Fim da função getSituacaoVistoria
+
+
+
+/**
  * Função para testar a função pesquisarVistoriasPorCPF() 
  * do módulo tabelasVistoria.gs
  */
@@ -72,6 +119,10 @@ function testePesquisarVistoriasPorCPF() {
 
   console.log( `Vistorias encontradas para o CPF ${cpf}:` );
   console.log( vistorias );
+
+  let situacaoVistoria = getSituacaoVistoria( vistorias );
+
+  console.log( `Situação da última vistoria para o CPF ${cpf}: ${situacaoVistoria}` );
 
 } // Fim da função testePesquisarVistoriasPorCPF()
 

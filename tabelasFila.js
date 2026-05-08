@@ -196,7 +196,10 @@ function obterFila() {
   
   // Obtém os casos na fila
   let fila = BUFFER_FILA.map( caso => {    
-    
+
+    let vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
+    let situacaoVistoria = getSituacaoVistoria( vistoriasCaso );
+        
     return {
 
       id: caso[ID],
@@ -237,7 +240,9 @@ function obterFila() {
 
       id_doc_pendente: caso[DOC_PENDENTE],
 
-      vistorias: pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") ),
+      vistorias: vistoriasCaso,
+
+      situacao_vistoria: situacaoVistoria,
            
       posicaoNaFila: 0
 
@@ -296,9 +301,10 @@ function obterFila() {
   let posicao = 1;
   fila.forEach( caso => {
 
-    caso.posicaoNaFila = posicao;
-    ++posicao; 
-
+    if( caso.id_situacao_beneficio != "1") {
+      caso.posicaoNaFila = posicao;
+      ++posicao; 
+    }
   });
 
 
