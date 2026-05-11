@@ -24,7 +24,7 @@ function enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso ) {
       htmlBody:  
 `Prezado (a),<br><br>
 
-informamos que houve alteração no status do benefício de <b>${nomeRFCaso}</b>, CPF <b>${cpfRFCaso}</b>, para <b>${evolucaoCaso}</b>. Pedimos que verifique as informações no sistema e comunique ao beneficiado.<br><br>
+informamos que houve alteração no status do benefício de <b>${nomeRFCaso}</b>, CPF <b>${cpfRFCaso}</b>, para <b>${evolucaoCaso}</b>. Pedimos que verifique as informações no sistema e comunique ao beneficiado, se necessário.<br><br>
 
 Qualquer dúvida, procure a equipe da DPOP.<br><br>
 

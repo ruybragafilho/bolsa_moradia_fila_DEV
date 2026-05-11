@@ -97,11 +97,16 @@
     // Seleciona o corpo da tabela onde os dados serão inseridos    
     const tbody = document.getElementById("conteudoResumosDosCasos");
 
+    // Número de casos ativos
+    let numCasosAtivos = 0;
+
     // Limpa o conteúdo da tabela
     tbody.innerHTML = ''; 
 
     // Para cada item nos resumosDosCasos, cria uma linha na tabela
     tabelaCasos.forEach( item => {
+
+      if( item.posicaoNaFila != 0 ) ++numCasosAtivos;
 
       // Testa se o item não está inativo ou se o usuário é da DPOP
       if( item.id_situacao_beneficio != "1" || usuarioLogado.instituicao == "0" ) {
@@ -176,7 +181,7 @@
     }); // Fim do dados.forEach
 
     // Mostra o total de casos
-    document.getElementById('totalizacaoResumosDosCasos').innerHTML = `TOTAL DE CASOS: ${tabelaCasos.length}`;
+    document.getElementById('totalizacaoResumosDosCasos').innerHTML = `TOTAL DE CASOS ATIVOS: ${numCasosAtivos}`;
 
   } // Fim da função gerarTabelaResumosCasos    
 
