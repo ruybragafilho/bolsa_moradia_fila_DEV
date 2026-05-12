@@ -39,25 +39,14 @@ const INFORMACAO_COMPLEMENTAR      = 12;
  */
 function pesquisarVistoriasPorCPF( cpf ) {
 
-  let vistorias = [];
-  
-  BUFFER_VISTORIAS.forEach( vistoria => {
-
-    if( vistoria[CPF_VISTORIA].padStart(11, "0") == cpf.padStart(11, "0") ) {
-
-      let v = {  
-        selo: vistoria[SELO_FK],
-        dataSolicitacao: vistoria[DATA_SOLICITACAO_VISTORIA],
-        dataVistoria: vistoria[DATA_VISTORIA],
-        dataLaudo: vistoria[DATA_LAUDO],
-        descricaoLaudo: vistoria[DESCRICAO_LAUDO],
-        informacaoComplementar: vistoria[INFORMACAO_COMPLEMENTAR]
-      };
-
-      vistorias.push( v );
-    }
-
-  });
+  const vistorias = BUFFER_VISTORIAS.filter( v => v[CPF_VISTORIA].padStart(11, "0") == cpf.padStart(11, "0") )
+                                    .map( v => { return { selo: v[SELO_FK],
+                                                          dataSolicitacao: v[DATA_SOLICITACAO_VISTORIA],
+                                                          dataVistoria: v[DATA_VISTORIA],
+                                                          dataLaudo: v[DATA_LAUDO],
+                                                          descricaoLaudo: v[DESCRICAO_LAUDO],
+                                                          informacaoComplementar: v[INFORMACAO_COMPLEMENTAR] };
+                                               });
 
   return vistorias;
 
@@ -118,7 +107,7 @@ function getSituacaoVistoria( vistoriasCaso ) {
  */
 function testePesquisarVistoriasPorCPF() {
 
-  let cpf = "22707190349";
+  let cpf = "07434335645";
 
   let vistorias = pesquisarVistoriasPorCPF( cpf );
 
