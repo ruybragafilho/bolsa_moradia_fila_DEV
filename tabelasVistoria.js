@@ -18,6 +18,7 @@ const TAMANHO_VISTORIAS      =  BUFFER_VISTORIAS.length;
 
 
 // Posições das colunas da planilha VISTORIAS
+const SELO_FK                      =  1;
 const CPF_VISTORIA                 =  3;
 const DATA_SOLICITACAO_VISTORIA    =  6;
 const DATA_VISTORIA                =  7;
@@ -28,10 +29,13 @@ const INFORMACAO_COMPLEMENTAR      = 12;
 
 
 
+
 /**
  * Função que pesquisa por todas as vistorias relacionadas a um CPF de RF
  * @param {String} cpf - CPF da RF
- * @returns Um array de objetos, onde cada objeto representa uma vistoria relacionada ao CPF da RF, contendo as seguintes propriedades: dataSolicitacao, dataVistoria, dataLaudo, descricaoLaudo e informacaoComplementar
+ * @returns Um array de objetos, onde cada objeto representa uma vistoria relacionada ao CPF da RF, 
+ *          contendo as seguintes propriedades: selo, dataSolicitacao, dataVistoria, dataLaudo, 
+ *          descricaoLaudo e informacaoComplementar
  */
 function pesquisarVistoriasPorCPF( cpf ) {
 
@@ -42,6 +46,7 @@ function pesquisarVistoriasPorCPF( cpf ) {
     if( vistoria[CPF_VISTORIA].padStart(11, "0") == cpf.padStart(11, "0") ) {
 
       let v = {  
+        selo: vistoria[SELO_FK],
         dataSolicitacao: vistoria[DATA_SOLICITACAO_VISTORIA],
         dataVistoria: vistoria[DATA_VISTORIA],
         dataLaudo: vistoria[DATA_LAUDO],
