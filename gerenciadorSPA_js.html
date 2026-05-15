@@ -34,13 +34,13 @@
 
     // Aguarda carregamento das páginas na cache de páginas
     while( !paginasCarregadasNaCache() ) {
-      console.log( "Aguardando carregamento das páginas na cache" );
+      console.log( "Gerenciador SPA - Aguardando carregamento das páginas na cache" );
       await esperar( 1000 );
     }    
 
     // Aguarda carregamento das tabelas na cache de tabelas
     while( !tabelasCarregadasNaCache() ) {
-      console.log( "Aguardando carregamento das tabelas na cache" );
+      console.log( "Gerenciador SPA - Aguardando carregamento das tabelas na cache" );
       await esperar( 1000 );
     }        
 
@@ -60,7 +60,10 @@
                               // Gera a tabela de resumo dos casos 
                               //document.getElementById( "checkboxAtivos1" ).checked = true;
                               //filtrar();
-                              gerarTabelaResumosCasos(cache_TabelaCasos);                              
+                              gerarTabelaResumosCasos(cache_TabelaCasos);   
+                              
+                              // Gera o gráfico de quantitativo de Situação do Benefício
+                              gerarGraficoQuantitativoSituacaoBeneficio();
 
                               break;    
 

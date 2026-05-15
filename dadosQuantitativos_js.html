@@ -1,0 +1,86 @@
+<script>
+
+/**
+ * Módulo:    dadosQuantitativos_js.html
+ * Objetivo:  Módulo com funções que obtêm os dados quantitativos e gera seus gráficos
+ */
+
+  "use strict";  
+
+  // Array para armazenar os valores X e Y do gráfico
+  let quantitativoSituacaoBeneficio;
+  let labelSituacaoBeneficio = [];
+
+
+  /**
+   * Função que contabiliza a quantidade de casos em cada situação (Situação do Benefício)
+   */
+  async function gerarQuantitativoSituacaoBeneficio() {
+
+    // Aguarda carregamento das tabelas na cache de tabelas
+    while( !tabelasCarregadasNaCache() ) {      
+      await esperar( 1000 );
+    }            
+
+    // Inicializa os contadores de cada situação de benefício
+    quantitativoSituacaoBeneficio =  new Array( numSituacoesBeneficio ).fill( 0 );
+
+    // Contabiliza a quantidade de casos em cada situação de benefício
+    casosFiltrados.forEach( caso => {        
+        ++(quantitativoSituacaoBeneficio[ parseInt(caso.id_situacao_beneficio) - 1 ]);
+    })    
+
+  } // Fim da função gerarQuantitativoSituacaoBeneficio
+
+
+
+  /**
+   * Função que gera o gráfico de barras da quantidade de casos em cada situação (Situação do Benefício)
+   */
+  async function gerarGraficoQuantitativoSituacaoBeneficio() {
+
+    // Aguarda carregamento das tabelas na cache de tabelas
+    while( !tabelasCarregadasNaCache() ) {
+      await esperar( 1000 );
+    }            
+
+    // Chama a função para gerar o quantitativo de quantidade de casos em cada situação
+    gerarQuantitativoSituacaoBeneficio();
+
+    // Gera os Labels do gráfico com os nomes das situações de benefício
+    cache_TabelaSituacoesBeneficio.forEach( sit_beneficio => {
+      labelSituacaoBeneficio.push( sit_beneficio[COLUNA_NOME] );  
+    });
+
+    // Gera o gráfico usando a biblioteca plotly.js
+    const grafico = document.getElementById( "plotQuantitativoSituacaoBeneficio" );    
+    
+    const data = [{
+      x:labelSituacaoBeneficio,
+      y:quantitativoSituacaoBeneficio,
+      type:"bar",
+      text: quantitativoSituacaoBeneficio.map(String),
+      textposition: 'auto',
+      orientation:"v",
+      marker: {color:"rgba(0,0,255,0.6)"}
+    }];
+    
+    const layout = {
+      height: 500, // Altura total  
+      xaxis: {
+        tickangle: -45,
+        automargin: true
+      }      
+    };
+
+    const config = {
+      responsive: true,
+      displayModeBar: false
+    };      
+    
+    Plotly.newPlot(grafico, data, layout, config);
+
+  } // Fim da função gerarGraficoQuantitativoSituacaoBeneficio 
+  
+
+</script>

@@ -11,6 +11,8 @@
    */
   document.addEventListener( 'DOMContentLoaded', () => {
 
+    console.log( "\nindex_js - INÍCIO" );     
+
     // Inicializa as telas modais
     inicializarModais();       
                    
@@ -41,12 +43,9 @@
                        // Mostra modal com mensagem de inicialização do sistema
                        mostrarModalMensagem( "Inicializando o sistema, por favor aguarde..." );                    
                    
-                       // Aguarda os caches serem inicializados e em seguida chama 
-                       // a função que redireciona para a tela com os resumos dos casos   
-                       console.log( "\nindex_js - INÍCIO" ); 
-                       redirecionarParaTelaResumosDosCasos(1);
-                       console.log( "index_js - FIM" ); 
-               
+                       // Redireciona para a tela com os resumos dos casos  
+                       // Carregando os dados do backend (Parâmetro == 1)
+                       redirecionarParaTelaResumosDosCasos(1);               
 
                      // Se usuário não autenticado, mostra mensagem de usuário não cadastrado.
                      } else {
@@ -76,6 +75,8 @@
                   // Chama a função backend para autenticar o usuario
                  .autenticarUsuario();  
 
+
+    console.log( "index_js - FIM" );                  
 
   }); // Fim do document.addEventListener
 

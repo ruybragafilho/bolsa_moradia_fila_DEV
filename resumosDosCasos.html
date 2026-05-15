@@ -57,6 +57,17 @@
     <!-- Pesquisa caso - Fim -->           
 
 
+    <!-- Tabela com dados quantitativos - Situações da vistoria - Início -->
+
+    <!-- Tabela com dados quantitativos - Situações da vistoria - Fim -->        
+
+
+    <!-- Tabela com dados quantitativos - Perfiis dos casos - Início -->
+
+    <!-- Tabela com dados quantitativos - Perfiis dos casos - Fim -->            
+
+
+
     <!-- Tabela com resumos dos Casos - Início -->
     <section>
 
@@ -64,7 +75,19 @@
 
       <hr><div class="text-center mt-1 mb-1 text-danger">* A habilitação poderá sofrer alterações se, após análise da Urbel, for identificada alguma questão decorrente de atendimento habitacional anterior.</div>
 
-      <hr><h5 class="text-center mt-2 mb-2" id="totalizacaoResumosDosCasos"></h5><hr><br>   
+      <!--<hr><h5 class="text-center mt-2 mb-2" id="totalizacaoResumosDosCasos"></h5>-->
+      <hr><br><h5 class="text-center" id="totalizacaoResumosDosCasos"></h5>
+
+      <!-- Tabela com dados quantitativos - Situações do Benefício - Início -->
+      <!-- <h4 class="text-center fw-bold mt-5" id="headerQuantitativoSituacaoBeneficio">Quantitativo Situação do Benefício</h4>  -->   
+      <div class="row" >
+        <div class="col-md-2"></div>
+        <div class="col-md-8" id="plotQuantitativoSituacaoBeneficio"></div>    
+        <div class="col-md-2"></div>
+      </div>    
+      <!-- Tabela com dados quantitativos - Situações do Benefício - Fim -->          
+        
+      <hr><br>   
       
       <div class="d-flex align-items-center justify-content-center" style="gap: 4px;" id="evolucao_multipla"> 
         <select class="form-select form-select-sm py-0" style="width: 280px; height: 28px;"  id="select_evolucao_multipla" onchange="exibirCampoDataLimite()">               
@@ -99,6 +122,7 @@
             <th scope="col" class="align-middle">SITUAÇÃO DA VISTORIA</th>  
 
             <th scope="col" class="align-middle">DOCUMENTO PESSOAL COM FOTO PENDENTE</th>
+
           </tr>
         </thead>
       
