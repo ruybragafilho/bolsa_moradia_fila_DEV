@@ -58,11 +58,11 @@
     const data = [{
       x:labelSituacaoBeneficio,
       y:quantitativoSituacaoBeneficio,
-      type:"bar",
-      text: quantitativoSituacaoBeneficio.map(String),
+      type:"bar",      
       textposition: 'auto',
       orientation:"v",
       marker: {color:"rgba(0,0,255,0.6)"},
+      text: quantitativoSituacaoBeneficio.map(String),
       hovertemplate: '%{x}: %{y}<br>' +                     
                      '<extra></extra>' // Hides the trace name box                     
     }];
