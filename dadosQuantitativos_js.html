@@ -63,7 +63,8 @@
       textposition: 'auto',
       orientation:"v",
       marker: {color:"rgba(0,0,255,0.6)"},
-      hovertemplate: '(%{x}, %{y})'
+      hovertemplate: '%{x}: %{y}<br>' +                     
+                     '<extra></extra>' // Hides the trace name box                     
     }];
     
     const layout = {
