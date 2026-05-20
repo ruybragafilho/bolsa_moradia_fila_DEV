@@ -14,18 +14,14 @@
     // Configura a página para trabalhador da ponta ou DPOP
     if( usuarioLogado.instituicao != "0" ) {           
 
-      document.getElementById("evolucao_multipla").style.display = "none";   
-      document.getElementById("select_evolucao_multipla").style.display = "none";   
-      document.getElementById("bt_evolucao_multipla").style.display = "none";  
-      document.getElementById("evolucao_traco").style.display = "none";
+      document.getElementById("evolucao").style.display = "none";   
 
     } else {
       cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;
     }
 
-    document.getElementById("data_limite_insercao").style.display = "none";  
-    document.getElementById("data_limite_insercao_label").style.display = "none";  
-    document.getElementById("data_limite_insercao_input").style.display = "none";  
+    document.getElementById("data_limite").style.display = "none";  
+
 
     // Configura a página para trabalhador da root
     if( usuarioLogado.tipo == "0" ) {            
@@ -326,13 +322,9 @@
     let tipoEvolucao = document.getElementById("select_evolucao_multipla").value;
 
     if( tipoEvolucao == "3" ) {
-      document.getElementById("data_limite_insercao").style.display        =  "";
-      document.getElementById("data_limite_insercao_label").style.display  =  "";  
-      document.getElementById("data_limite_insercao_input").style.display  =  "";  
+      document.getElementById("data_limite").style.display = "";  
     } else {
-      document.getElementById("data_limite_insercao").style.display        =  "none";
-      document.getElementById("data_limite_insercao_label").style.display  =  "none";  
-      document.getElementById("data_limite_insercao_input").style.display  =  "none";        
+      document.getElementById("data_limite").style.display = "none";  
     }
 
   } // Fim da função exibirCampoDataLimite

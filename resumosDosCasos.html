@@ -89,21 +89,25 @@
         
       <hr><br>   
       
-      <div class="d-flex align-items-center justify-content-center" style="gap: 4px;" id="evolucao_multipla"> 
-        <select class="form-select form-select-sm py-0" style="width: 280px; height: 28px;"  id="select_evolucao_multipla" onchange="exibirCampoDataLimite()">               
-          <?!= gerarSelectBackend( BUFFER_SITUACOES_BENEFICIO ); ?>
-        </select>
-        <button class="btn btn-sm btn-primary" id="bt_evolucao_multipla" onclick="evoluirMultiplosCasosFE()">Evoluir</button>
+      <div id="evolucao">
+        <div class="d-flex align-items-center justify-content-center" style="gap: 4px;"> 
+          <select class="form-select form-select-sm py-0" style="width: 280px; height: 28px;" id="select_evolucao_multipla" onchange="exibirCampoDataLimite()">               
+            <?!= gerarSelectBackend( BUFFER_SITUACOES_BENEFICIO ); ?>
+          </select>
+          <button class="btn btn-sm btn-primary" onclick="evoluirMultiplosCasosFE()">Evoluir</button>
+        </div>
+  
+        <br>
+  
+        <div id="data_limite">
+          <div class="d-flex justify-content-center align-items-center" style="gap: 10px;"> 
+            <label for="data_limite_insercao_input" class="form-label fw-bold text-danger">Data Limite</label>
+            <input type="date" class="form-control form-control-sm" style="width: 170px;" id="data_limite_insercao_input">        
+          </div>
+        </div>
+
+        <br><hr><br>
       </div>
-
-      <br>
-
-      <div class="d-flex justify-content-center align-items-center" style="gap: 10px;" id="data_limite_insercao"> 
-        <label for="data_limite_insercao_input" class="form-label fw-bold text-danger" id="data_limite_insercao_label">Data Limite</label>
-        <input type="date" class="form-control form-control-sm" style="width: 170px;" id="data_limite_insercao_input">        
-      </div>
-
-      <div id="evolucao_traco"><br><hr><br></div>   
 
       <table id="resumosDosCasos" class="table table-striped table-hover text-center">    
 
