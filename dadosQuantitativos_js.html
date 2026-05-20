@@ -72,6 +72,7 @@
     }];
     
     const layout = {
+      title: { text: "<b>Situações Benefícios</b>" },            
       height: 500, // Altura total  
       xaxis: {
         tickangle: -45,
@@ -111,18 +112,64 @@
       } else {
         ++(quantitativoSituacaoVistoria[ quantitativoSituacaoVistoria.length - 1 ]);
       }        
-              
+
     })    
 
   } // Fim da função gerarQuantitativoSituacaoVistoria
 
 
 
+/**
+   * Função que gera o gráfico de barras da quantidade de casos em cada situação (Situação da Vistoria)
+   */
+  async function gerarGraficoQuantitativoSituacaoVistoria() {
 
+    // Aguarda carregamento das tabelas na cache de tabelas
+    while( !tabelasCarregadasNaCache() ) {
+      await esperar( 1000 );
+    }            
 
+    // Chama a função para gerar o quantitativo de quantidade de casos em cada situação
+    gerarQuantitativoSituacaoVistoria();
 
+    // Gera os Labels do gráfico com os nomes das situações de vistoria
+    cache_TabelaSituacoesVistoria.forEach( sit_vistoria => {
+      labelSituacaoVistoria.push( sit_vistoria[COLUNA_NOME] );  
+    });
+    labelSituacaoVistoria.push( "SEM VISTORIA AGENDADA" );
 
+    // Gera o gráfico usando a biblioteca plotly.js
+    const grafico = document.getElementById( "plotQuantitativoSituacaoVistoria" );    
+    
+    const data = [{
+      x:labelSituacaoVistoria,
+      y:quantitativoSituacaoVistoria,
+      type:"bar",      
+      textposition: 'auto',
+      orientation:"v",
+      marker: {color:"rgba(0,0,255,0.6)"},
+      text: quantitativoSituacaoVistoria.map(String),
+      hovertemplate: '%{x}: %{y}<br>' +                     
+                     '<extra></extra>' // Hides the trace name box                     
+    }];
+    
+    const layout = {
+      title: { text: "<b>Situações Vistorias</b>" },      
+      height: 500, // Altura total  
+      xaxis: {
+        tickangle: -45,
+        automargin: true
+      }      
+    };
 
+    const config = {
+      responsive: true,
+      displayModeBar: false
+    };      
+    
+    Plotly.newPlot(grafico, data, layout, config);
+
+  } // Fim da função gerarGraficoQuantitativoSituacaoVistoria 
 
 
 </script>
