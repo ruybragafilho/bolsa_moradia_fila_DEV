@@ -64,8 +64,8 @@ function getSituacaoVistoria( vistoriasCaso ) {
   if( vistoriasCaso.length == 0 ) {
     return "";  
   }
-  
-  let ultimaVistoria = vistoriasCaso[0];
+
+  let ultimaVistoria = vistoriasCaso[vistoriasCaso.length-1];
 
   let dataSolicitacao = ultimaVistoria.dataSolicitacao != "";
   let dataVistoria = ultimaVistoria.dataVistoria != "";
@@ -74,25 +74,25 @@ function getSituacaoVistoria( vistoriasCaso ) {
   if( dataLaudo ) {
 
     if( ultimaVistoria.descricaoLaudo.includes("Aprovado")  ) {
-      return BUFFER_SITUACOES_VISTORIA[3][NOME];         }
+      return BUFFER_SITUACOES_VISTORIA[3][ID];         }
     else if( ultimaVistoria.descricaoLaudo.includes("Reprovado") ) {
-      return BUFFER_SITUACOES_VISTORIA[2][NOME];     
+      return BUFFER_SITUACOES_VISTORIA[2][ID];     
     } else if( ultimaVistoria.descricaoLaudo.includes("Passível") ) {
-      return BUFFER_SITUACOES_VISTORIA[1][NOME];     
+      return BUFFER_SITUACOES_VISTORIA[1][ID];     
     } else {
-      return "INDEFINIDO"    
+      return ""    
     }
 
   }
 
   if( dataVistoria ) {
     // Última vistoria passível de aprovação
-    return BUFFER_SITUACOES_VISTORIA[1][NOME];             
+    return BUFFER_SITUACOES_VISTORIA[1][ID];             
   }  
 
   if( dataSolicitacao ) {
     // Vistoria solicitada
-    return BUFFER_SITUACOES_VISTORIA[0][NOME];             
+    return BUFFER_SITUACOES_VISTORIA[0][ID];             
   }
 
   return "";
@@ -125,3 +125,5 @@ function testePesquisarVistoriasPorCPF() {
 /**
  * ##### FIM DO MÓDULO tabelasVistoria.gs #####
  */
+
+

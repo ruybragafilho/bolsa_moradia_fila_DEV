@@ -7,9 +7,13 @@
 
   "use strict";  
 
-  // Array para armazenar os valores X e Y do gráfico
+  // Arrays para armazenar os valores X e Y do gráfico Situação do Benefício
   let quantitativoSituacaoBeneficio;
   let labelSituacaoBeneficio = [];
+
+    // Arrays para armazenar os valores X e Y do gráfico Situação da Vistoria
+  let quantitativoSituacaoVistoria;
+  let labelSituacaoVistoria = [];
 
 
   /**
@@ -84,5 +88,41 @@
 
   } // Fim da função gerarGraficoQuantitativoSituacaoBeneficio 
   
+
+
+  /**
+   * Função que contabiliza a quantidade de casos em cada situação (Situação da Vistoria)
+   */
+  async function gerarQuantitativoSituacaoVistoria() {
+
+    // Aguarda carregamento das tabelas na cache de tabelas
+    while( !tabelasCarregadasNaCache() ) {      
+      await esperar( 1000 );
+    }            
+
+    // Inicializa os contadores de cada situação de benefício
+    quantitativoSituacaoVistoria =  new Array( numSituacoesVistoria + 1 ).fill( 0 );
+
+    // Contabiliza a quantidade de casos em cada situação de benefício
+    casosFiltrados.forEach( caso => {        
+
+      if( caso.id_situacao_vistoria != "" ) {
+        ++(quantitativoSituacaoVistoria[ parseInt(caso.id_situacao_vistoria) - 1 ]);
+      } else {
+        ++(quantitativoSituacaoVistoria[ quantitativoSituacaoVistoria.length - 1 ]);
+      }        
+              
+    })    
+
+  } // Fim da função gerarQuantitativoSituacaoVistoria
+
+
+
+
+
+
+
+
+
 
 </script>

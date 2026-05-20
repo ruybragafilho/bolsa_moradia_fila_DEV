@@ -26,6 +26,11 @@
   let cache_TabelaSituacoesBeneficio = [];
   let numSituacoesBeneficio = 0;
 
+  // Cache da tabela Situações Vistoria, carregada via chamada 
+  // da função backend obterTabelaCompleta( "SITUACOES_VISTORIA" )  
+  let cache_TabelaSituacoesVistoria = [];
+  let numSituacoesVistoria = 0;
+
   // Cache da tabela Intervalos de Tempo, carregada via chamada 
   // da função backend obterTabelaCompleta( "INTERVALOS_DE_TEMPO" )  
   let cache_TabelaIntervalosDeTempo = [];
@@ -50,6 +55,7 @@
   let flagCache_TabelaRespostasSimples      = 0;
   let flagCache_TabelaOrgaosEncaminhadores  = 0;  
   let flagCache_TabelaSituacoesBeneficio    = 0;    
+  let flagCache_TabelaSituacoesVistoria     = 0;    
   let flagCache_TabelaIntervalosDeTempo     = 0;
   let flagCache_TabelaParametros            = 0;
   let flagCache_TabelaCasos                 = 0;
@@ -76,6 +82,7 @@
       carregarTabelaNaCache( "RESPOSTAS_SIMPLES" );    
       carregarTabelaNaCache( "ORGAOS_ENCAMINHADORES" );
       carregarTabelaNaCache( "SITUACOES_BENEFICIO" );
+      carregarTabelaNaCache( "SITUACOES_VISTORIA" );      
       carregarTabelaNaCache( "INTERVALOS_DE_TEMPO" );
       carregarTabelaNaCache( "PARAMETROS" );      
 
@@ -96,6 +103,7 @@
     if( flagCache_TabelaRespostasSimples      && 
         flagCache_TabelaOrgaosEncaminhadores  &&
         flagCache_TabelaSituacoesBeneficio    &&
+        flagCache_TabelaSituacoesVistoria     &&
         flagCache_TabelaIntervalosDeTempo     && 
         flagCache_TabelaParametros            &&
         flagCache_TabelaCasos      ) {
@@ -140,6 +148,11 @@
                       case "SITUACOES_BENEFICIO":   cache_TabelaSituacoesBeneficio     = tabela;
                                                     numSituacoesBeneficio              = tabela.length
                                                     flagCache_TabelaSituacoesBeneficio = 1;  
+                                                    break;           
+
+                      case "SITUACOES_VISTORIA":    cache_TabelaSituacoesVistoria      = tabela;
+                                                    numSituacoesVistoria               = tabela.length
+                                                    flagCache_TabelaSituacoesVistoria  = 1;  
                                                     break;           
 
                       case "INTERVALOS_DE_TEMPO":   cache_TabelaIntervalosDeTempo     = tabela;
@@ -202,6 +215,9 @@
                                        break;          
       case "SITUACOES_BENEFICIO":      tabela = cache_TabelaSituacoesBeneficio;
                                        tamanhoTabela = numSituacoesBeneficio;
+                                       break;          
+      case "SITUACOES_VISTORIA":       tabela = cache_TabelaSituacoesVistoria;
+                                       tamanhoTabela = numSituacoesVistoria;
                                        break;               
       case "INTERVALOS_DE_TEMPO":      tabela = cache_TabelaIntervalosDeTempo;
                                        tamanhoTabela = numIntervalosDeTempo;
@@ -229,18 +245,6 @@
   
   
   } // Fim da função idToNomeFE
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

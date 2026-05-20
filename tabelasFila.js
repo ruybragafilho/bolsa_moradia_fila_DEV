@@ -198,7 +198,7 @@ function obterFila() {
   let fila = BUFFER_FILA.map( caso => {    
 
     let vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
-    let situacaoVistoria = getSituacaoVistoria( vistoriasCaso );
+    let idSituacaoVistoria = getSituacaoVistoria( vistoriasCaso );
         
     return {
 
@@ -242,7 +242,7 @@ function obterFila() {
 
       vistorias: vistoriasCaso,
 
-      situacao_vistoria: situacaoVistoria,
+      id_situacao_vistoria: idSituacaoVistoria,
            
       posicaoNaFila: 0
 
@@ -345,17 +345,6 @@ function teste_obterFila() {
 /**
  * ##### FIM DO MÓDULO tabelasFila.gs #####
  */
-
-
-
-
-
-
-
-
-
-
-
 
 
 

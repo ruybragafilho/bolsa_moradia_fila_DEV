@@ -14,6 +14,10 @@
     // Configura a página para trabalhador da ponta ou DPOP
     if( usuarioLogado.instituicao != "0" ) {           
 
+      if(usuarioLogado.instituicao != "-1") {
+        document.getElementById("graficos").style.display = "none";   
+      }
+      
       document.getElementById("evolucao").style.display = "none";   
 
     } else {
@@ -155,7 +159,9 @@
           <td class="clicavel align-middle">${item.data_ultima_evolucao}</td>
           <td class="clicavel align-middle">${item.data_limite}</td>   
           
-          <td class="clicavel align-middle">${ item.situacao_vistoria }</td>`;  
+          <td class="clicavel align-middle">${ idToNomeFE( item.id_situacao_vistoria, "SITUACOES_VISTORIA" ) }</td>`; 
+          
+          
   
         tr.innerHTML += docPendente;   
 
