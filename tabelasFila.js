@@ -316,6 +316,53 @@ function obterFila() {
 
 
 
+/**
+ * Função que atualiza o campo SITUAÇÃO DO BENEFÍCIO dos casos que estavam
+ * com a situação == CONVOCADO PARA ACESSO e foram liberados na planilha de 
+ * monitoramento da Urbel 
+ */
+function atualizarFila() {
+
+  try {
+
+    // Obtém os casos com SITUAÇÃO BENEFÍCIO == CONVOCADO PARA ACESSO
+    let casosConvocados = BUFFER_FILA.filter( caso => caso[SITUACAO_BENEFICIO] == "3" );
+  
+    // Para cada caso CONVOCADO PARA ACESSO,
+    // verifica, na tabela monitoramento, se a situação do 
+    // benefício mudou para Benefício Liberado.
+    // Se sim, evolui o caso, na fila, para esse status
+    if( casosConvocados.length > 0 ) {
+  
+      casosConvocados.forEach( cc => {
+  
+        let vistorias = pesquisarVistoriasPorCPF( cc[CPF_RF] );
+  
+        if( vistorias.length > 0 ) {
+  
+          let ultimaVistoria = vistorias[0];
+  
+          if( beneficioLiberado( ultimaVistoria.selo ) ) {
+            
+            evoluirCasoBE( cc[ID], "4", "" );
+            console.log(  "Selo: " + ultimaVistoria.selo + " - Liberado" );
+            console.log( "ID CASO: " + cc[ID] );
+            console.log( "ID EVOLUÇÃO: 4" );
+  
+          }          
+        }
+  
+      }); // Fim forEach
+    }
+
+  } catch( error ) {
+    throw( error.message );
+  }
+
+} // Fim da Função atualizarFila 
+
+
+
 
 
 /** 

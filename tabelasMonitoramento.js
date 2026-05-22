@@ -18,8 +18,9 @@ const TAMANHO_MONITORAMENTO      =  BUFFER_MONITORAMENTO.length;
 
 
 // Posições das colunas da planilha MONITORAMENTO
-const SELO_PK                              =  29;
-const SITUACAO_BENEFICIO_TB_MONITORAMENTO  =  46;
+const SELO_PK                                   =  29;
+const SITUACAO_BENEFICIO_TB_MONITORAMENTO       =  46;
+const DATA_SITUACAO_BENEFICIO_TB_MONITORAMENTO  =  47;
 
 
 
@@ -29,18 +30,24 @@ const SITUACAO_BENEFICIO_TB_MONITORAMENTO  =  46;
  * @param {String} selo - SELO do caso
  * @returns A situação do benefício
  */
-function pesquisarCasoPorSelo( selo ) {
+function beneficioLiberado( selo ) {
 
-  const caso = BUFFER_MONITORAMENTO.filter( c => c[SELO_PK] == selo );
+  const casos = BUFFER_MONITORAMENTO.filter( c => c[SELO_PK].replace(".", "").replace(",", "") == selo );
   
-  if( caso.length > 0 ) {
+  if( casos.length > 0 ) {
 
-    return new String( caso[0][SITUACAO_BENEFICIO_TB_MONITORAMENTO] );
+      let caso = casos[0];
+
+      if( caso[SITUACAO_BENEFICIO_TB_MONITORAMENTO].toUpperCase().includes( "LIBERADO" ) ) {
+        
+        return true;
+
+      } else {
+        return false;
+      } 
 
   } else {
-
-    return "NI";
-
+    return false;
   }  
 
 } // Fim da função pesquisarCasoPorSelo()
@@ -48,11 +55,11 @@ function pesquisarCasoPorSelo( selo ) {
 
 
 
-function testepesquisarCasoPorSelo() {
+function testebeneficioLiberado() {
 
-    const selo = 292;
+    const selo = "943";
 
-    const situacaoBeneficio = pesquisarCasoPorSelo( selo );
+    const situacaoBeneficio = beneficioLiberado( selo );
 
     console.log( "Situação do benefício: " + situacaoBeneficio );
 }
@@ -61,4 +68,5 @@ function testepesquisarCasoPorSelo() {
 /**
  * ##### FIM DO MÓDULO tabelasMonitoramento.gs #####
  */
+
 

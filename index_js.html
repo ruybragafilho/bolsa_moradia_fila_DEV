@@ -11,10 +11,19 @@
    */
   document.addEventListener( 'DOMContentLoaded', () => {
 
-    console.log( "\nindex_js - INÍCIO" );     
+    console.log( "\nindex_js - INÍCIO" );  
 
     // Inicializa as telas modais
     inicializarModais();       
+
+    // Atualiza Fila
+    google.script.run
+                  // Se a função atualizarFila for executada com sucesso
+                 .withSuccessHandler( p => {console.log("Fila Atualizada!");} )
+                  // Se a função atualizarFila lançar algum erro / excessão
+                 .withFailureHandler( error => { mostrarModalErro( "index_js - " + error.message ); })
+                  // Chama a função backend para autenticar o usuario
+                 .atualizarFila();     
                    
     // Pŕe carrega as páginas do sistema no cache de páginas
     preCarregarPaginasNaCache();                       

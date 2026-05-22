@@ -55,23 +55,24 @@ function pesquisarVistoriasPorCPF( cpf ) {
 
 
 /**
- * Função que retorn a a situação da última vistoria de um caso, a partir do histórico de vistorias do caso
+ * Função que retorna o id da situação da última vistoria de um caso, a partir do histórico de vistorias do caso
  * @param {Array de vistorias} vistoriasCaso - Array com o historico de vistorias do caso
- * @returns Status da últimaVistoria do caso
+ * @returns ID do status da últimaVistoria do caso
  */
 function getSituacaoVistoria( vistoriasCaso ) {
 
+  // Se o parâmetro vistoria for null, retiorn null
   if( vistoriasCaso.length == 0 ) {
     return "";  
   }
 
+  // Obtém a última vistoria de um caso
   let ultimaVistoria = vistoriasCaso[vistoriasCaso.length-1];
 
-  let dataSolicitacao = ultimaVistoria.dataSolicitacao != "";
-  let dataVistoria = ultimaVistoria.dataVistoria != "";
-  let dataLaudo = ultimaVistoria.dataLaudo != "";
 
-  if( dataLaudo ) {
+  // Retorna a situação da última vistoria
+
+  if( ultimaVistoria.dataLaudo != "" ) {
 
     if( ultimaVistoria.descricaoLaudo.includes("Aprovado")  ) {
       return BUFFER_SITUACOES_VISTORIA[3][ID];         }
@@ -85,12 +86,12 @@ function getSituacaoVistoria( vistoriasCaso ) {
 
   }
 
-  if( dataVistoria ) {
+  if( ultimaVistoria.dataVistoria != "" ) {
     // Última vistoria passível de aprovação
     return BUFFER_SITUACOES_VISTORIA[1][ID];             
   }  
 
-  if( dataSolicitacao ) {
+  if( ultimaVistoria.dataSolicitacao != "" ) {
     // Vistoria solicitada
     return BUFFER_SITUACOES_VISTORIA[0][ID];             
   }
@@ -102,12 +103,34 @@ function getSituacaoVistoria( vistoriasCaso ) {
 
 
 /**
+ * Função que retorna o selo da última vistoria de um caso, a partir do histórico de vistorias do caso
+ * @param {Array de vistorias} vistoriasCaso - Array com o historico de vistorias do caso
+ * @returns Selo da últimaVistoria do caso
+ */
+function getSeloVistoria( vistoriasCaso ) {
+
+  if( vistoriasCaso.length == 0 ) {
+    return "";  
+  }
+
+  let ultimaVistoria = vistoriasCaso[vistoriasCaso.length-1];
+
+  return( ultimaVistoria.selo );
+
+} // Fim da função getSeloVistoria
+
+
+
+
+
+
+/**
  * Função para testar a função pesquisarVistoriasPorCPF() 
  * do módulo tabelasVistoria.gs
  */
 function testePesquisarVistoriasPorCPF() {
 
-  let cpf = "07434335645";
+  let cpf = "03468702671";
 
   let vistorias = pesquisarVistoriasPorCPF( cpf );
 
@@ -117,6 +140,10 @@ function testePesquisarVistoriasPorCPF() {
   let situacaoVistoria = getSituacaoVistoria( vistorias );
 
   console.log( `Situação da última vistoria para o CPF ${cpf}: ${situacaoVistoria}` );
+
+  let seloVistoria = getSeloVistoria( vistorias );
+
+  console.log( `Selo da última vistoria para o CPF ${cpf}: ${seloVistoria}` );  
 
 } // Fim da função testePesquisarVistoriasPorCPF()
 
