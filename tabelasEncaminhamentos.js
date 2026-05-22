@@ -10,7 +10,7 @@
 /**
  * Planilha CASOS EXTERNOS - TRABALHADORES EXTERNOS (casos registrados por trabalhadores externos)
  */
-const PLANILHA_CASOS_EXTERNOS_ID   =  "1M4JJvQSfZ9Z4LMfi_lsbmdMP53edSWLvwTPw2_dGK8w";
+const PLANILHA_CASOS_EXTERNOS_ID   =  "1PVOFfOORpXJx4FsWJLQskc9x0ZanMjQMd3roJ6hib5w";
 const PLANILHA_CASOS_EXTERNOS      =  SpreadsheetApp.openById(PLANILHA_CASOS_EXTERNOS_ID);
 
 const TABELA_CASOS_EXTERNOS             =  PLANILHA_CASOS_EXTERNOS.getSheetByName('PESSOA');
@@ -21,7 +21,7 @@ const NUM_LINHAS_TABELA_CASOS_EXTERNOS  =  BUFFER_CASOS_EXTERNOS.length;
 /**
  * Planilha CASOS PBH - TRABALHADORES PBH (casos registrados por trabalhadores PBH)
  */
-const PLANILHA_CASOS_PBH_ID   =  "1Ud6_qdKgt9jTeDOjdQWbjwBq7KUaSiaI2jsjTkNoxFA";
+const PLANILHA_CASOS_PBH_ID   =  "1JVmJIM8FPePpgdOeXXgd9C307ZSj1tzE99MLiajeHCc";
 const PLANILHA_CASOS_PBH      =  SpreadsheetApp.openById(PLANILHA_CASOS_PBH_ID);
 
 const TABELA_CASOS_PBH             =  PLANILHA_CASOS_PBH.getSheetByName('PESSOA');
