@@ -319,7 +319,7 @@ function obterFila() {
 /**
  * Função que atualiza o campo SITUAÇÃO DO BENEFÍCIO dos casos que estavam
  * com a situação == CONVOCADO PARA ACESSO e foram liberados na planilha de 
- * monitoramento da Urbel 
+ * MONITORAMENTO da Urbel 
  */
 function atualizarFila() {
 
