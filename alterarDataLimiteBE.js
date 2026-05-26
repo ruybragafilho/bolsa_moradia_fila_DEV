@@ -42,8 +42,9 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
       const campo_data_limite = TABELA_FILA.getRange( id+1, DATA_LIMITE+1 );
       //campo_data_limite.setValue( dataLimite );          
       let auxDataLimite = new Date( dataLimite );  
-      auxDataLimite.setDate( auxDataLimite.getDate() + 1 );      
-      campo_data_limite.setValue( new Date(auxDataLimite).toLocaleString("pt-BR", {dateStyle: "short"}) );          
+      auxDataLimite.setDate( auxDataLimite.getDate() + 1 );   
+      let dataLimiteFormatada = new Date(auxDataLimite).toLocaleString("pt-BR", {dateStyle: "short"});   
+      campo_data_limite.setValue( dataLimiteFormatada );          
 
       
       // Grava a justificativa da alteração da data limite
@@ -56,6 +57,41 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
       
       // SOLTA O LOCK
       lock.releaseLock();
+
+
+      // Envia email para o órgão encaminhador e para a instituição,
+      // caso a evolução seja diferente de INATIVAÇÃO
+      let idEvolucao = BUFFER_FILA[id-1][SITUACAO_BENEFICIO];
+
+      if( idEvolucao != "1" ) {
+
+        let mensagemDataLimite;
+        if( idEvolucao == "3" ) {
+
+          mensagemDataLimite = `<br>Atentem-se à data limite de conclusão do acesso ao benefício: <b>${dataLimiteFormatada}</b>. 
+                                Após este período, o beneficiário perderá a sua reserva da vaga e só poderá ser inserido novamente
+                                em um novo processo de habilitação. Caso o beneficiário já esteja com o benefício liberado, o 
+                                prazo pode ser desconsiderado.<br>`;
+        } else {
+          mensagemDataLimite = "";
+        }
+
+        const emailOrgaoEncaminhador = BUFFER_FILA[id-1][EMAIL_ORGAO_ENCAMINHADOR];
+        const cpfRFCaso = (BUFFER_FILA[id-1][CPF_RF]).padStart(11, "0");
+        const nomeRFCaso = BUFFER_FILA[id-1][REFERENCIA_FAMILIAR];
+        const evolucaoCaso = idToNome( idEvolucao,  "SITUACOES_BENEFICIO" );
+    
+        const idInstituicao = parseInt(BUFFER_FILA[id-1][ORGAO_ENCAMINHADOR]);
+        const emailInstituicao = BUFFER_ORGAOS_ENCAMINHADORES[idInstituicao-1][EMAIL_INSTITUICAO];
+    
+        const emails = [];
+        if( isEmailValidBE(emailOrgaoEncaminhador) ) { emails.push(emailOrgaoEncaminhador) }
+        if( isEmailValidBE(emailInstituicao) ) { emails.push(emailInstituicao) }
+            
+        enviarEmailBE( emails.join(","), cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );                
+
+      } // Fim if 
+
   
       return true;
   
