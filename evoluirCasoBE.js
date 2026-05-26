@@ -59,6 +59,16 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
       // caso a evolução seja diferente de INATIVAÇÃO
       if( idEvolucao != "1" ) {
 
+        let mensagemDataLimite;
+        if( idEvolucao == "3" ) {
+
+          let dataLimiteFormatada = new Date(dataLimite).toLocaleDateString("pt-BR", {dateStyle: "short"});
+
+          mensagemDataLimite = `<br>Atentem-se à data limite de conclusão do acesso ao benefício: <b>${dataLimiteFormatada}</b>. Após este período, o beneficiário perderá a sua reserva da vaga e só poderá ser inserido novamente em um novo processo de habilitação. Caso o beneficiário já esteja com o benefício liberado, o prazo pode ser desconsiderado.<br>`;
+        } else {
+          mensagemDataLimite = "";
+        }
+
         const emailOrgaoEncaminhador = BUFFER_FILA[id-1][EMAIL_ORGAO_ENCAMINHADOR];
         const cpfRFCaso = (BUFFER_FILA[id-1][CPF_RF]).padStart(11, "0");
         const nomeRFCaso = BUFFER_FILA[id-1][REFERENCIA_FAMILIAR];
@@ -71,7 +81,7 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
         if( isEmailValidBE(emailOrgaoEncaminhador) ) { emails.push(emailOrgaoEncaminhador) }
         if( isEmailValidBE(emailInstituicao) ) { emails.push(emailInstituicao) }
             
-        enviarEmailBE( emails.join(",")  , cpfRFCaso, nomeRFCaso, evolucaoCaso );                
+        enviarEmailBE( emails.join(","), cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );                
 
       } // Fim if 
 

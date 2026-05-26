@@ -10,9 +10,13 @@
  * Função que envia um email para o endereço de e-mail informado
  *  
  * @param {String} enderecoEmail: enderecoEmail Endereço para onde o email será enviado
+ * @param {String} cpfRFCaso: cpfRFCaso CPF do beneficiário do caso
+ * @param {String} nomeRFCaso: nomeRFCaso Nome do beneficiário do caso
+ * @param {String} evolucaoCaso: evolucaoCaso Tipo de evolução do caso
+ * @param {String} mensagemDataLimite: mensagemDataLimite Mensagem sobre a data limite  
  * 
  */
-function enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso ) {
+function enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite ) {
   
   try {
   
@@ -24,7 +28,9 @@ function enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso ) {
       htmlBody:  
 `Prezado (a),<br><br>
 
-informamos que houve alteração no status do benefício de <b>${nomeRFCaso}</b>, CPF <b>${cpfRFCaso}</b>, para <b>${evolucaoCaso}</b>. Pedimos que verifique as informações no sistema e comunique ao beneficiado, se necessário.<br><br>
+informamos que houve alteração no status do benefício de <b>${nomeRFCaso}</b>, CPF <b>${cpfRFCaso}</b>, para <b>${evolucaoCaso}</b>. Pedimos que verifique as informações no sistema e comunique ao beneficiado, se necessário.<br>
+
+${mensagemDataLimite}<br>
 
 Qualquer dúvida, procure a equipe da DPOP.<br><br>
 
@@ -55,9 +61,10 @@ function teste_enviarEmail() {
   let enderecoEmail = "sigps@pbh.gov.br";
   let cpfRFCaso = "111.222.333-44";
   let nomeRFCaso = "João da Silva";
-  let evolucaoCaso = "evolução;"
-
-  enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso );
+  let evolucaoCaso = "evolução";
+  let mensagemDataLimite = "";
+  
+  enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );
  
 }
 
