@@ -630,17 +630,17 @@ function perfilCompleto( caso ) {
 
 
   // Array onde cada posição armazenará o id do parâmetro
-  let perfil_idsParametrosCaso = new Array( NUM_PARAMETROS + 1).fill( 0 );
+  let perfil_idsParametrosCaso = new Array( NUM_PERFIS + 1).fill( 0 );
   let contador = 0;
   
   
-  // PARÂMETRO 1 - RF mulher (cis ou trans)    
+  // PERFIL 1 - RF mulher (cis ou trans)    
   if( rf[UNI_GENERO] == "3" || rf[UNI_GENERO] == "4" ) {   
     perfil_idsParametrosCaso[1] = 1;
   } 
   
   
-  // PARÂMETRO 2 - NÃO RF mulher (cis ou trans)  
+  // PERFIL 2 - NÃO RF mulher (cis ou trans)  
   contador = 0;
   for( let i=1; i<numeroFamiliares; ++i ) {
     familiar = caso[i];
@@ -651,16 +651,14 @@ function perfilCompleto( caso ) {
   perfil_idsParametrosCaso[2] = contador;
 
   
-  // PARÂMETRO 3 - RF cuja identidade de gênero e orientação sexual sejam
-  //               diferentes da cisheterossexualidade    
+  // PERFIL 3 - RF não cisheterossexual
   if( (rf[UNI_GENERO] == "2" || rf[UNI_GENERO] == "4" || rf[UNI_GENERO] == "5" || rf[UNI_GENERO] == "6" ) || 
       (rf[UNI_ORIENTACAO_SEXUAL] == "1" || rf[UNI_ORIENTACAO_SEXUAL] == "2" || rf[UNI_ORIENTACAO_SEXUAL] == "4" || rf[UNI_ORIENTACAO_SEXUAL] == "5") ) {       
     perfil_idsParametrosCaso[3] = 1;
   }
     
   
-  // PARÂMETRO 4 - NÃO RF cuja identidade de gênero e orientação sexual sejam
-  //               diferentes da cisheterossexualidade    
+  // PERFIL 4 - NÃO RF não cisheterossexual
   contador = 0; 
   for( let i=1; i<numeroFamiliares; ++i ) {
     familiar = caso[i];
@@ -672,13 +670,13 @@ function perfilCompleto( caso ) {
   perfil_idsParametrosCaso[4] = contador;
   
 
-  // PARÂMETRO 5 - RF preto, pardo ou indígena    
+  // PERFIL 5 - RF preto, pardo ou indígena    
   if( rf[UNI_RACA_COR] == "2" || rf[UNI_RACA_COR] == "4" || rf[UNI_RACA_COR] == "5" ) { 
     perfil_idsParametrosCaso[5] = 1;
   }
     
   
-  // PARÂMETRO 6 - Não RF preto, pardo ou indígena  
+  // PERFIL 6 - Não RF preto, pardo ou indígena  
   contador = 0;
   for( let i=1; i<numeroFamiliares; ++i ) {
     familiar = caso[i];
@@ -689,7 +687,7 @@ function perfilCompleto( caso ) {
   perfil_idsParametrosCaso[6] = contador;
 
   
-  // PARÂMETRO 7 - Famílias com crianças e adolescentes
+  // PERFIL 7 - Crianças e Adolescentes
   contador = 0;
   for( let i=1; i<numeroFamiliares; ++i ) {
     familiar = caso[i];
@@ -700,40 +698,40 @@ function perfilCompleto( caso ) {
   perfil_idsParametrosCaso[7] = contador;
 
 
-  // PARÂMETRO 8  - RF com idade >= 80 anos
-  // PARÂMETRO 10 - RF com idade >= 60 anos e < 80 anos  
-  perfil_idsParametrosCaso[8]  = 0;
-  perfil_idsParametrosCaso[10] = 0;  
+  // PERFIL 8 - RF com idade >= 80 anos
+  // PERFIL 9 - RF com idade >= 60 anos e < 80 anos  
+  perfil_idsParametrosCaso[8] = 0;
+  perfil_idsParametrosCaso[9] = 0;  
   let idadeRF = calcularIdade( rf[UNI_DATA_NASCIMENTO] );  
   if( idadeRF >= 80 ) { 
    perfil_idsParametrosCaso[8] = 1;    
   } else if( idadeRF >= 60 ) { 
-   perfil_idsParametrosCaso[10] = 1;    
+   perfil_idsParametrosCaso[9] = 1;    
   } 
    
-  // PARÂMETRO 9  - NÃO RF com idade >= 80 anos
-  // PARÂMETRO 11 - NÃO RF com idade >= 60 anos e < 80 anos  
-  perfil_idsParametrosCaso[9]  = 0;    
+  // PERFIL 10 - NÃO RF com idade >= 80 anos
+  // PERFIL 11 - NÃO RF com idade >= 60 anos e < 80 anos  
+  perfil_idsParametrosCaso[10] = 0;    
   perfil_idsParametrosCaso[11] = 0;    
   let idadeFamiliar;        
   for( let i=1; i<numeroFamiliares; ++i ) {
     familiar = caso[i];
     idadeFamiliar = calcularIdade( familiar[UNI_DATA_NASCIMENTO] );
     if( idadeFamiliar >= 80 ) {
-      ++perfil_idsParametrosCaso[9];    
+      ++perfil_idsParametrosCaso[10];    
     } else if( idadeFamiliar >= 60 ) {
       ++perfil_idsParametrosCaso[11];    
     } 
   } 
   
   
-  // PARÂMETRO 12 - RF PCD
+  // PERFIL 12 - RF PCD
   if( rf[UNI_PCD] == "2" ) { 
     perfil_idsParametrosCaso[12] = 1;    
   }
 
   
-  // PARÂMETRO 13 - NÃO RF PCD
+  // PERFIL 13 - NÃO RF PCD
   contador = 0;
   for( let i=1; i<numeroFamiliares; ++i ) {
     familiar = caso[i];
@@ -744,13 +742,13 @@ function perfilCompleto( caso ) {
   perfil_idsParametrosCaso[13] = contador;    
 
 
-  // PARÂMETRO 14 - RF em gestação ou em fase de puerpério – até 6 meses após a gestação.
+  // PERFIL 14 - RF em gestação ou em fase de puerpério
   if( rf[UNI_GESTANTE] == "2" ) { 
     perfil_idsParametrosCaso[14] = 1;
   }
 
   
-  // PARÂMETRO 15 - NÃO RF em gestação ou em fase de puerpério – até 6 meses após a gestação.
+  // PERFIL 15 - NÃO RF em gestação ou em fase de puerpério
   contador = 0;
   for( let i=1; i<numeroFamiliares; ++i ) {
     familiar = caso[i];
@@ -761,236 +759,142 @@ function perfilCompleto( caso ) {
   perfil_idsParametrosCaso[15] = contador;    
 
 
-  // PARÂMETRO 16 - Famílias em situação de rua com crianças e/ou adolescentes com
-  //                medida protetiva de acolhimento ou em processo de acolhimento, e
-  //                famílias que tiveram crianças e/ou adolescentes privadas do convívio
-  //                familiar em decorrência da vida nas ruas dos responsáveis    
+  // PERFIL 16 - Famílias em situação de rua com crianças e/ou adolescentes com
+  //             medida protetiva de acolhimento ou em processo de acolhimento, e
+  //             famílias que tiveram crianças e/ou adolescentes privadas do convívio
+  //             familiar em decorrência da vida nas ruas dos responsáveis    
   if( rf[UNI_CEA_ACOLHIMENTO_INSTITUCIONAL] == "2" ||
       rf[UNI_CEA_PRIVACAO_CONVIVIO] == "2"   ) {
     perfil_idsParametrosCaso[16] = 1;    
   }
 
 
-  // PARÂMETRO 17 - Família em situação de rua com membros em situação de trabalho infantil
-  //                e/ou exploração sexual de crianças/adolescentes    
+  // PERFIL 17 - Família em situação de rua com membros em situação de trabalho infantil
+  //             e/ou exploração sexual de crianças/adolescentes    
   if( rf[UNI_CEA_TRABALHO_INFANTIL_EXPLORACAO_SEXUAL] == "2" ) {
     perfil_idsParametrosCaso[17] = 1;    
   }
 
 
-  // PARÂMETRO 18 - Família em situação de rua com membros em situação de prostituição    
+  // PERFIL 18 - Família em situação de rua com membros em situação de prostituição    
   if( rf[UNI_PROSTITUICAO] == "2" ) {
     perfil_idsParametrosCaso[18] = 1;    
   }
 
 
-
-
-
-  // 3) VULNERABILIDADE DE SAÚDE DA FAMÍLIA  
-  peso = 1;
-
-
-  // 3.1) Presença de condições de saúde que necessitem de cuidado contínuo  
-  pontuacaoCriterio = 0;
-
-  let flagParametroSaude;
-
+  // PERFIL 19 - RF apresenta MAIS DE UMA condição de saúde que necessite de cuidado contínuo
+  // PERFIL 20 - RF apresenta APENAS UMA condição de saúde que necessite de cuidado contínuo
   if( rf[UNI_PROBLEMAS_SAUDE] == "3" ) { 
-
-    pontuacaoCriterio = peso*3;    
-    
-    flagParametroSaude = 19;
-    idsParametrosCaso.push(flagParametroSaude);
-    pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
-
+    perfil_idsParametrosCaso[19] = 1;    
   } else if( rf[UNI_PROBLEMAS_SAUDE] == "2" ) { 
-
-    pontuacaoCriterio = peso*2;    
-
-    flagParametroSaude = 21;
-
-    for( let i=1; i<numeroFamiliares; ++i ) {
-      familiar = caso[i];
-      if( familiar[UNI_PROBLEMAS_SAUDE] == "3" ) {
-        pontuacaoCriterio += peso*1;
-        flagParametroSaude = 20;
-        
-        break;
-      }
-    } 
-
-    idsParametrosCaso.push(flagParametroSaude);          
-    pontuacoesParametrosCaso.push(pontuacaoCriterio);                                   
-    
-  } else {
-
-    flagParametroSaude = 0;
-
-    for( let i=1; i<numeroFamiliares; ++i ) {
-      familiar = caso[i];
-      if( familiar[UNI_PROBLEMAS_SAUDE] == "3" ) {
-        pontuacaoCriterio = peso*2;        
-        flagParametroSaude = 22;
-        break;
-      } else if( familiar[UNI_PROBLEMAS_SAUDE] == "2" ) {
-        pontuacaoCriterio = peso*1;        
-        flagParametroSaude = 23;      
-      }
+    perfil_idsParametrosCaso[20] = 1;    
+  }
+  
+  // PERFIL 21 - NÃO RF apresenta MAIS DE UMA condição de saúde que necessite de cuidado contínuo
+  // PERFIL 22 - NÃO RF apresenta APENAS UMA condição de saúde que necessite de cuidado contínuo
+  for( let i=1; i<numeroFamiliares; ++i ) {
+    familiar = caso[i];
+    if( familiar[UNI_PROBLEMAS_SAUDE] == "3" ) {
+      ++perfil_idsParametrosCaso[21];                  
+    } else if( familiar[UNI_PROBLEMAS_SAUDE] == "2" ) {
+      ++perfil_idsParametrosCaso[22];                  
     }
-    
-    if(flagParametroSaude != 0) {
-      idsParametrosCaso.push(flagParametroSaude);      
-      pontuacoesParametrosCaso.push(pontuacaoCriterio);
-    } 
-
-  }  
-
-  pontuacaoTotal += pontuacaoCriterio;  
+  }     
 
 
-  // 3.2) Famílias com pessoas que possuem diagnóstico de sofrimento mental, uso prejudicial
-  //      de álcool e drogas e/ou membros dependentes de cuidados para a vida diária  
-  pontuacaoCriterio = 0;
-
+  // PERFIL 23 - Diagnóstico de sofrimento mental, uso prejudicial de álcool e drogas e/ou dependentes de cuidados para a vida diária
   if( rf[UNI_DIAGNOSTICO] == "2" ) {
-    pontuacaoCriterio = peso*1;    
-    idsParametrosCaso.push(24);
-    pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
+    perfil_idsParametrosCaso[23] = 1;    
   }
 
-  pontuacaoTotal += pontuacaoCriterio;  
 
-
-
-  // 4) VULNERABILIDADE EM DECORRÊNCIA DE VIDA NAS RUAS
-  peso = 1;
-
-
-  // 4.1) Tempo de vida nas ruas e/ou de acolhimento institucional  
-  pontuacaoCriterio = 0;
-  
+  // Tempo de vida nas ruas
+  // PERFIL 24 - Até seis meses
+  // PERFIL 25 - Entre seis meses e um ano
+  // PERFIL 26 - Entre um e dois anos
+  // PERFIL 27 - Entre dois e cinco anos
+  // PERFIL 28 - Entre cinco e dez anos
+  // PERFIL 29 - Mais de dez anos
   switch( rf[UNI_TEMPO_SITUACAO_DE_RUA] ) {
-    case "1":   pontuacaoCriterio = peso*2;
-                idsParametrosCaso.push(25);
-                pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
+    case "1":   perfil_idsParametrosCaso[24] = 1;    
                 break;    
-    case "2":   pontuacaoCriterio = peso*2;
-                idsParametrosCaso.push(26);
-                pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
+    case "2":   perfil_idsParametrosCaso[25] = 1;    
                 break;    
-    case "3":   pontuacaoCriterio = peso*2;
-                idsParametrosCaso.push(27);
-                pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
+    case "3":   perfil_idsParametrosCaso[26] = 1;    
                 break;    
-    case "4":   pontuacaoCriterio = peso*4;
-                idsParametrosCaso.push(28);
-                pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
+    case "4":   perfil_idsParametrosCaso[27] = 1;    
                 break;    
-    case "5":   pontuacaoCriterio = peso*5;
-                idsParametrosCaso.push(29);
-                pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
+    case "5":   perfil_idsParametrosCaso[28] = 1;    
                 break;    
-    case "6":   pontuacaoCriterio = peso*6;
-                idsParametrosCaso.push(30);
-                pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
-                break;
-    default:    pontuacaoCriterio = 0;
+    case "6":   perfil_idsParametrosCaso[29] = 1;    
                 break;
   }  
 
-  pontuacaoTotal += pontuacaoCriterio;    
-  
 
-  // 4.2) Histórico de institucionalização (Clínicas psiquiátricas, comunidades terapêuticas, 
-  //      sistema prisional, sistema socioeducativo, instituições asilares)  
-  pontuacaoCriterio = 0;
-
+  // PERFIL 30 - Histórico de institucionalização  
   if( rf[UNI_INSTITUCIONALIZACAO].includes("2") || 
       rf[UNI_INSTITUCIONALIZACAO].includes("3") || 
       rf[UNI_INSTITUCIONALIZACAO].includes("4") ||      
       rf[UNI_INSTITUCIONALIZACAO].includes("5") || 
       rf[UNI_INSTITUCIONALIZACAO].includes("6") ) {
-    pontuacaoCriterio = peso*1;    
-    idsParametrosCaso.push(31);
-    pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
-  }
 
-  pontuacaoTotal += pontuacaoCriterio; 
-  
+    perfil_idsParametrosCaso[30] = 1;    
+  }  
+   
 
-  // 4.3) Famílias ou indivíduos em situação de ameaça, conflito 
-  //      territorial ou outras violências  
-  pontuacaoCriterio = 0;
-
+  // PERFIL 31 - Mulheres em situação de violência doméstica
   if( rf[UNI_AMEACA_CONFLITO_VIOLENCIA].includes("2") ) {
-    pontuacaoCriterio = peso*2;    
-    idsParametrosCaso.push(32);
-    pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
-  } else if( rf[UNI_AMEACA_CONFLITO_VIOLENCIA].includes("3") ||
-             rf[UNI_AMEACA_CONFLITO_VIOLENCIA].includes("4")   ) {
-    pontuacaoCriterio = peso*1;    
-    idsParametrosCaso.push(33);
-    pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
+    perfil_idsParametrosCaso[31] = 1;    
+  }
+  
+  // PERFIL 32 - Outras situações de violência doméstica
+  if( rf[UNI_AMEACA_CONFLITO_VIOLENCIA].includes("3") ||
+      rf[UNI_AMEACA_CONFLITO_VIOLENCIA].includes("4")   ) {
+    perfil_idsParametrosCaso[32] = 1; 
   }
 
-  pontuacaoTotal += pontuacaoCriterio;  
 
-
-
-  // 5) ARTICULAÇÃO ENTRE MORADIA E TRABALHO
-  peso = 1;
-
-  
-  // 5.1) Pessoas em situação vinculadas ao trabalho formal ou informal, 
-  //      grupos produtivos, associações e cooperativas  
-  pontuacaoCriterio = 0;
-
+  // PERFIL 33 - RF vinculada ao trabalho formal ou informal, grupos produtivos, associações e cooperativas
   if( rf[UNI_TRABALHO_FORMAL] == "2" || 
       rf[UNI_TRABALHO_OUTROS].includes("2") || 
       rf[UNI_TRABALHO_OUTROS].includes("3") ) { 
-    pontuacaoCriterio = peso*2;    
-    idsParametrosCaso.push(34);
-    pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
-  } else {
-    for( let i=1; i<numeroFamiliares; ++i ) {
-      familiar = caso[i];
-      if( familiar[UNI_TRABALHO_FORMAL] == "2" || 
-          familiar[UNI_TRABALHO_OUTROS].includes("2") || 
-          familiar[UNI_TRABALHO_OUTROS].includes("3") ) {
-        pontuacaoCriterio = peso*1;        
-        idsParametrosCaso.push(35);
-        pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
-        break;
-      }
-    } 
-  }
 
-  pontuacaoTotal += pontuacaoCriterio;
+    perfil_idsParametrosCaso[33] = 1; 
+  } 
+  
+  
+  // PERFIL 34 - NÃO RF vinculada ao trabalho formal ou informal, grupos produtivos, associações e cooperativas
+  contador = 0;
+  for( let i=1; i<numeroFamiliares; ++i ) {
+    familiar = caso[i];
+    if( familiar[UNI_TRABALHO_FORMAL] == "2" || 
+        familiar[UNI_TRABALHO_OUTROS].includes("2") || 
+        familiar[UNI_TRABALHO_OUTROS].includes("3") ) {
+      ++contador;
+    }
+  } 
+  perfil_idsParametrosCaso[34] = contador; 
 
-
-  // 5.2) Participante do Programa Estamos Juntos, inseridos 
-  //      nas frentes de trabalho ou oportunidade CLT  
-  pontuacaoCriterio = 0;
-
+  
+  // PERFIL 35 - RF é participante do programa Estamos Juntos, inseridos nas frentes de trabalho ou oportunidade CLT
   if( rf[UNI_ESTAMOS_JUNTOS] == "2" ) { 
-    pontuacaoCriterio = peso*2;    
-    idsParametrosCaso.push(36);
-    pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
-  } else {
-    for( let i=1; i<numeroFamiliares; ++i ) {
-      familiar = caso[i];
-      if( familiar[UNI_ESTAMOS_JUNTOS] == "2" ) {
-        pontuacaoCriterio = peso*1;        
-        idsParametrosCaso.push(37);
-        pontuacoesParametrosCaso.push(pontuacaoCriterio);                             
-        break;
-      }
-    } 
-  }
+    perfil_idsParametrosCaso[35] = 1; 
+  } 
+  
+  
+  // PERFIL 36 - NÃO RF é participante do programa Estamos Juntos, inseridos nas frentes de trabalho ou oportunidade CLT  
+  contador = 0;
+  for( let i=1; i<numeroFamiliares; ++i ) {
+    familiar = caso[i];
+    if( familiar[UNI_ESTAMOS_JUNTOS] == "2" ) {
+      ++contador;
+    }
+  } 
+  perfil_idsParametrosCaso[36] = contador; 
+  
 
-  pontuacaoTotal += pontuacaoCriterio;  
-
+  // Retorna o perfil
+  return perfil_idsParametrosCaso.join(";").substring(2);
 
 
 } // Fim da função perfilCompleto
@@ -1005,8 +909,20 @@ function testeCalcularPontuacaoCaso() {
   let caso = obterCaso( BUFFER_CASOS_EXTERNOS );
 
   let pontuacaoCaso = calcularPontuacao( caso );
-
+  
   console.log( "\n\nPontuação caso: " + pontuacaoCaso );
+}
+
+
+
+function testePerfilCompleto() {
+
+  let caso = obterCaso( BUFFER_CASOS_EXTERNOS );
+
+  let perfil = perfilCompleto( caso );
+
+  console.log( "\n\nCPF: " + caso[0][UNI_CPF_RF] );  
+  console.log( "\n\nPerfil Completo caso: " + perfil );
 }
 
 
