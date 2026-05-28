@@ -11,9 +11,13 @@
   let quantitativoSituacaoBeneficio;
   let labelSituacaoBeneficio = [];
 
-    // Arrays para armazenar os valores X e Y do gráfico Situação da Vistoria
+  // Arrays para armazenar os valores X e Y do gráfico Situação da Vistoria
   let quantitativoSituacaoVistoria;
   let labelSituacaoVistoria = [];
+
+  // Arrays para armazenar os valores X e Y do gráfico Perfis
+  let quantitativoPerfis;
+  let labelPerfis = [];
 
 
   /**
@@ -170,6 +174,92 @@
     Plotly.newPlot(grafico, data, layout, config);
 
   } // Fim da função gerarGraficoQuantitativoSituacaoVistoria 
+  
+
+
+  /**
+   * Função que contabiliza a quantidade de características dos casos
+   */
+  async function gerarQuantitativoPerfis() {
+
+    // Aguarda carregamento das tabelas na cache de tabelas
+    while( !tabelasCarregadasNaCache() ) {      
+      await esperar( 1000 );
+    }            
+
+    // Inicializa os contadores de cada situação de benefício
+    quantitativoPerfis =  new Array( numPerfis ).fill( 0 );
+
+    let perfilCaso = [];
+
+    // Contabiliza a quantidade de casos em cada situação de benefício
+    casosFiltrados.forEach( caso => {        
+
+      perfilCaso = caso.ids_perfil.split(";");
+
+      for( let i=0; i<numPerfis; ++i)  {
+        quantitativoPerfis[i] += parseInt( perfilCaso[i] );
+      }
+
+    })    
+
+  } // Fim da função gerarQuantitativoPerfis
+
+
+
+  /**
+   * Função que gera o gráfico de barras da quantidade características dos casos
+   */
+  async function gerarGraficoQuantitativoPerfis() {
+
+    // Aguarda carregamento das tabelas na cache de tabelas
+    while( !tabelasCarregadasNaCache() ) {
+      await esperar( 1000 );
+    }            
+
+    // Chama a função para gerar o quantitativo de quantidade de casos em cada situação
+    gerarQuantitativoPerfis();
+
+    // Gera os Labels do gráfico com os nomes das situações de benefício
+    cache_TabelaPerfis.forEach( perfil => {
+      labelPerfis.push( perfil[COLUNA_NOME] );  
+    });
+
+    // Gera o gráfico usando a biblioteca plotly.js
+    const grafico = document.getElementById( "plotQuantitativoPerfis" );    
+    
+    const data = [{
+      x:quantitativoPerfis,
+      y:labelPerfis,
+      type:"bar",      
+      textposition: 'auto',
+      orientation:"h",
+      marker: {color:"rgba(0,0,255,0.6)"},
+      text: quantitativoPerfis.map(String),
+      hovertemplate: '%{x}: %{y}<br>' +                     
+                     '<extra></extra>' // Hides the trace name box                     
+    }];
+    
+    const layout = {
+      title: { text: "<b>Perfil Parâmetros Casos</b>" },            
+      height: 900, // Altura total  
+      xaxis: {
+        automargin: true
+      },      
+      yaxis: {
+//        tickangle: -45,        
+        automargin: true
+      }
+    };
+
+    const config = {
+      responsive: true,
+      displayModeBar: false
+    };      
+    
+    Plotly.newPlot(grafico, data, layout, config);
+
+  } // Fim da função gerarGraficoQuantitativoPerfis 
 
 
 </script>

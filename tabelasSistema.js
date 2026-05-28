@@ -117,9 +117,11 @@ function obterTabelaCompleta( nomeTabela ) {
     case "SITUACOES_VISTORIA":       bufferTabela = BUFFER_SITUACOES_VISTORIA;
                                      break;
     case "INTERVALOS_DE_TEMPO":      bufferTabela = BUFFER_INTERVALOS_DE_TEMPO;
-                                     break;                                                                                      
+                                     break;
     case "PARAMETROS":               bufferTabela = BUFFER_PARAMETROS;
-                                     break;                                                 
+                                     break;
+    case "PERFIS":                   bufferTabela = BUFFER_PERFIS;
+                                     break;                           
     default:                         throw( new Error( "Tabela inválida" ) ); 
   }
 
@@ -177,7 +179,10 @@ function idToNome( id, nomeTabela ) {
                                      break;                                                                                                                           
     case "PARAMETROS":               bufferTabela = BUFFER_PARAMETROS;
                                      tamanhoTabela = NUM_PARAMETROS;
-                                     break;                                                    
+                                     break;      
+    case "PERFIS":                   bufferTabela = BUFFER_PERFIS;
+                                     tamanhoTabela = NUM_PERFIS;
+                                     break;                                                                                                              
     default:                         throw( new Error( "idToNome - Tabela Inválida" ) );    
   }
 

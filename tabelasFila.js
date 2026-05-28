@@ -307,6 +307,8 @@ function obterFila() {
       vistorias: vistoriasCaso,
 
       id_situacao_vistoria: idSituacaoVistoria,
+
+      ids_perfil: caso[PERFIL_COMPLETO],
            
       posicaoNaFila: 0
 
