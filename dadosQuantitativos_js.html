@@ -227,15 +227,18 @@
 
     // Gera o gráfico usando a biblioteca plotly.js
     const grafico = document.getElementById( "plotQuantitativoPerfis" );    
+
+    const quantitativoPerfisReversed = quantitativoPerfis.toReversed();
+    const labelPerfisReversed = labelPerfis.toReversed();
     
     const data = [{
-      x:quantitativoPerfis,
-      y:labelPerfis,
+      x:quantitativoPerfisReversed,
+      y:labelPerfisReversed,
       type:"bar",      
       textposition: 'auto',
       orientation:"h",
       marker: {color:"rgba(0,0,255,0.6)"},
-      text: quantitativoPerfis.map(String),
+      text: quantitativoPerfisReversed.map(String),
       hovertemplate: '%{x}: %{y}<br>' +                     
                      '<extra></extra>' // Hides the trace name box                     
     }];
