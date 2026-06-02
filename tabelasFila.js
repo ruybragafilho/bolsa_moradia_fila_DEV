@@ -425,6 +425,8 @@ function obterFila() {
       ids_perfil: caso[PERFIL_COMPLETO],
 
       ids_perfil_genero: caso[PERFIL_GENERO],
+
+      ids_perfil_orientacao_sexual: caso[PERFIL_ORIENTACAO_SEXUAL],
            
       posicaoNaFila: 0
 

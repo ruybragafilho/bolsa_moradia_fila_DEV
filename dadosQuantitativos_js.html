@@ -23,6 +23,10 @@
   let quantitativoPerfisGenero;
   let labelPerfisGenero = [];  
 
+  // Arrays para armazenar os valores X e Y do gráfico Perfis de Orientações Sexuais
+  let quantitativoPerfisOrientacaoSexual;
+  let labelPerfisOrientacaoSexual = [];  
+
 
   /**
    * Função que contabiliza a quantidade de casos em cada situação (Situação do Benefício)
@@ -301,7 +305,7 @@
 
 
   /**
-   * Função que gera o gráfico de barras da quantidade características dos casos
+   * Função que gera o gráfico de barras da quantidade de identidades de gênero dos casos
    */
   async function gerarGraficoQuantitativoPerfisGenero() {
 
@@ -354,6 +358,93 @@
     Plotly.newPlot(grafico, data, layout, config);
 
   } // Fim da função gerarGraficoQuantitativoPerfisGenero 
+  
+
+
+  /**
+   * Função que contabiliza a quantidade de orientações sexuais dos casos
+   */
+  async function gerarQuantitativoPerfisOrientacaoSexual() {
+
+    // Aguarda carregamento das tabelas na cache de tabelas
+    while( !tabelasCarregadasNaCache() ) {      
+      await esperar( 1000 );
+    }            
+
+    // Inicializa os contadores de cada Orientação Sexual
+    quantitativoPerfisOrientacaoSexual =  new Array( numOrientacoesSexuais ).fill( 0 );
+
+    let perfilOrientacaoSexualCaso = [];
+
+    // Contabiliza a quantidade de casos em cada Orientação Sexual
+    casosFiltrados.forEach( caso => {        
+
+      perfilOrientacaoSexualCaso = caso.ids_perfil_orientacao_sexual.split(";");
+
+      for( let i=0; i<numOrientacoesSexuais; ++i)  {
+        quantitativoPerfisOrientacaoSexual[i] += parseInt( perfilOrientacaoSexualCaso[i] );
+      }
+
+    })    
+
+  } // Fim da função   async function gerarQuantitativoPerfisOrientacaoSexual() {
+
+
+
+  /**
+   * Função que gera o gráfico de barras da quantidade de orientações sexuais dos casos
+   */
+  async function gerarGraficoQuantitativoPerfisOrientacaoSexual() {
+
+    // Aguarda carregamento das tabelas na cache de tabelas
+    while( !tabelasCarregadasNaCache() ) {
+      await esperar( 1000 );
+    }            
+
+    // Chama a função para gerar o quantitativo de casos em cada orientação sexual
+    gerarQuantitativoPerfisOrientacaoSexual();
+
+    // Gera os Labels do gráfico com os nomes das orientações sexuais
+    cache_TabelaOrientacoesSexuais.forEach( orientacaoSexual => {
+      labelPerfisOrientacaoSexual.push( orientacaoSexual[COLUNA_NOME] );  
+    });
+
+    // Gera o gráfico usando a biblioteca plotly.js
+    const grafico = document.getElementById( "plotQuantitativoPerfisOrientacaoSexual" );    
+
+    
+    const data = [{
+      x:labelPerfisOrientacaoSexual,
+      y:quantitativoPerfisOrientacaoSexual,
+      type:"bar",      
+      textposition: 'auto',
+      orientation:"v",
+      marker: {color:"rgba(0,0,255,0.6)"},
+      text: quantitativoPerfisOrientacaoSexual.map(String),
+      hovertemplate: '%{x}: %{y}<br>' +                     
+                     '<extra></extra>' // Hides the trace name box                     
+    }];
+    
+    const layout = {
+      title: { text: "<b>Orientações Sexuais dos Cidadãos</b>" },            
+      height: 500, // Altura total  
+      xaxis: {
+        automargin: true
+      },      
+      yaxis: {
+        tickangle: -45,        
+        automargin: true
+      }
+    };
+
+    const config = {
+      responsive: true,
+      displayModeBar: false
+    };      
+    
+    Plotly.newPlot(grafico, data, layout, config);
+
+  } // Fim da função gerarGraficoQuantitativoPerfisOrientacaoSexual 
 
 
 </script>
