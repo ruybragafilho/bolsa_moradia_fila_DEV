@@ -366,6 +366,8 @@ function obterFila() {
       id_situacao_vistoria: idSituacaoVistoria,
 
       ids_perfil: caso[PERFIL_COMPLETO],
+
+      ids_perfil_genero: caso[PERFIL_GENERO],
            
       posicaoNaFila: 0
 
