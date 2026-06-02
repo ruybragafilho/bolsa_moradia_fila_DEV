@@ -41,6 +41,11 @@
   let cache_TabelaIdentidadesDeGenero = [];
   let numIdentidadesDeGenero = 0;
 
+  // Cache da tabela Orientações Sexuais, carregada via chamada 
+  // da função backend obterTabelaCompleta( "ORIENTACOES_SEXUAIS" )  
+  let cache_TabelaOrientacoesSexuais = [];
+  let numOrientacoesSexuais = 0;
+
   // Cache da tabela Parametros, carregada via chamada 
   // da função backend obterTabelaCompleta( "PARAMETROS" )  
   let cache_TabelaParametros = [];
@@ -68,6 +73,7 @@
   let flagCache_TabelaSituacoesVistoria     = 0;    
   let flagCache_TabelaIntervalosDeTempo     = 0;
   let flagCache_TabelaIdentidadesDeGenero   = 0;
+  let flagCache_TabelaOrientacoesSexuais    = 0;
   let flagCache_TabelaParametros            = 0;
   let flagCache_TabelaPerfis                = 0;  
   let flagCache_TabelaCasos                 = 0;
@@ -97,6 +103,7 @@
       carregarTabelaNaCache( "SITUACOES_VISTORIA" );      
       carregarTabelaNaCache( "INTERVALOS_DE_TEMPO" );
       carregarTabelaNaCache( "IDENTIDADES_DE_GENERO" );
+      carregarTabelaNaCache( "ORIENTACOES_SEXUAIS" );
       carregarTabelaNaCache( "PARAMETROS" );      
       carregarTabelaNaCache( "PERFIS" );      
 
@@ -120,6 +127,7 @@
         flagCache_TabelaSituacoesVistoria     &&
         flagCache_TabelaIntervalosDeTempo     && 
         flagCache_TabelaIdentidadesDeGenero   && 
+        flagCache_TabelaOrientacoesSexuais    && 
         flagCache_TabelaParametros            &&
         flagCache_TabelaPerfis                &&
         flagCache_TabelaCasos      ) {
@@ -180,6 +188,11 @@
                                                      numIdentidadesDeGenero              = tabela.length
                                                      flagCache_TabelaIdentidadesDeGenero = 1;  
                                                      break;                                                               
+
+                      case "ORIENTACOES_SEXUAIS":    cache_TabelaOrientacoesSexuais     = tabela;
+                                                     numOrientacoesSexuais              = tabela.length
+                                                     flagCache_TabelaOrientacoesSexuais = 1;  
+                                                     break;                                                                                                                    
 
                       case "PARAMETROS":            cache_TabelaParametros     = tabela;
                                                     numParametros              = tabela.length; 
@@ -255,6 +268,10 @@
 
       case "IDENTIDADES_DE_GENERO":    tabela = cache_TabelaIdentidadesDeGenero;
                                        tamanhoTabela = numIdentidadesDeGenero;
+                                       break;
+
+      case "ORIENTACOES_SEXUAIS":      tabela = cache_TabelaOrientacoesSexuais;
+                                       tamanhoTabela = numOrientacoesSexuais;
                                        break;
 
       case "PARAMETROS":               tabela = cache_TabelaParametros;

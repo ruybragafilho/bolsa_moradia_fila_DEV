@@ -30,6 +30,7 @@ const TABELA_SITUACOES_BENEFICIO    =  PLANILHA_CODIGOS.getSheetByName('SITUACOE
 const TABELA_SITUACOES_VISTORIA     =  PLANILHA_CODIGOS.getSheetByName('SITUACOES_VISTORIA');
 const TABELA_INTERVALOS_DE_TEMPO    =  PLANILHA_CODIGOS.getSheetByName('INTERVALOS_DE_TEMPO');
 const TABELA_IDENTIDADES_DE_GENERO  =  PLANILHA_CODIGOS.getSheetByName('IDENTIDADES_DE_GENERO');
+const TABELA_ORIENTACOES_SEXUAIS    =  PLANILHA_CODIGOS.getSheetByName('ORIENTACOES_SEXUAIS');
 const TABELA_PARAMETROS             =  PLANILHA_CODIGOS.getSheetByName('PARAMETROS');
 const TABELA_PERFIS                 =  PLANILHA_CODIGOS.getSheetByName('PERFIS');
 
@@ -39,6 +40,7 @@ const BUFFER_SITUACOES_BENEFICIO    =  TABELA_SITUACOES_BENEFICIO.getDataRange()
 const BUFFER_SITUACOES_VISTORIA     =  TABELA_SITUACOES_VISTORIA.getDataRange().getDisplayValues().splice(1);
 const BUFFER_INTERVALOS_DE_TEMPO    =  TABELA_INTERVALOS_DE_TEMPO.getDataRange().getDisplayValues().splice(1);
 const BUFFER_IDENTIDADES_DE_GENERO  =  TABELA_IDENTIDADES_DE_GENERO.getDataRange().getDisplayValues().splice(1);
+const BUFFER_ORIENTACOES_SEXUAIS    =  TABELA_ORIENTACOES_SEXUAIS.getDataRange().getDisplayValues().splice(1);
 const BUFFER_PARAMETROS             =  TABELA_PARAMETROS.getDataRange().getDisplayValues().splice(1);
 const BUFFER_PERFIS                 =  TABELA_PERFIS.getDataRange().getDisplayValues().splice(1);
 
@@ -48,6 +50,7 @@ const NUM_SITUACOES_BENEFICIO    =  BUFFER_SITUACOES_BENEFICIO.length;
 const NUM_SITUACOES_VISTORIA     =  BUFFER_SITUACOES_VISTORIA.length;
 const NUM_INTERVALOS_DE_TEMPO    =  BUFFER_INTERVALOS_DE_TEMPO.length;
 const NUM_IDENTIDADES_DE_GENERO  =  BUFFER_IDENTIDADES_DE_GENERO.length;
+const NUM_ORIENTACOES_SEXUAIS    =  BUFFER_ORIENTACOES_SEXUAIS.length;
 const NUM_PARAMETROS             =  BUFFER_PARAMETROS.length;
 const NUM_PERFIS                 =  BUFFER_PERFIS.length;
 
@@ -111,22 +114,34 @@ function obterTabelaCompleta( nomeTabela ) {
   let bufferTabela;
 
   switch( nomeTabela ) {
+
     case "RESPOSTAS_SIMPLES":        bufferTabela = BUFFER_RESPOSTAS_SIMPLES;
-                                     break;                                                                  
+                                     break;     
+
     case "ORGAOS_ENCAMINHADORES":    bufferTabela = BUFFER_ORGAOS_ENCAMINHADORES;
                                      break;
+
     case "SITUACOES_BENEFICIO":      bufferTabela = BUFFER_SITUACOES_BENEFICIO;
-                                     break;            
+                                     break;        
+
     case "SITUACOES_VISTORIA":       bufferTabela = BUFFER_SITUACOES_VISTORIA;
                                      break;
+
     case "INTERVALOS_DE_TEMPO":      bufferTabela = BUFFER_INTERVALOS_DE_TEMPO;
                                      break;
+
     case "IDENTIDADES_DE_GENERO":    bufferTabela = BUFFER_IDENTIDADES_DE_GENERO;
-                                     break;                                     
+                                     break;       
+
+    case "ORIENTACOES_SEXUAIS":      bufferTabela = BUFFER_ORIENTACOES_SEXUAIS;
+                                     break;    
+
     case "PARAMETROS":               bufferTabela = BUFFER_PARAMETROS;
                                      break;
+
     case "PERFIS":                   bufferTabela = BUFFER_PERFIS;
-                                     break;                           
+                                     break;       
+
     default:                         throw( new Error( "Tabela inválida" ) ); 
   }
 
@@ -167,30 +182,43 @@ function idToNome( id, nomeTabela ) {
   let tamanhoTabela;
 
   switch( nomeTabela ) {
+
     case "RESPOSTAS_SIMPLES":        bufferTabela = BUFFER_RESPOSTAS_SIMPLES;
                                      tamanhoTabela = NUM_RESPOSTAS_SIMPLES;
-                                     break;                                                        
+                                     break;                                     
+
     case "ORGAOS_ENCAMINHADORES":    bufferTabela = BUFFER_ORGAOS_ENCAMINHADORES;
                                      tamanhoTabela = NUM_ORGAOS_ENCAMINHADORES;
                                      break;          
+
     case "SITUACOES_BENEFICIO":      bufferTabela = BUFFER_SITUACOES_BENEFICIO;
                                      tamanhoTabela = NUM_SITUACOES_BENEFICIO;
-                                     break;               
+                                     break;     
+
     case "SITUACOES_VISTORIA":       bufferTabela = BUFFER_SITUACOES_VISTORIA;
                                      tamanhoTabela = NUM_SITUACOES_VISTORIA;
                                      break;
+
     case "INTERVALOS_DE_TEMPO":      bufferTabela = BUFFER_INTERVALOS_DE_TEMPO;
                                      tamanhoTabela = NUM_INTERVALOS_DE_TEMPO;
-                                     break;                                    
+                                     break;                                  
+
     case "IDENTIDADES_DE_GENERO":    bufferTabela = BUFFER_IDENTIDADES_DE_GENERO;
                                      tamanhoTabela = NUM_IDENTIDADES_DE_GENERO;
                                      break;
+
+    case "ORIENTACOES_SEXUAIS":      bufferTabela = BUFFER_ORIENTACOES_SEXUAIS;
+                                     tamanhoTabela = NUM_ORIENTACOES_SEXUAIS;
+                                     break;                         
+
     case "PARAMETROS":               bufferTabela = BUFFER_PARAMETROS;
                                      tamanhoTabela = NUM_PARAMETROS;
                                      break;      
+
     case "PERFIS":                   bufferTabela = BUFFER_PERFIS;
                                      tamanhoTabela = NUM_PERFIS;
-                                     break;                                                                                                              
+                                     break;            
+
     default:                         throw( new Error( "idToNome - Tabela Inválida" ) );    
   }
 

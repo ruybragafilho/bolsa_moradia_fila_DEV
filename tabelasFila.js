@@ -47,6 +47,7 @@ const DATA_LIMITE                = 16;
 const JUSTIFICATIVA_ALTERACAO_DATA_LIMITE = 17;
 const PERFIL_COMPLETO            = 18;
 const PERFIL_GENERO              = 19;
+const PERFIL_ORIENTACAO_SEXUAL   = 20;
 
 
 
@@ -266,7 +267,6 @@ function carregarPerfilGenero() {
       campo_perfil_genero.setValue( perfilGeneroCaso );      
       ++id;      
     }
-
   }  
 
   
@@ -297,6 +297,63 @@ function carregarPerfilGenero() {
   refreshBufferFila();
 
 } // Fim da função carregarPerfilGenero
+
+
+
+
+/**
+ * Função que carrega o perfil de orientações sexuais a partir das tabelas de encaminhamentos
+ */
+function carregarPerfilOrientacaoSexual() {
+
+  let caso = [];  
+  let id = 1; 
+  let perfilOrientacaoSexualCaso;
+
+  
+  console.log( "\n\nCASOS EXTERNOS" );
+  linhaTabela = 0;
+  while( linhaTabela < NUM_LINHAS_TABELA_CASOS_EXTERNOS ) {
+
+    caso = obterCaso( BUFFER_CASOS_EXTERNOS );   
+    perfilOrientacaoSexualCaso = perfilOrientacaoSexual( caso );
+
+    if( caso[0][UNI_CPF_RF].padStart(11, "0") == BUFFER_FILA[id-1][CPF_RF].padStart(11, "0") ) {
+
+      let campo_perfil_Orientacao_sexual = TABELA_FILA.getRange( id+1, PERFIL_ORIENTACAO_SEXUAL+1 );
+      campo_perfil_Orientacao_sexual.setValue( perfilOrientacaoSexualCaso );      
+      ++id;      
+    }
+  }  
+
+  
+  console.log( "\n\nCASOS PBH" );
+  linhaTabela = 0;
+  while( linhaTabela < NUM_LINHAS_TABELA_CASOS_PBH ) {
+
+    caso = obterCaso( BUFFER_CASOS_PBH );
+    perfilOrientacaoSexualCaso = perfilOrientacaoSexual( caso );
+
+    if( caso[0][UNI_CPF_RF].padStart(11, "0") == BUFFER_FILA[id-1][CPF_RF].padStart(11, "0") ) {
+
+      let campo_perfil_Orientacao_sexual = TABELA_FILA.getRange( id+1, PERFIL_ORIENTACAO_SEXUAL+1 );
+      campo_perfil_Orientacao_sexual.setValue( perfilOrientacaoSexualCaso );      
+      ++id;      
+    }
+  }
+
+
+  // Flush na planilha
+  try {
+    SpreadsheetApp.flush();
+    PLANILHA_FILA.waitForAllDataExecutionsCompletion(2);      
+  } catch( error ) {
+    throw( error.message );
+  }
+
+  refreshBufferFila();
+
+} // Fim da função carregarPerfilOrientacaoSexual
 
 
 

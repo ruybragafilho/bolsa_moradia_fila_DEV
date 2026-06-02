@@ -934,6 +934,39 @@ function perfilGenero( caso ) {
 
 
 
+/**
+ * Função que determina o perfil de orientações sexuais de um caso
+ */
+function perfilOrientacaoSexual( caso ) {
+
+  // Familiares do caso
+  let numeroFamiliares = caso.length;
+  
+  if( numeroFamiliares < 1 ) {    
+    return 0;
+  } 
+
+  let familiar = [];   
+
+
+  // Array onde cada posição armazenará o id da orientação sexual
+  let perfil_idsOrientacoesSexuaisCaso = new Array( NUM_ORIENTACOES_SEXUAIS ).fill( 0 );
+  let idOrientacaoSexual;
+
+  for( let i=0; i<numeroFamiliares; ++i ) {
+    familiar = caso[i];
+    if( familiar[UNI_ORIENTACAO_SEXUAL] != "" ) {
+      idOrientacaoSexual = parseInt( familiar[UNI_ORIENTACAO_SEXUAL] );    
+      ++perfil_idsOrientacoesSexuaisCaso[ idOrientacaoSexual - 1 ];
+    }
+  }
+
+  return perfil_idsOrientacoesSexuaisCaso.join(";");
+
+} // Fim da função perfilOrientacaoSexual
+
+
+
 
 function testeCalcularPontuacaoCaso() {
 
