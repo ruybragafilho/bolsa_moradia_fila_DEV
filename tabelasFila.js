@@ -46,6 +46,7 @@ const EMAIL_ORGAO_ENCAMINHADOR   = 15;
 const DATA_LIMITE                = 16;
 const JUSTIFICATIVA_ALTERACAO_DATA_LIMITE = 17;
 const PERFIL_COMPLETO            = 18;
+const PERFIL_GENERO              = 19;
 
 
 
@@ -201,7 +202,6 @@ function carregarPerfil() {
     caso = obterCaso( BUFFER_CASOS_EXTERNOS );   
     perfilCaso = perfilCompleto( caso );
 
-
     if( caso[0][UNI_CPF_RF].padStart(11, "0") == BUFFER_FILA[id-1][CPF_RF].padStart(11, "0") ) {
 
       let campo_perfil_completo = TABELA_FILA.getRange( id+1, PERFIL_COMPLETO+1 );
@@ -218,7 +218,6 @@ function carregarPerfil() {
 
     caso = obterCaso( BUFFER_CASOS_PBH );
     perfilCaso = perfilCompleto( caso );
-
 
     if( caso[0][UNI_CPF_RF].padStart(11, "0") == BUFFER_FILA[id-1][CPF_RF].padStart(11, "0") ) {
 
@@ -240,6 +239,64 @@ function carregarPerfil() {
   refreshBufferFila();
 
 } // Fim da função carregarPerfil
+
+
+
+
+/**
+ * Função que carrega o perfil de identidades de gênero a partir das tabelas de encaminhamentos
+ */
+function carregarPerfilGenero() {
+
+  let caso = [];  
+  let id = 1; 
+  let perfilGeneroCaso;
+
+  
+  console.log( "\n\nCASOS EXTERNOS" );
+  linhaTabela = 0;
+  while( linhaTabela < NUM_LINHAS_TABELA_CASOS_EXTERNOS ) {
+
+    caso = obterCaso( BUFFER_CASOS_EXTERNOS );   
+    perfilGeneroCaso = perfilGenero( caso );
+
+    if( caso[0][UNI_CPF_RF].padStart(11, "0") == BUFFER_FILA[id-1][CPF_RF].padStart(11, "0") ) {
+
+      let campo_perfil_genero = TABELA_FILA.getRange( id+1, PERFIL_GENERO+1 );
+      campo_perfil_genero.setValue( perfilGeneroCaso );      
+      ++id;      
+    }
+
+  }  
+
+  
+  console.log( "\n\nCASOS PBH" );
+  linhaTabela = 0;
+  while( linhaTabela < NUM_LINHAS_TABELA_CASOS_PBH ) {
+
+    caso = obterCaso( BUFFER_CASOS_PBH );
+    perfilGeneroCaso = perfilGenero( caso );
+
+    if( caso[0][UNI_CPF_RF].padStart(11, "0") == BUFFER_FILA[id-1][CPF_RF].padStart(11, "0") ) {
+
+      let campo_perfil_genero = TABELA_FILA.getRange( id+1, PERFIL_GENERO+1 );
+      campo_perfil_genero.setValue( perfilGeneroCaso );      
+      ++id;      
+    }
+  }
+
+
+  // Flush na planilha
+  try {
+    SpreadsheetApp.flush();
+    PLANILHA_FILA.waitForAllDataExecutionsCompletion(2);      
+  } catch( error ) {
+    throw( error.message );
+  }
+
+  refreshBufferFila();
+
+} // Fim da função carregarPerfilGenero
 
 
 

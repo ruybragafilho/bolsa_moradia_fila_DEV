@@ -36,6 +36,11 @@
   let cache_TabelaIntervalosDeTempo = [];
   let numIntervalosDeTempo = 0;
 
+  // Cache da tabela Identidades de Gênero, carregada via chamada 
+  // da função backend obterTabelaCompleta( "IDENTIDADES_DE_GENERO" )  
+  let cache_TabelaIdentidadesDeGenero = [];
+  let numIdentidadesDeGenero = 0;
+
   // Cache da tabela Parametros, carregada via chamada 
   // da função backend obterTabelaCompleta( "PARAMETROS" )  
   let cache_TabelaParametros = [];
@@ -62,6 +67,7 @@
   let flagCache_TabelaSituacoesBeneficio    = 0;    
   let flagCache_TabelaSituacoesVistoria     = 0;    
   let flagCache_TabelaIntervalosDeTempo     = 0;
+  let flagCache_TabelaIdentidadesDeGenero   = 0;
   let flagCache_TabelaParametros            = 0;
   let flagCache_TabelaPerfis                = 0;  
   let flagCache_TabelaCasos                 = 0;
@@ -90,6 +96,7 @@
       carregarTabelaNaCache( "SITUACOES_BENEFICIO" );
       carregarTabelaNaCache( "SITUACOES_VISTORIA" );      
       carregarTabelaNaCache( "INTERVALOS_DE_TEMPO" );
+      carregarTabelaNaCache( "IDENTIDADES_DE_GENERO" );
       carregarTabelaNaCache( "PARAMETROS" );      
       carregarTabelaNaCache( "PERFIS" );      
 
@@ -112,6 +119,7 @@
         flagCache_TabelaSituacoesBeneficio    &&
         flagCache_TabelaSituacoesVistoria     &&
         flagCache_TabelaIntervalosDeTempo     && 
+        flagCache_TabelaIdentidadesDeGenero   && 
         flagCache_TabelaParametros            &&
         flagCache_TabelaPerfis                &&
         flagCache_TabelaCasos      ) {
@@ -167,6 +175,11 @@
                                                     numIntervalosDeTempo              = tabela.length
                                                     flagCache_TabelaIntervalosDeTempo = 1;  
                                                     break;           
+
+                      case "IDENTIDADES_DE_GENERO":  cache_TabelaIdentidadesDeGenero     = tabela;
+                                                     numIdentidadesDeGenero              = tabela.length
+                                                     flagCache_TabelaIdentidadesDeGenero = 1;  
+                                                     break;                                                               
 
                       case "PARAMETROS":            cache_TabelaParametros     = tabela;
                                                     numParametros              = tabela.length; 
@@ -239,6 +252,10 @@
       case "INTERVALOS_DE_TEMPO":      tabela = cache_TabelaIntervalosDeTempo;
                                        tamanhoTabela = numIntervalosDeTempo;
                                        break;        
+
+      case "IDENTIDADES_DE_GENERO":    tabela = cache_TabelaIdentidadesDeGenero;
+                                       tamanhoTabela = numIdentidadesDeGenero;
+                                       break;
 
       case "PARAMETROS":               tabela = cache_TabelaParametros;
                                        tamanhoTabela = numParametros;

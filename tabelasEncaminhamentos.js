@@ -901,6 +901,37 @@ function perfilCompleto( caso ) {
 
 
 
+/**
+ * Função que determina o perfil de identidades de gênero de um caso
+ */
+function perfilGenero( caso ) {
+
+  // Familiares do caso
+  let numeroFamiliares = caso.length;
+  
+  if( numeroFamiliares < 1 ) {    
+    return 0;
+  } 
+
+  let familiar = [];   
+
+
+  // Array onde cada posição armazenará o id da identidade de gênero
+  let perfil_idsIdentidadesGeneroCaso = new Array( NUM_IDENTIDADES_DE_GENERO ).fill( 0 );
+  let idGenero;
+
+  for( let i=0; i<numeroFamiliares; ++i ) {
+    familiar = caso[i];
+    if( familiar[UNI_GENERO] != "" ) {
+      idGenero = parseInt( familiar[UNI_GENERO] );    
+      ++perfil_idsIdentidadesGeneroCaso[ idGenero - 1 ];
+    }
+  }
+
+  return perfil_idsIdentidadesGeneroCaso.join(";");
+
+} // Fim da função perfilGenero
+
 
 
 
@@ -923,6 +954,22 @@ function testePerfilCompleto() {
 
   console.log( "\n\nCPF: " + caso[0][UNI_CPF_RF] );  
   console.log( "\n\nPerfil Completo caso: " + perfil );
+}
+
+
+
+function testePerfilGenero() {
+
+  for(let i=0; i<=224; ++i) {
+    obterCaso( BUFFER_CASOS_EXTERNOS );
+  }
+
+  let caso = obterCaso( BUFFER_CASOS_EXTERNOS );
+
+  let perfil = perfilGenero( caso );
+
+  console.log( "\n\nCPF: " + caso[0][UNI_CPF_RF] );  
+  console.log( "\n\nPerfil Genero caso: " + perfil );
 }
 
 
