@@ -77,9 +77,9 @@ function limparFila() {
   }
 
   // Flush na planilha
-  try {
-    SpreadsheetApp.flush();
+  try {    
     PLANILHA_FILA.waitForAllDataExecutionsCompletion(2);      
+    SpreadsheetApp.flush();
   } catch( error ) {
     throw( "limparFila: " + error.message );
   }
@@ -172,9 +172,9 @@ function carregarFila() {
   }
 
   // Flush na planilha
-  try {
-    SpreadsheetApp.flush();
+  try {    
     PLANILHA_FILA.waitForAllDataExecutionsCompletion(2);      
+    SpreadsheetApp.flush();
   } catch( error ) {
     throw( error.message );
   }
@@ -230,9 +230,9 @@ function carregarPerfil() {
 
 
   // Flush na planilha
-  try {
-    SpreadsheetApp.flush();
+  try {    
     PLANILHA_FILA.waitForAllDataExecutionsCompletion(2);      
+    SpreadsheetApp.flush();
   } catch( error ) {
     throw( error.message );
   }
@@ -287,9 +287,9 @@ function carregarPerfilGenero() {
 
 
   // Flush na planilha
-  try {
-    SpreadsheetApp.flush();
+  try {    
     PLANILHA_FILA.waitForAllDataExecutionsCompletion(2);      
+    SpreadsheetApp.flush();
   } catch( error ) {
     throw( error.message );
   }
@@ -344,9 +344,9 @@ function carregarPerfilOrientacaoSexual() {
 
 
   // Flush na planilha
-  try {
-    SpreadsheetApp.flush();
+  try {    
     PLANILHA_FILA.waitForAllDataExecutionsCompletion(2);      
+    SpreadsheetApp.flush();
   } catch( error ) {
     throw( error.message );
   }

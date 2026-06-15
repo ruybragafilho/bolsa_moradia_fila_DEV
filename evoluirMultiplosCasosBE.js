@@ -22,16 +22,49 @@ function evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite ) {
     throw( new Error( "Usuário sem permissão para evoluir casos" ) );
   }    
 
-  // Evolui todos os casos do array idsCasos com a evolução idEvolucao
-  idsCasos.forEach( idCaso => {
 
-    try {
-      evoluirCasoBE( idCaso, idEvolucao, dataLimite );
-    } catch( error ) {
-      throw( "evoluirMultiplosCasosBE - " + error.message );
+  // TENTA PEGAR O LOCK
+  const lock = LockService.getScriptLock();
+
+  try {
+
+    lock.waitLock(10000);  
+  
+    // SE PEGAR O LOCK, PROSSEGUE COM A EVOLUÇÃO
+    if( lock.hasLock() ) {
+
+      // Evolui todos os casos do array idsCasos com a evolução idEvolucao
+      idsCasos.forEach( idCaso => {
+    
+        try {
+          evoluirCasoBE( idCaso, idEvolucao, dataLimite );
+        } catch( error ) {
+          throw( "evoluirMultiplosCasosBE - " + error.message );
+        } 
+    
+      }); // Fim do forEach
+
+
+      // Aguarda sincronização de dados
+      PLANILHA_FILA.waitForAllDataExecutionsCompletion(3);          
+      SpreadsheetApp.flush();    
+      
+    } else {
+  
+      // SE NAO CONSEGUIR PEGAR O LOCK, LANCA UMA EXCESSAO
+      throw( new Error( "evoluirMultiplosCasosBE - Nao foi possivel pegar o LOCK" ) );
     } 
 
-  }); // Fim do forEach
+  } catch( error ) {
+
+    throw( "evoluirMultiplosCasosBE - " + error.message );
+
+  } finally {
+
+    // Always release the lock for other waiting instances
+    lock.releaseLock(); 
+
+  }    
 
 } // Fim da função evoluirMultiplosCasosBE
 

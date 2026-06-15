@@ -29,10 +29,11 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
     throw( new Error( "Usuário sem permissão para registrar Documentação Pendente" ) );
   }  
 
+  // TENTA PEGAR O LOCK
+  const lock = LockService.getScriptLock();
+
   try {
 
-    // TENTA PEGAR O LOCK
-    const lock = LockService.getScriptLock();
     lock.waitLock(10000);  
   
     // SE PEGAR O LOCK, PROSSEGUE COM A ALTERAÇÃO DA DATA LIMITE
@@ -54,9 +55,9 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
       const campo_justificativa = TABELA_FILA.getRange( id+1, JUSTIFICATIVA_ALTERACAO_DATA_LIMITE+1 );
       campo_justificativa.setValue( justificativaFormatada );            
 
-      
-      // SOLTA O LOCK
-      lock.releaseLock();
+
+      PLANILHA_FILA.waitForAllDataExecutionsCompletion(3);          
+      SpreadsheetApp.flush();      
 
 
       // Envia email para o órgão encaminhador e para a instituição,
@@ -92,7 +93,6 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
 
       } // Fim if 
 
-  
       return true;
   
     } else {
@@ -102,7 +102,14 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
     }
 
   } catch( error ) {
+
     throw( "alterarDataLimiteBE - " + error.message );
+
+  } finally {
+
+    // Always release the lock for other waiting instances
+    lock.releaseLock(); 
+
   }
 
 } // Fim da função alterarDataLimiteBE
