@@ -53,7 +53,7 @@ Telefone: (31) 3277-6373 / 3277-9994 | pbh.gov.br      <br><br> `
 
     console.log( "enviarEmailBE - " + error.message );    
     throw( "enviarEmailBE - " + error.message );
-    
+
   }
 
 } // Fim da função enviarEmailBE
@@ -77,6 +77,14 @@ function teste_enviarEmail() {
   
   enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );
  
+}
+
+
+function limiteEmailDisponivel() {
+
+  const n = MailApp.getRemainingDailyQuota();
+
+  console.log( "Limite Email Disponivel: " + n );
 }
 
 
