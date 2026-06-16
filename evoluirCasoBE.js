@@ -29,12 +29,12 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
     let dataEvolucao = new Date().toLocaleString("pt-BR", {dateStyle: "short"});    
     const campo_data = TABELA_FILA.getRange( id+1, DATA_ULTIMA_EVOLUCAO+1 );
     campo_data.setValue( dataEvolucao );    
-    
+    console.log( "\nevoluirCasoBE - dataEvolucao" );
     
     // Gera e grava o id da evolução do caso  
     const campo_SituacaoBeneficio = TABELA_FILA.getRange( id+1, SITUACAO_BENEFICIO+1 );
     campo_SituacaoBeneficio.setValue( idEvolucao );      
-
+    console.log( "\nevoluirCasoBE - idEvolucao" );
 
     // Grava a data limite para evolução do tipo CONVOCADO PARA ACESSO
     const campo_data_limite = TABELA_FILA.getRange( id+1, DATA_LIMITE+1 );
@@ -46,7 +46,8 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
     } else {
       dataLimiteFormatada = "";
     }
-    campo_data_limite.setValue( dataLimiteFormatada );      
+    campo_data_limite.setValue( dataLimiteFormatada ); 
+    console.log( "\nevoluirCasoBE - dataLimite" );     
 
 
     // Envia email para o órgão encaminhador e para a instituição,
@@ -76,13 +77,17 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
       const emails = [];
       if( isEmailValidBE(emailOrgaoEncaminhador) ) { emails.push(emailOrgaoEncaminhador) }
       if( isEmailValidBE(emailInstituicao) ) { emails.push(emailInstituicao) }
-            
+
+      console.log( "\nevoluirCasoBE - chamada enviarEmailBE - ANTES" );               
       enviarEmailBE( emails.join(","), cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );    
+      console.log( "\nevoluirCasoBE - chamada enviarEmailBE - DEPOIS" );       
 
     } // Fim if   
+    console.log( "\nevoluirCasoBE - enviar Email" );       
 
 
   } catch( error ) {
+    console.log( "evoluirCasoBE - " + error.message );
     throw( "evoluirCasoBE - " + error.message );
   }
 

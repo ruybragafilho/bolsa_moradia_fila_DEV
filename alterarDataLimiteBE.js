@@ -41,7 +41,6 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
 
       // Grava a nova data limite 
       const campo_data_limite = TABELA_FILA.getRange( id+1, DATA_LIMITE+1 );
-      //campo_data_limite.setValue( dataLimite );          
       let auxDataLimite = new Date( dataLimite );  
       auxDataLimite.setDate( auxDataLimite.getDate() + 1 );   
       let dataLimiteFormatada = new Date(auxDataLimite).toLocaleString("pt-BR", {dateStyle: "short"});   
@@ -56,6 +55,7 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
       campo_justificativa.setValue( justificativaFormatada );            
 
 
+      // Aguarda sincronização dos dados na planilha 
       PLANILHA_FILA.waitForAllDataExecutionsCompletion(3);          
       SpreadsheetApp.flush();      
 
@@ -92,8 +92,6 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
         enviarEmailBE( emails.join(","), cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );                
 
       } // Fim if 
-
-      return true;
   
     } else {
   
@@ -111,6 +109,8 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
     lock.releaseLock(); 
 
   }
+
+  return true;  
 
 } // Fim da função alterarDataLimiteBE
 

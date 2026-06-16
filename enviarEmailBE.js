@@ -17,7 +17,13 @@
  * 
  */
 function enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite ) {
-  
+
+  console.log("enderecoEmail: " + enderecoEmail);
+  console.log("cpfRFCaso: " + cpfRFCaso);
+  console.log("nomeRFCaso: " + nomeRFCaso);
+  console.log("evolucaoCaso: " + evolucaoCaso);
+  console.log("mensagemDataLimite: " + mensagemDataLimite);          
+
   try {
   
     MailApp.sendEmail({
@@ -40,9 +46,14 @@ Av. Afonso Pena, 342, 6º andar - Centro | Belo Horizonte/MG | CEP: 30130-001<br
 Telefone: (31) 3277-6373 / 3277-9994 | pbh.gov.br      <br><br> `
   
     });     
+
+    console.log("EMAIL ENVIADO");            
   
   } catch( error ) {
+
+    console.log( "enviarEmailBE - " + error.message );    
     throw( "enviarEmailBE - " + error.message );
+    
   }
 
 } // Fim da função enviarEmailBE

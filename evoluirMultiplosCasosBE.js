@@ -35,12 +35,9 @@ function evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite ) {
 
       // Evolui todos os casos do array idsCasos com a evolução idEvolucao
       idsCasos.forEach( idCaso => {
-    
-        try {
-          evoluirCasoBE( idCaso, idEvolucao, dataLimite );
-        } catch( error ) {
-          throw( "evoluirMultiplosCasosBE - " + error.message );
-        } 
+
+        console.log( "\nchamada - evoluirCasoBE" );
+        evoluirCasoBE( idCaso, idEvolucao, dataLimite );
     
       }); // Fim do forEach
 
@@ -66,6 +63,8 @@ function evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite ) {
 
   }    
 
+  return true;
+
 } // Fim da função evoluirMultiplosCasosBE
 
 
@@ -81,9 +80,9 @@ function evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite ) {
  */
 function teste_evoluirMultiplosCasosBE() {
 
-  let idsCasos = [ "3", "5", "9", "12" ];
-  let idEvolucao = "5";   
-  let dataLimite = "";
+  let idsCasos = [ "204", "205", "206", "207", "208", "209", "210" ];
+  let idEvolucao = "3";   
+  let dataLimite = new Date( 2026, 11, 15 );
 
   try {
     evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite );
