@@ -11,19 +11,25 @@
     // Título da tabela de resumos dos casos
     let cabecalhoTabela = document.getElementById("titulosResumosDosCasos");
 
-    // Configura a página para trabalhador da ponta ou DPOP
+    // Configura a página para trabalhadores da ponta e gestores externos
     if( usuarioLogado.instituicao != "0" ) {           
 
+      // Esconde o campo evolução dos trabalhadores da ponta e gestores externos
+      document.getElementById("evolucao").style.display = "none";   
+
+      // Esconde os gráficos, apenas para trabalhadores da ponta
       if(usuarioLogado.instituicao != "-1") {
         document.getElementById("graficos").style.display = "none";   
       }
-      
-      document.getElementById("evolucao").style.display = "none";   
 
+    // Configura a página para trabalhador da DPOP 
     } else {
       cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;
     }
 
+
+    // Esconde o campo data limite, que só deve ser exibido para evolução
+    //  múltipla do tipo "Convocado para acesso"
     document.getElementById("data_limite").style.display = "none";  
 
 
@@ -331,6 +337,8 @@
 
     let tipoEvolucao = document.getElementById("select_evolucao_multipla").value;
 
+    // Mostra o campo data limite apenas para evolução múltipla
+    //  do tipo "Convocado para acesso"
     if( tipoEvolucao == "3" ) {
       document.getElementById("data_limite").style.display = "";  
     } else {
