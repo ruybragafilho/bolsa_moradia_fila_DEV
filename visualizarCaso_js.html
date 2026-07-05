@@ -18,10 +18,10 @@
 
     // Não mostra os campos referentes às vistorias por padrão. Mostra apenas para 
     // técnicas da DPOP    
-    document.getElementById("headerVistoriasDoCaso").style.display   =  "none";    
-    document.getElementById("vistoriasDoCaso").style.display   =  "none";    
-    document.getElementById("vistoria_traco_inicio").style.display   =  "none";   
-    document.getElementById("vistoria_traco_fim").style.display   =  "none";   
+    document.getElementById("headerVistoriasDoCaso").style.display  =  "none";    
+    document.getElementById("vistoriasDoCaso").style.display        =  "none";    
+    document.getElementById("vistoria_traco_inicio").style.display  =  "none";   
+    document.getElementById("vistoria_traco_fim").style.display     =  "none";   
     
   } // Fim da função configurarPaginaVisualizarCaso
 
@@ -61,6 +61,9 @@
         visualizarDataLimite( cache_CasoEmVisualizacao );
 
       }
+
+      // Mostra a situação do questionário
+      visualizarSituacaoQuestionario( cache_CasoEmVisualizacao );
       
       // Mostra os parâmetros do caso
       visualizarParametroCaso( cache_CasoEmVisualizacao );
@@ -107,6 +110,54 @@
     justificativa.value = caso.justificativa_alteracao_data_limite;
 
   } // Fim da função visualizarDataLimite
+
+
+
+  /**
+   * Função que mostra a situação do questionário
+   */      
+  function visualizarSituacaoQuestionario( caso ) {
+
+    // Obtém o elemento questionario_status
+    let questionarioStatus = document.getElementById("questionario_status");   
+
+    document.getElementById("btResponserQuestionario").style.display  =  "none"; 
+    document.getElementById("questionario_conteudo").style.display    =  "none";     
+        
+    // Exibe a situação do questionário
+    switch( caso.id_situacao_questionario ) {
+
+      case "1": // Sem questionário a responder
+        questionarioStatus.innerHTML = "Sem questionário a responder";
+        questionarioStatus.style.color = "blue";
+        break;
+      case "2": // Questionário Pendente
+        questionarioStatus.innerHTML = "  Questionário Pendente";
+        questionarioStatus.style.color = "red";
+        document.getElementById("btResponserQuestionario").style.display  =  "";   
+        break;
+      case "3": // Questionário Respondido
+        questionarioStatus.innerHTML = "Questionário Respondido";
+        questionarioStatus.style.color = "green";
+        break;
+      default:
+        questionarioStatus.innerHTML = "";
+    }
+
+  } // Fim da função visualizarSituacaoQuestionario
+
+  
+
+  function handlerBotaoResponderQuestionario() {
+    document.getElementById("questionario_conteudo").style.display    =  "";    
+    document.getElementById("btResponserQuestionario").style.display  =  "none";    
+
+    document.getElementById("etapa_acesso").style.display                =  "none";   
+    document.getElementById("acompanhamento_nao").style.display          =  "none";   
+    document.getElementById("impossibilidade_temporaria").style.display  =  "none";                   
+    document.getElementById("nao_acesso_definitivo").style.display       =  "none";                  
+    document.getElementById("observacoes").style.display                 =  "none";               
+  }
 
 
 
@@ -163,10 +214,10 @@
    */    
   function visualizarVistoriasCaso( caso ) {
 
-    document.getElementById("headerVistoriasDoCaso").style.display   =  "";    
-    document.getElementById("vistoriasDoCaso").style.display   =  "";   
-    document.getElementById("vistoria_traco_inicio").style.display   =  "";   
-    document.getElementById("vistoria_traco_fim").style.display   =  "";   
+    document.getElementById("headerVistoriasDoCaso").style.display  =  "";    
+    document.getElementById("vistoriasDoCaso").style.display        =  "";   
+    document.getElementById("vistoria_traco_inicio").style.display  =  "";   
+    document.getElementById("vistoria_traco_fim").style.display     =  "";   
 
     if( caso.vistorias.length < 1 ) {
       console.log( "visualizarVistoriasCaso - Sem Vistorias" );
@@ -199,6 +250,149 @@
     }); // Fim do forEach
 
   } // Fim da função visualizarVistoriasCaso
+
+
+
+  /**
+   * Mostra e esconde campos em função da opção selecionada no campo radio_acompanhamento_beneficiario
+   */   
+  function handlerChangeRadio_acompanhamento_beneficiario() {
+
+    const valorRadio = document.querySelector('input[name="radio_acompanhamento_beneficiario"]:checked').value;            
+
+    switch( valorRadio ) {
+
+      case "1": // NÃO
+
+                // Esconde campos referentes à opção SIM
+                document.getElementById("etapa_acesso").style.display  =  "none";                  
+                document.getElementsByName("radio_etapa_acesso").forEach( opcao => {opcao.checked = false;} );
+
+                document.getElementById("impossibilidade_temporaria").style.display  =  "none";                  
+                document.getElementsByName("radio_impossibilidade_temporaria").forEach( opcao => {opcao.checked = false;} );                
+
+                document.getElementById("nao_acesso_definitivo").style.display  =  "none";                  
+                document.getElementsByName("radio_nao_acesso_definitivo").forEach( opcao => {opcao.checked = false;} );                
+
+                // Mostra campo referente à opção NÃO
+                document.getElementById("acompanhamento_nao").style.display  =  "";                   
+
+                break; 
+
+      case "2": // SIM
+
+                // Mostra campos referentes à opção SIM
+                document.getElementById("etapa_acesso").style.display  =  "";                   
+
+                // Esconde campo referente à opção Não
+                document.getElementById("acompanhamento_nao").style.display  =  "none";                  
+                document.getElementsByName("radio_acompanhamento_nao").forEach( opcao => {opcao.checked = false;} );
+       
+                break;
+    }
+
+    document.getElementById("observacoes").style.display  =  "";   
+
+  } // Fim da função handlerChangeRadio_acompanhamento_beneficiario
+
+
+
+  /**
+   * Mostra e esconde campos em função da opção selecionada no campo radio_etapa_acesso
+   */     
+  function handlerChangeRadio_etapa_acesso() {
+
+    const valorRadio = document.querySelector('input[name="radio_etapa_acesso"]:checked').value;            
+
+    switch( valorRadio ) {
+
+      case "5": // O beneficiário está impossibilitado de acessar temporariamente
+
+                // Mostra campo referente à impossibilidade
+                document.getElementById("impossibilidade_temporaria").style.display  =  "";                   
+
+                // Esconde campo referente ao não acesso definitivo
+                document.getElementById("nao_acesso_definitivo").style.display  =  "none";                  
+                document.getElementsByName("radio_nao_acesso_definitivo").forEach( opcao => {opcao.checked = false;} );
+
+                break; 
+
+      case "6": // O beneficiário não acessará o benefício de forma definitiva
+
+                // Esconde campo referente à impossibilidade
+                document.getElementById("impossibilidade_temporaria").style.display  =  "none";                   
+                document.getElementsByName("radio_impossibilidade_temporaria").forEach( opcao => {opcao.checked = false;} );
+
+                // Mostra campo referente ao não acesso definitivo
+                document.getElementById("nao_acesso_definitivo").style.display  =  "";                                  
+       
+                break;
+
+      default:  // Outras opções                
+
+                // Esconde campo referente à impossibilidade
+                document.getElementById("impossibilidade_temporaria").style.display  =  "none";                   
+                document.getElementsByName("radio_impossibilidade_temporaria").forEach( opcao => {opcao.checked = false;} );      
+
+                // Esconde campo referente ao não acesso definitivo
+                document.getElementById("nao_acesso_definitivo").style.display  =  "none";                  
+                document.getElementsByName("radio_nao_acesso_definitivo").forEach( opcao => {opcao.checked = false;} );
+                
+                break;
+    }
+
+  } // Fim da função handlerChangeRadio_etapa_acesso
+
+
+
+  /**
+   * Handler do botão Salvar Questionário. Coleta as respostas do questionário e 
+   * chama a função frontend para salvar o questionário
+   */     
+  function handlerBotaoSalvarQuestionario() {
+    
+    const q1 = document.querySelector('input[name="radio_acompanhamento_beneficiario"]:checked') ?
+               document.querySelector('input[name="radio_acompanhamento_beneficiario"]:checked').value :
+               "";
+
+    const q2 = document.querySelector('input[name="radio_etapa_acesso"]:checked') ? 
+               document.querySelector('input[name="radio_etapa_acesso"]:checked').value : 
+               "";
+
+    const q3 = document.querySelector('input[name="radio_impossibilidade_temporaria"]:checked') ? 
+               document.querySelector('input[name="radio_impossibilidade_temporaria"]:checked').value : 
+               "";               
+
+    const q4 = document.querySelector('input[name="radio_nao_acesso_definitivo"]:checked') ? 
+               document.querySelector('input[name="radio_nao_acesso_definitivo"]:checked').value : 
+               "";               
+
+    const q5 = document.querySelector('input[name="radio_acompanhamento_nao"]:checked') ? 
+               document.querySelector('input[name="radio_acompanhamento_nao"]:checked').value : 
+               "";      
+               
+    const observacoes = document.getElementById("campo_observacoes").value;
+
+    const respostasQuestionario = {
+      "idCaso" : id_CasoEmVisualizacao,
+      "q1" : q1,
+      "q2" : q2,
+      "q3" : q3,
+      "q4" : q4,
+      "q5" : q5,
+      "observacoes" : observacoes
+    };
+    
+
+    salvarQuestionarioFE( respostasQuestionario )
+
+  } // Fim da função handlerBotaoSalvarQuestionario
+
+
+
+
+
+
 
 
 

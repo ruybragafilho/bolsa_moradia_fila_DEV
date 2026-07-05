@@ -377,6 +377,8 @@ function obterFila() {
 
     let vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
     let idSituacaoVistoria = getSituacaoVistoria( vistoriasCaso );
+
+    let idSituacaoQuestionario = getSituacaoQuestionario( caso[ID] );
         
     return {
 
@@ -421,6 +423,8 @@ function obterFila() {
       vistorias: vistoriasCaso,
 
       id_situacao_vistoria: idSituacaoVistoria,
+
+      id_situacao_questionario: idSituacaoQuestionario,
 
       ids_perfil: caso[PERFIL_COMPLETO],
 

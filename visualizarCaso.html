@@ -76,7 +76,95 @@
     <!-- Data limite - Fim -->
 
     
-    <br><br>
+    <br><hr><br>       
+
+
+    <!-- Questionário sobre acompanhamento do caso - Início -->    
+    <section id="questionario" class="mt-5 mb-4">
+
+      <h5 class="text-center mt-5 mb-2" id="headerQuestionario">QUESTIONÁRIO ACOMPANHAMENTO DO CASO PELO SERVIÇO</h5><br>          
+
+      <h6 class="text-center mt-2 mb-2" id="questionario_status"></h6><br>  
+
+      
+      <!-- Botão Responder Questionário - Início -->        
+      <div class="row mb-2">
+        <div class="col-md-5"></div>
+        <div class="col-md-3">
+          <button class="btn btn-sm btn-primary" id="btResponserQuestionario" onclick="handlerBotaoResponderQuestionario()">Responder Questionário</button>
+        </div>        
+        <div class="col-md-4"></div>
+      </div>          
+      <!-- Botão Responder Questionário - Fim -->   
+
+
+      <!-- Questionário Conteúdo - Início -->
+      <div id="questionario_conteudo">        
+
+        <!-- Pergunta principal do questionário - Q1 -->  
+        <div id="acompanhamento_beneficiario" class="mt-3">
+          <p id="label_acompanhamento_beneficiario" class="fw-bold">O beneficiário continua em acompanhamento por este serviço?</p>    
+          <div id="radio_acompanhamento_beneficiario" onchange="handlerChangeRadio_acompanhamento_beneficiario()">
+            <?!= gerarRadioButton( BUFFER_RESPOSTAS_SIMPLES, "radio_acompanhamento_beneficiario", 1 ); ?>
+          </div>
+        </div> 
+          
+        <!-- Acompanhamento SIM - Q2-->
+        <div id="etapa_acesso" class="mt-5">
+          <p id="label_etapa_acesso" class="fw-bold">Em qual etapa de acesso o beneficiário se encontra?</p>    
+          <div id="radio_etapa_acesso" onchange="handlerChangeRadio_etapa_acesso()">
+            <?!= gerarRadioButton( BUFFER_ETAPA_ACESSO, "radio_etapa_acesso", 0 ); ?>
+          </div>        
+        </div>
+
+        <!-- Q3-->
+        <div id="impossibilidade_temporaria" class="mt-5">
+          <p id="label_impossibilidade_temporaria" class="fw-bold">Justificativa impossibilidade temporária</p>    
+          <div id="radio_impossibilidade_temporaria">
+            <?!= gerarRadioButton( BUFFER_IMPOSSIBILIDADE_TEMPORARIA, "radio_impossibilidade_temporaria", 0 ); ?>
+          </div>        
+        </div>          
+
+        <!-- Q4-->
+        <div id="nao_acesso_definitivo" class="mt-5">
+          <p id="label_nao_acesso_definitivo" class="fw-bold">Justificativa não acesso definitivo</p>    
+          <div id="radio_nao_acesso_definitivo">
+            <?!= gerarRadioButton( BUFFER_NAO_ACESSO_DEFINITIVO, "radio_nao_acesso_definitivo", 0 ); ?>
+          </div>        
+        </div>                    
+
+        <!-- Acompanhamento NÃO - Q5 -->
+        <div id="acompanhamento_nao" class="mt-5">
+          <p id="label_acompanhamento_nao" class="fw-bold">Justificativa</p>    
+          <div id="radio_acompanhamento_nao">
+            <?!= gerarRadioButton( BUFFER_ACOMPANHAMENTO_NAO, "radio_acompanhamento_nao", 0 ); ?>
+          </div>        
+        </div>          
+
+        <!-- Observações -->
+        <div id="observacoes" class="mt-5 mb-5">
+          <label for="campo_observacoes" class="form-label fw-bold">OBSERVAÇÕES</label>
+          <textarea class="form-control" id="campo_observacoes" rows="3" maxlength="512"></textarea>
+        </div>                
+
+        <!-- Botão Salvar Questionário - Início -->        
+        <div class="row mb-2">
+          <div class="col-md-5"></div>
+          <div class="col-md-3">
+            <button class="btn btn-sm btn-primary" id="bt_alterarDataLimite" onclick="handlerBotaoSalvarQuestionario()">Salvar Questionário</button>
+          </div>        
+          <div class="col-md-4"></div>
+        </div>          
+        <!-- Botão Salvar Questionário - Fim -->   
+
+      </div>
+      <!-- Questionário Conteúdo - Fim -->
+
+    </section>
+    <!-- Questionário sobre acompanhamento do caso - Fim -->    
+
+
+    <br><hr><br>       
 
 
     <!-- Tabela com Parâmetros + Pontuação do caso - Início -->    

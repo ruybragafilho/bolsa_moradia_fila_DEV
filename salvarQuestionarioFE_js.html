@@ -1,0 +1,59 @@
+<script>
+
+  "use strict";
+
+
+
+
+  /**
+   * chama a função backend para salvar o questionário
+   */       
+  function salvarQuestionarioFE( respostasQuestionario ) {
+
+    console.log( "salvarQuestionarioFE_js - INÍCIO" );
+
+    let questionario_status = document.getElementById( "questionario_status" );
+
+    questionario_status.innerHTML = "<h3 class='text-center mt-5 mb-5'>Aguarde gravação do questionário!</h3>";
+    questionario_status.style.color = "blue";
+
+
+    const jsonRespostasQuestionario = JSON.stringify( respostasQuestionario );
+
+    // Chama a função back end para salvar o questionário
+    google.script.run
+                 .withSuccessHandler( () => {
+  
+                   // Localiza o caso na tabela dados
+                   let indiceCasoNaTabelaResumo;
+                   let numCasos = cache_TabelaCasos.length;
+                   for( indiceCasoNaTabelaResumo=0; indiceCasoNaTabelaResumo<numCasos; ++indiceCasoNaTabelaResumo  ) {
+                     if(cache_TabelaCasos[indiceCasoNaTabelaResumo].id == id_CasoEmVisualizacao) {
+                       cache_TabelaCasos[indiceCasoNaTabelaResumo].id_situacao_questionario = "3"; 
+                       break;
+                     }
+                   }                                     
+                  
+                   questionario_status.innerHTML = "<h3 class='text-center mt-5 mb-5'>Questionário salvo com sucesso!</h3>";
+                   questionario_status.style.color = "green";
+  
+                 })
+                 .withFailureHandler( erro => {
+  
+                   questionario_status.innerHTML = "<h3 class='text-center mt-5 mb-5'>Erro ao salvar questionário!</h3>";
+                   questionario_status.style.color = "red";
+                   console.log( erro );
+  
+                 })
+                 // Chama a função backend que designa o caso
+                 .salvarQuestionarioBE( jsonRespostasQuestionario );     
+                 
+
+    console.log( "salvarQuestionarioFE_js - FIM" );
+
+  } // Fim da função salvarQuestionarioFE
+
+
+
+
+</script>
