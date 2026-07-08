@@ -24,7 +24,7 @@ const NUM_QUESTIONARIO     =  BUFFER_QUESTIONARIO.length;
  */
 const ID_CASO           = 0;
 
-const EMAIL_RESPONSAVEL_RESPOSTA = 1;
+const ID_TRABALHADOR_RESPONSAVEL_RESPOSTA = 1;
 const DATA_ENVIO_EMAIL_QUESTIONARIO = 2;
 const DATA_RESPOSTA_QUESTIONARIO = 3;
 const RESPOSTAS = 4;
@@ -84,11 +84,25 @@ function getSituacaoQuestionario( idCaso ) {
  */       
 function salvarQuestionarioBE( jsonRespostasQuestionario ) {
 
-  // Prepara os dados para serem gravados na planilha QUESTIONARIO
 
+  // Parse na resposta do questionário recebida do front-end
   const respostasQuestionario = JSON.parse( jsonRespostasQuestionario );
 
+  // Parse no id do caso recebido do front-end
   const idCaso = parseInt( respostasQuestionario.idCaso );
+
+
+  // Verifica se o usuário do app tem permissão para salvar questionários
+  const usuarioLogado = JSON.parse( autenticarUsuario() );
+  if( usuarioLogado.tipo != "1" ||
+      ( usuarioLogado.instituicao != "0" &&        
+        usuarioLogado.instituicao != BUFFER_FILA[idCaso-1][ORGAO_ENCAMINHADOR] ) ) {
+
+    throw( new Error( "Usuário sem permissão para evoluir casos" ) );
+  }    
+
+
+  // Prepara os dados para serem gravados na planilha QUESTIONARIO
 
   const repostas = [ respostasQuestionario.q1, 
                      respostasQuestionario.q2, 
@@ -118,6 +132,11 @@ function salvarQuestionarioBE( jsonRespostasQuestionario ) {
     // SE PEGAR O LOCK, PROSSEGUE COM A GRAVAÇÃO DOS DADOS DO QUESTIONÁRIO
     if( lock.hasLock() ) {
 
+
+      // Grava o ID do trabalhador que respondeu o questionário
+      const campo_ID_trabalhador = TABELA_QUESTIONARIO.getRange( idCaso+1, ID_TRABALHADOR_RESPONSAVEL_RESPOSTA+1 );
+      campo_ID_trabalhador.setValue( usuarioLogado.id );      
+      console.log( "\nsalvarQuestionarioBE - ID_trabalhador" );
 
       // Gera, formata e grava a data de resposta do questionário
       let dataResposta = new Date().toLocaleString("pt-BR", {dateStyle: "short"});    

@@ -1,0 +1,280 @@
+<script>
+
+  "use strict";
+
+
+
+  /**
+   * chama a função backend para salvar o questionário
+   */       
+  function salvarQuestionarioFE( respostasQuestionario ) {
+
+    console.log( "salvarQuestionarioFE_js - INÍCIO" );
+
+    //let questionario_status = document.getElementById( "questionario_status" );
+    // mostra modal com mensagem de gravação das respostas do questionário
+    mostrarModalMensagem( "Salvando questionário, por favor aguarde..." );
+
+
+    const jsonRespostasQuestionario = JSON.stringify( respostasQuestionario );
+
+    // Chama a função back end para salvar o questionário
+    google.script.run
+                 .withSuccessHandler( () => {
+  
+                   // Localiza o caso na tabela dados
+                   let indiceCasoNaTabelaResumo;
+                   let numCasos = cache_TabelaCasos.length;
+                   for( indiceCasoNaTabelaResumo=0; indiceCasoNaTabelaResumo<numCasos; ++indiceCasoNaTabelaResumo  ) {
+                     if(cache_TabelaCasos[indiceCasoNaTabelaResumo].id == id_CasoEmVisualizacao) {
+                       cache_TabelaCasos[indiceCasoNaTabelaResumo].id_situacao_questionario = "3"; 
+                       break;
+                     }
+                   }                                     
+
+                   // Visualiza novo status do questionário
+                   //questionario_status.innerHTML = "<h3 class='text-center mt-5 mb-5'>Questionário salvo com sucesso!</h3>";
+                   //questionario_status.style.color = "green";
+                   visualizarSituacaoQuestionario( cache_CasoEmVisualizacao );
+
+                   // Esconde modal de mensagem
+                   modalMensagem.hide();      
+                   window.scrollTo(0, 0);                
+  
+                 })
+                 .withFailureHandler( erro => {
+  
+                   // Visualiza novo status do questionário
+                   //questionario_status.innerHTML = "<h3 class='text-center mt-5 mb-5'>Erro ao salvar questionário!</h3>";
+                   //questionario_status.style.color = "red";
+                   visualizarSituacaoQuestionario( cache_CasoEmVisualizacao );
+
+                   // Esconde modal de mensagem
+                   modalMensagem.hide();                      
+
+                   // Exibe modal de erro ao gravar o questionário
+                   mostrarModalErro( "salvarQuestionarioFE - " + erro.message );                            
+                   console.log( erro.message );
+  
+                 })
+                 // Chama a função backend que designa o caso
+                 .salvarQuestionarioBE( jsonRespostasQuestionario );     
+                 
+
+    console.log( "salvarQuestionarioFE_js - FIM" );
+
+  } // Fim da função salvarQuestionarioFE
+
+
+
+  /**
+   * Função que mostra a situação do questionário
+   */      
+  function visualizarSituacaoQuestionario( caso ) {
+
+    // Obtém o elemento questionario_status
+    let questionarioStatus = document.getElementById("questionario_status");   
+
+    document.getElementById("btResponserQuestionario").style.display  =  "none"; 
+    document.getElementById("questionario_conteudo").style.display    =  "none";     
+        
+    // Exibe a situação do questionário
+    switch( caso.id_situacao_questionario ) {
+
+      case "1": // Sem questionário a responder
+        questionarioStatus.innerHTML = "Sem questionário a responder";
+        questionarioStatus.style.color = "blue";
+        break;
+      case "2": // Questionário Pendente
+        questionarioStatus.innerHTML = "Questionário Pendente";
+        questionarioStatus.style.color = "red";
+        document.getElementById("btResponserQuestionario").style.display  =  "";   
+        break;
+      case "3": // Questionário Respondido
+        questionarioStatus.innerHTML = "Questionário Respondido";
+        questionarioStatus.style.color = "green";
+        break;
+      default:
+        questionarioStatus.innerHTML = "";
+    }
+
+  } // Fim da função visualizarSituacaoQuestionario
+
+  
+
+  /**
+   * Handler do botão Responder Questionário. Mostra o questionário e esconde o botão
+   */
+  function handlerBotaoResponderQuestionario() {
+    document.getElementById("questionario_conteudo").style.display    =  "";    
+    document.getElementById("btResponserQuestionario").style.display  =  "none";    
+
+    document.getElementById("etapa_acesso").style.display                =  "none";   
+    document.getElementById("acompanhamento_nao").style.display          =  "none";   
+    document.getElementById("impossibilidade_temporaria").style.display  =  "none";                   
+    document.getElementById("nao_acesso_definitivo").style.display       =  "none";                  
+    document.getElementById("observacoes").style.display                 =  "none";  
+
+  } // Fim da função handlerBotaoResponderQuestionario 
+
+
+
+  /**
+   * Mostra e esconde campos em função da opção selecionada no campo radio_acompanhamento_beneficiario
+   */   
+  function handlerChangeRadio_acompanhamento_beneficiario() {
+
+    const valorRadio = document.querySelector('input[name="radio_acompanhamento_beneficiario"]:checked').value;            
+
+    switch( valorRadio ) {
+
+      case "1": // NÃO
+
+                // Esconde campos referentes à opção SIM
+                document.getElementById("etapa_acesso").style.display  =  "none";                  
+                document.getElementsByName("radio_etapa_acesso").forEach( opcao => {opcao.checked = false;} );
+
+                document.getElementById("impossibilidade_temporaria").style.display  =  "none";                  
+                document.getElementsByName("radio_impossibilidade_temporaria").forEach( opcao => {opcao.checked = false;} );                
+
+                document.getElementById("nao_acesso_definitivo").style.display  =  "none";                  
+                document.getElementsByName("radio_nao_acesso_definitivo").forEach( opcao => {opcao.checked = false;} );                
+
+                // Mostra campo referente à opção NÃO
+                document.getElementById("acompanhamento_nao").style.display  =  "";                   
+
+                break; 
+
+      case "2": // SIM
+
+                // Mostra campos referentes à opção SIM
+                document.getElementById("etapa_acesso").style.display  =  "";                   
+
+                // Esconde campo referente à opção Não
+                document.getElementById("acompanhamento_nao").style.display  =  "none";                  
+                document.getElementsByName("radio_acompanhamento_nao").forEach( opcao => {opcao.checked = false;} );
+       
+                break;
+    }
+
+    document.getElementById("observacoes").style.display  =  "";   
+
+  } // Fim da função handlerChangeRadio_acompanhamento_beneficiario
+
+
+
+  /**
+   * Mostra e esconde campos em função da opção selecionada no campo radio_etapa_acesso
+   */     
+  function handlerChangeRadio_etapa_acesso() {
+
+    const valorRadio = document.querySelector('input[name="radio_etapa_acesso"]:checked').value;            
+
+    switch( valorRadio ) {
+
+      case "5": // O beneficiário está impossibilitado de acessar temporariamente
+
+                // Mostra campo referente à impossibilidade
+                document.getElementById("impossibilidade_temporaria").style.display  =  "";                   
+
+                // Esconde campo referente ao não acesso definitivo
+                document.getElementById("nao_acesso_definitivo").style.display  =  "none";                  
+                document.getElementsByName("radio_nao_acesso_definitivo").forEach( opcao => {opcao.checked = false;} );
+
+                break; 
+
+      case "6": // O beneficiário não acessará o benefício de forma definitiva
+
+                // Esconde campo referente à impossibilidade
+                document.getElementById("impossibilidade_temporaria").style.display  =  "none";                   
+                document.getElementsByName("radio_impossibilidade_temporaria").forEach( opcao => {opcao.checked = false;} );
+
+                // Mostra campo referente ao não acesso definitivo
+                document.getElementById("nao_acesso_definitivo").style.display  =  "";                                  
+       
+                break;
+
+      default:  // Outras opções                
+
+                // Esconde campo referente à impossibilidade
+                document.getElementById("impossibilidade_temporaria").style.display  =  "none";                   
+                document.getElementsByName("radio_impossibilidade_temporaria").forEach( opcao => {opcao.checked = false;} );      
+
+                // Esconde campo referente ao não acesso definitivo
+                document.getElementById("nao_acesso_definitivo").style.display  =  "none";                  
+                document.getElementsByName("radio_nao_acesso_definitivo").forEach( opcao => {opcao.checked = false;} );
+                
+                break;
+    }
+
+  } // Fim da função handlerChangeRadio_etapa_acesso
+
+
+
+  /**
+   * Handler do botão Salvar Questionário. Coleta as respostas do questionário e 
+   * chama a função frontend para salvar o questionário
+   */     
+  function handlerBotaoSalvarQuestionario() {
+    
+    const q1 = document.querySelector('input[name="radio_acompanhamento_beneficiario"]:checked') ?
+               document.querySelector('input[name="radio_acompanhamento_beneficiario"]:checked').value :
+               "";
+
+    const q2 = document.querySelector('input[name="radio_etapa_acesso"]:checked') ? 
+               document.querySelector('input[name="radio_etapa_acesso"]:checked').value : 
+               "";
+
+    const q3 = document.querySelector('input[name="radio_impossibilidade_temporaria"]:checked') ? 
+               document.querySelector('input[name="radio_impossibilidade_temporaria"]:checked').value : 
+               "";               
+
+    const q4 = document.querySelector('input[name="radio_nao_acesso_definitivo"]:checked') ? 
+               document.querySelector('input[name="radio_nao_acesso_definitivo"]:checked').value : 
+               "";               
+
+    const q5 = document.querySelector('input[name="radio_acompanhamento_nao"]:checked') ? 
+               document.querySelector('input[name="radio_acompanhamento_nao"]:checked').value : 
+               "";      
+               
+    const observacoes = document.getElementById("campo_observacoes").value;
+
+    const respostasQuestionario = {
+      "idCaso" : id_CasoEmVisualizacao,
+      "q1" : q1,
+      "q2" : q2,
+      "q3" : q3,
+      "q4" : q4,
+      "q5" : q5,
+      "observacoes" : observacoes
+    };
+    
+
+    salvarQuestionarioFE( respostasQuestionario )
+
+  } // Fim da função handlerBotaoSalvarQuestionario
+
+
+
+  /**
+   * Função que localiza os questionários pendentes de uma instituição
+   */
+  function localizarQuestionariosPendentes( idInstituicao ) {
+
+    // Localiza os casos pendentes na tabela casos
+    const casosPendentes = cache_TabelaCasos.filter( caso => {
+      if( caso.idInstituicao == idInstituicao && caso.situacaoQuestionario == "3" ) {
+        return {
+          id: caso.id,
+          referencia_familiar: caso.referencia_familiar,
+          cpf_rf: caso.cpf_rf
+        }
+      } 
+    });
+
+    return casosPendentes;
+
+  } // Fim da função localizarQuestionariosPendentes
+
+
+</script>

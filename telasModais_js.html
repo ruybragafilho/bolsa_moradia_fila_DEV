@@ -10,6 +10,10 @@
   let conteudoModalErro;  
   let modalErro;
 
+  // Variáveis para controlar a exibição da janela modal de questionário
+  let conteudoModalQuestionario;  
+  let modalQuestionario;
+
 
   /**
   * Função que inicializa as telas modais utilizadas no frontend
@@ -27,6 +31,11 @@
     // Instancia as variáveis para controlar a exibição da janela modal de erro
     conteudoModalErro = document.getElementById("conteudoModalErro");  
     modalErro = new bootstrap.Modal( document.getElementById("modalErro") );
+
+
+    // Instancia as variáveis para controlar a exibição da janela modal de questionário
+    conteudoModalQuestionario = document.getElementById("conteudoModalQuestionario");  
+    modalQuestionario = new bootstrap.Modal( document.getElementById("modalQuestionario") );    
 
   } // Fim da função inicializarModais
 
@@ -60,6 +69,23 @@
     modalErro.show();
 
   } // Fim da função modalErro
+
+
+function mostrarModalQuestionario( casosPendentes ) {
+
+    // Esconde modal de mensagem, caso alguma esteja visível
+    modalMensagem.hide();
+
+    // Se houver casos pendentes, mostra o modal de questionário
+    if ( casosPendentes.length > 0 ) {
+
+      // Mostra modal de questionário
+      conteudoModalQuestionario.innerHTML = "Casos Pendentes";
+      modalQuestionario.show();      
+    }
+
+  } // Fim da função mostrarModalQuestionario
+
   
 
 </script>
