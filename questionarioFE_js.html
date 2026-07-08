@@ -276,6 +276,24 @@
 
 
 
+  /**
+   * Função que mostra o caso com questionário pendente clicado
+   */
+  function mostrarQuestionario( idCaso ) {
+
+    // Esconde modal de questionários pendentes
+    modalQuestionariosPendentes.hide();      
+
+    // Obtém o id do caso 
+    id_CasoEmVisualizacao = idCaso;
+
+    // Exibe a página de visualização    
+    exibirPagina('visualizarCaso');      
+
+  } //  Fim da função mostrarQuestionario
+
+
+
   function teste_localizarQuestionariosPendentes() {
      
      let questionariosPendentes = localizarQuestionariosPendentes( "38" );

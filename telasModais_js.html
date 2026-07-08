@@ -10,9 +10,9 @@
   let conteudoModalErro;  
   let modalErro;
 
-  // Variáveis para controlar a exibição da janela modal de questionário
-  let conteudoModalQuestionario;  
-  let modalQuestionario;
+  // Variáveis para controlar a exibição da janela modal de questionários pendentes
+  let conteudoModalQuestionariosPendentes;  
+  let modalQuestionariosPendentes;
 
 
   /**
@@ -34,8 +34,8 @@
 
 
     // Instancia as variáveis para controlar a exibição da janela modal de questionário
-    conteudoModalQuestionario = document.getElementById("conteudoModalQuestionario");  
-    modalQuestionario = new bootstrap.Modal( document.getElementById("modalQuestionario") );    
+    conteudoModalQuestionariosPendentes = document.getElementById("conteudoModalQuestionariosPendentes");  
+    modalQuestionariosPendentes = new bootstrap.Modal( document.getElementById("modalQuestionariosPendentes") );    
 
   } // Fim da função inicializarModais
 
@@ -71,20 +71,36 @@
   } // Fim da função modalErro
 
 
-function mostrarModalQuestionario( casosPendentes ) {
+  /**
+   * Função frontend que mostra o modal de questionários pendentes
+   */
+  function mostrarModalQuestionariosPendentes() {
+  
+      // Esconde modal de mensagem, caso alguma esteja visível
+      modalMensagem.hide();
 
-    // Esconde modal de mensagem, caso alguma esteja visível
-    modalMensagem.hide();
+      // Reset do modal de questionários pendentes
+      conteudoModalQuestionariosPendentes.innerHTML = "";      
 
-    // Se houver casos pendentes, mostra o modal de questionário
-    if ( casosPendentes.length > 0 ) {
+      // Obtém os casos com questionários pendentes associados à instituição do usuário logado no sistema
+      let questionariosPendentes = localizarQuestionariosPendentes( usuarioLogado.instituicao );
 
-      // Mostra modal de questionário
-      conteudoModalQuestionario.innerHTML = "Casos Pendentes";
-      modalQuestionario.show();      
-    }
+      // Se houver casos pendentes, mostra o modal de questionário
+      if ( questionariosPendentes.length > 0 ) {
+  
+        conteudoModalQuestionariosPendentes.innerHTML += "<br><hr><br>";
+        questionariosPendentes.forEach( element => {
 
-  } // Fim da função mostrarModalQuestionario
+          // Popula o modal com os casos
+          conteudoModalQuestionariosPendentes.innerHTML += `<div onclick="mostrarQuestionario(${element.id})">${element.id} - ${element.referencia_familiar} - ${element.cpf_rf}</div><br><hr><br>`;          
+        });
+  
+        // Mostra modal de questionários pendentes
+        modalQuestionariosPendentes.show();      
+        
+      }
+  
+    } // Fim da função mostrarModalQuestionario
 
   
 
