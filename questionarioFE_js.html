@@ -262,19 +262,36 @@
   function localizarQuestionariosPendentes( idInstituicao ) {
 
     // Localiza os casos pendentes na tabela casos
-    const casosPendentes = cache_TabelaCasos.filter( caso => {
-      if( caso.idInstituicao == idInstituicao && caso.situacaoQuestionario == "3" ) {
-        return {
-          id: caso.id,
-          referencia_familiar: caso.referencia_familiar,
-          cpf_rf: caso.cpf_rf
-        }
-      } 
+    let casosPendentes = cache_TabelaCasos.filter( caso => {
+      if( caso.id_orgao_encaminhador == idInstituicao && caso.id_situacao_questionario == "2" ) {
+        return true;
+      } else {
+        return false;
+      }
     });
 
     return casosPendentes;
 
   } // Fim da função localizarQuestionariosPendentes
+
+
+
+  function teste_localizarQuestionariosPendentes() {
+     
+     let questionariosPendentes = localizarQuestionariosPendentes( "38" );
+
+     console.log( "teste_localizarQuestionariosPendentes - INÍCIO" );
+
+     questionariosPendentes.forEach( qp => {
+       console.log( "\n## CASO ##" ); 
+       console.log( qp.id );
+       console.log( qp.referencia_familiar );
+       console.log( qp.cpf_rf );
+       console.log( "--------" ); 
+     });
+
+     console.log( "teste_localizarQuestionariosPendentes - FIM" );
+  }
 
 
 </script>
