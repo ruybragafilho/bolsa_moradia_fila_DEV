@@ -21,20 +21,23 @@
     // Chama a função back end para salvar o questionário
     google.script.run
                  .withSuccessHandler( () => {
-  
-                   // Localiza o caso na tabela dados
-                   let indiceCasoNaTabelaResumo;
-                   let numCasos = cache_TabelaCasos.length;
-                   for( indiceCasoNaTabelaResumo=0; indiceCasoNaTabelaResumo<numCasos; ++indiceCasoNaTabelaResumo  ) {
-                     if(cache_TabelaCasos[indiceCasoNaTabelaResumo].id == id_CasoEmVisualizacao) {
-                       cache_TabelaCasos[indiceCasoNaTabelaResumo].id_situacao_questionario = "3"; 
-                       break;
-                     }
-                   }                                     
+
+                  // Atualiza o caso também no frontend, para não precisar 
+                  // carregá-lo do backend novamente
+
+                   cache_CasoEmVisualizacao.id_situacao_questionario = "3"; 
+
+                   cache_CasoEmVisualizacao.ids_respostas_questionarios = {      
+                     "q1" : respostasQuestionario.q1,
+                     "q2" : respostasQuestionario.q2,
+                     "q3" : respostasQuestionario.q3,
+                     "q4" : respostasQuestionario.q4,
+                     "q5" : respostasQuestionario.q5,
+                     "observacoes" : respostasQuestionario.observacoes
+                   };                       
+
 
                    // Visualiza novo status do questionário
-                   //questionario_status.innerHTML = "<h3 class='text-center mt-5 mb-5'>Questionário salvo com sucesso!</h3>";
-                   //questionario_status.style.color = "green";
                    visualizarSituacaoQuestionario( cache_CasoEmVisualizacao );
 
                    // Esconde modal de mensagem
@@ -45,8 +48,6 @@
                  .withFailureHandler( erro => {
   
                    // Visualiza novo status do questionário
-                   //questionario_status.innerHTML = "<h3 class='text-center mt-5 mb-5'>Erro ao salvar questionário!</h3>";
-                   //questionario_status.style.color = "red";
                    visualizarSituacaoQuestionario( cache_CasoEmVisualizacao );
 
                    // Esconde modal de mensagem
@@ -74,9 +75,6 @@
 
     // Obtém o elemento questionario_status
     let questionarioStatus = document.getElementById("questionario_status");   
-
-    document.getElementById("btResponserQuestionario").style.display  =  "none"; 
-    document.getElementById("questionario_conteudo").style.display    =  "none";     
         
     // Exibe a situação do questionário
     switch( caso.id_situacao_questionario ) {
@@ -84,21 +82,109 @@
       case "1": // Sem questionário a responder
         questionarioStatus.innerHTML = "Sem questionário a responder";
         questionarioStatus.style.color = "blue";
+        document.getElementById("btResponserQuestionario").style.display  =  "none"; 
+        document.getElementById("questionario_conteudo").style.display    =  "none";             
         break;
       case "2": // Questionário Pendente
         questionarioStatus.innerHTML = "Questionário Pendente";
         questionarioStatus.style.color = "red";
         document.getElementById("btResponserQuestionario").style.display  =  "";   
+        document.getElementById("questionario_conteudo").style.display    =  "none";                     
         break;
       case "3": // Questionário Respondido
         questionarioStatus.innerHTML = "Questionário Respondido";
         questionarioStatus.style.color = "green";
+        document.getElementById("btResponserQuestionario").style.display  =  "none";         
+        document.getElementById("btSalvarQuestionario").style.display     =  "none";                 
+        document.getElementById("questionario_conteudo").style.display    =  "";                     
+        visualizarQuestionarioRespondido( caso );        
         break;
       default:
         questionarioStatus.innerHTML = "";
+        document.getElementById("btResponserQuestionario").style.display  =  "none";         
+        document.getElementById("btSalvarQuestionario").style.display     =  "none";                 
+        document.getElementById("questionario_conteudo").style.display    =  "none";                             
     }
 
   } // Fim da função visualizarSituacaoQuestionario
+
+
+
+  /**
+   * Função que mostra o questionário respondido
+   */
+  function visualizarQuestionarioRespondido( caso ) {
+
+    console.log( "visualizarQuestionarioRespondido - Início" );
+
+    // Respostas do questionario
+    let idsRespostasQuestionarios = caso.ids_respostas_questionarios;
+
+    //DEBUG
+    if( idsRespostasQuestionarios != "" ) {
+      console.log( JSON.stringify(idsRespostasQuestionarios) );
+    } else {
+      console.log( "RESPOSTA NULA" );
+    }
+
+    // Obtém as divs do questionário
+    let div_q1 = document.getElementById("acompanhamento_beneficiario");
+    let div_q2 = document.getElementById("etapa_acesso");
+    let div_q3 = document.getElementById("impossibilidade_temporaria");
+    let div_q4 = document.getElementById("nao_acesso_definitivo");
+    let div_q5 = document.getElementById("acompanhamento_nao");
+    let div_observacoes = document.getElementById("observacoes"); 
+
+
+    // Exibe apenas as questoes respondidas
+
+    if( idsRespostasQuestionarios.q1 != "" ) {
+      div_q1.style.display  =  "";
+      document.getElementById("radio_acompanhamento_beneficiario" + idsRespostasQuestionarios.q1 ).checked = true;
+      document.getElementsByName("radio_acompanhamento_beneficiario").forEach( opcao => {opcao.disabled = true;} );
+    } else {
+      div_q1.style.display  =  "none";
+    }
+
+    if( idsRespostasQuestionarios.q2 != "" ) {
+      div_q2.style.display  =  "";
+      document.getElementById("radio_etapa_acesso" + idsRespostasQuestionarios.q2 ).checked = true;
+      document.getElementsByName("radio_etapa_acesso").forEach( opcao => {opcao.disabled = true;} );
+    } else {
+      div_q2.style.display  =  "none";
+    }    
+
+    if( idsRespostasQuestionarios.q3 != "" ) {
+      div_q3.style.display  =  "";
+      document.getElementById("radio_impossibilidade_temporaria" + idsRespostasQuestionarios.q3 ).checked = true;
+      document.getElementsByName("radio_impossibilidade_temporaria").forEach( opcao => {opcao.disabled = true;} );
+    } else {
+      div_q3.style.display  =  "none";
+    }        
+
+    if( idsRespostasQuestionarios.q4 != "" ) {
+      div_q4.style.display  =  "";
+      document.getElementById("radio_nao_acesso_definitivo" + idsRespostasQuestionarios.q4 ).checked = true;
+      document.getElementsByName("radio_nao_acesso_definitivo").forEach( opcao => {opcao.disabled = true;} );
+    } else {
+      div_q4.style.display  =  "none";
+    }        
+
+    if( idsRespostasQuestionarios.q5 != "" ) {
+      div_q5.style.display  =  "";
+      document.getElementById("radio_acompanhamento_nao" + idsRespostasQuestionarios.q5 ).checked = true;
+      document.getElementsByName("radio_acompanhamento_nao").forEach( opcao => {opcao.disabled = true;} );
+    } else {
+      div_q5.style.display  =  "none";
+    }        
+
+    div_observacoes.style.display  =  "";
+    document.getElementById("campo_observacoes").value = idsRespostasQuestionarios.observacoes;
+    document.getElementById("campo_observacoes").disabled = true; 
+
+    console.log( "visualizarQuestionarioRespondido - Fim" );
+
+  } // Fim da função visualizarQuestionarioRespondido
 
   
 
@@ -113,7 +199,7 @@
     document.getElementById("acompanhamento_nao").style.display          =  "none";   
     document.getElementById("impossibilidade_temporaria").style.display  =  "none";                   
     document.getElementById("nao_acesso_definitivo").style.display       =  "none";                  
-    document.getElementById("observacoes").style.display                 =  "none";  
+    document.getElementById("observacoes").style.display                 =  "none";      
 
   } // Fim da função handlerBotaoResponderQuestionario 
 
@@ -158,6 +244,8 @@
     }
 
     document.getElementById("observacoes").style.display  =  "";   
+
+    document.getElementById("observacoes").focus();
 
   } // Fim da função handlerChangeRadio_acompanhamento_beneficiario
 
@@ -207,6 +295,8 @@
                 break;
     }
 
+    document.getElementById("observacoes").focus();
+
   } // Fim da função handlerChangeRadio_etapa_acesso
 
 
@@ -249,7 +339,6 @@
       "observacoes" : observacoes
     };
     
-
     salvarQuestionarioFE( respostasQuestionario )
 
   } // Fim da função handlerBotaoSalvarQuestionario

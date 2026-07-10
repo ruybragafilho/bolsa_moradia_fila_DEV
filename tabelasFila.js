@@ -379,6 +379,8 @@ function obterFila() {
     let idSituacaoVistoria = getSituacaoVistoria( vistoriasCaso );
 
     let idSituacaoQuestionario = getSituacaoQuestionario( caso[ID] );
+    let idsRespostasQuestionarios = idSituacaoQuestionario == "3" ?
+                                    getRespostasQuestionario( caso[ID] ) : "";
         
     return {
 
@@ -425,6 +427,8 @@ function obterFila() {
       id_situacao_vistoria: idSituacaoVistoria,
 
       id_situacao_questionario: idSituacaoQuestionario,
+
+      ids_respostas_questionarios: idsRespostasQuestionarios,
 
       ids_perfil: caso[PERFIL_COMPLETO],
 

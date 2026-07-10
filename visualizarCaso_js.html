@@ -37,10 +37,10 @@
     let numCasos = cache_TabelaCasos.length;
     for( indiceCasoNaTabelaResumo=0; indiceCasoNaTabelaResumo<numCasos; ++indiceCasoNaTabelaResumo  ) {
       if(cache_TabelaCasos[indiceCasoNaTabelaResumo].id == id_CasoEmVisualizacao) {
+        cache_CasoEmVisualizacao = cache_TabelaCasos[ indiceCasoNaTabelaResumo ];
         break;
       }
-    }
-    cache_CasoEmVisualizacao = cache_TabelaCasos[ indiceCasoNaTabelaResumo ];
+    }    
 
     // Mostra os parâmetros do caso apenas para os trabalhadores
     // do órgão que encaminhou o cidadão

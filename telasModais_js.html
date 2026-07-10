@@ -88,11 +88,11 @@
       // Se houver casos pendentes, mostra o modal de questionário
       if ( questionariosPendentes.length > 0 ) {
   
-        conteudoModalQuestionariosPendentes.innerHTML += "<br><hr><br>";
+        conteudoModalQuestionariosPendentes.innerHTML += "<br>";
         questionariosPendentes.forEach( element => {
 
           // Popula o modal com os casos
-          conteudoModalQuestionariosPendentes.innerHTML += `<div onclick="mostrarQuestionario(${element.id})">${element.id} - ${element.referencia_familiar} - ${element.cpf_rf}</div><br><hr><br>`;          
+          conteudoModalQuestionariosPendentes.innerHTML += `<div class="bg-light border rounded-2" role="button" onclick="mostrarQuestionario(${element.id})">RF: ${element.referencia_familiar}<br>CPF: ${element.cpf_rf}</div><br>`;          
         });
   
         // Mostra modal de questionários pendentes

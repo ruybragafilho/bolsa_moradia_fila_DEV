@@ -78,6 +78,32 @@ function getSituacaoQuestionario( idCaso ) {
 
 
 
+/**
+ * Função backend que retorna as respostas do questionário de um caso
+ */       
+function getRespostasQuestionario( idCaso ) {
+
+  const id = parseInt( idCaso );
+
+  // Se id inválido, retorna uma exceção
+  if( id < 1  ||  id > TAMANHO_FILA ) {
+    throw( new Error( "getRespostasQuestionario - ID Inválido" ) );
+  }      
+
+  let respostasChecks = BUFFER_QUESTIONARIO[id-1][RESPOSTAS].split(";");
+
+  return {
+    q1: respostasChecks[0],
+    q2: respostasChecks[1],
+    q3: respostasChecks[2],
+    q4: respostasChecks[3],
+    q5: respostasChecks[4],
+    observacoes: BUFFER_QUESTIONARIO[id-1][OBSERVACAO]
+  };
+
+} // Fim da função getRespostasQuestionario
+
+
 
 /**
  * Função backend para salvar o questionário
