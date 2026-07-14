@@ -1,0 +1,63 @@
+<script>
+
+  "use strict";
+  
+  /**
+   * Função frontend que obtém o relatório de todos os casos da fila, retornando-o como xlsx
+   */  
+  function relatorioFilaFE() {
+
+    // Mensagem de debug
+    console.log( "relatorioFilaFE - INÍCIO" ); 
+
+    // Mostra modal com mensagem de geração de relatório
+    mostrarModalMensagem( "Gerando relatório, por favor aguarde..." );      
+    document.getElementById("botaoGerarRelatorio").disabled = true;          
+
+    // Chama função do Apps Script para reativar um caso
+    google.script.run
+                 .withSuccessHandler( (urlRelatorio) => {
+
+                   // Volta para a tela de resumos de casos
+                   console.log( "relatorioFilaFE - SuccessHandler" );
+
+                   // Esconde modal de mensagem
+                   modalMensagem.hide();   
+
+                   // Abre a planilha
+                   console.log("Gerar link - Início");
+
+                   const link = document.createElement('a');
+                   link.href = urlRelatorio;
+                   link.target = "_blank"
+                   link.download = 'RELATÓRIO_FILA_BM.xlsx';
+
+                   document.body.appendChild(link);
+                   link.click();
+                   document.body.removeChild(link);
+                   document.getElementById("botaoGerarRelatorio").disabled = false;          
+                   
+                   console.log("Gerar link - Fim");                                
+
+                 })
+                 .withFailureHandler( erro => {
+
+                   // Esconde modal de mensagem
+                   modalMensagem.hide();   
+
+                   // mostra modal com mensagem de erro
+                   console.log( "relatorioFilaFE - FailureHandler: " + erro.message );
+                   mostrarModalErro( "relatorioFilaFE - FailureHandler: " + erro.message );                   
+
+                 })
+                 // Chama a função backend que gera e retorna o relatório
+                 .getRelatorioExel( );  
+
+
+    // Mensagem de debug
+    console.log( "relatorioFilaFE - FIM" );                                                               
+
+  } // Fim da função relatorioFilaFE
+
+
+</script>

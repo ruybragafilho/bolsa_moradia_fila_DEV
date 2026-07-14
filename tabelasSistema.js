@@ -33,6 +33,7 @@ const TABELA_IDENTIDADES_DE_GENERO  =  PLANILHA_CODIGOS.getSheetByName('IDENTIDA
 const TABELA_ORIENTACOES_SEXUAIS    =  PLANILHA_CODIGOS.getSheetByName('ORIENTACOES_SEXUAIS');
 const TABELA_PARAMETROS             =  PLANILHA_CODIGOS.getSheetByName('PARAMETROS');
 const TABELA_PERFIS                 =  PLANILHA_CODIGOS.getSheetByName('PERFIS');
+const TABELA_SITUACOES_QUESTIONARIO      =  PLANILHA_CODIGOS.getSheetByName('SITUACOES_QUESTIONARIO'); 
 const TABELA_ETAPA_ACESSO                =  PLANILHA_CODIGOS.getSheetByName('ETAPA_ACESSO');
 const TABELA_ACOMPANHAMENTO_NAO          =  PLANILHA_CODIGOS.getSheetByName('ACOMPANHAMENTO_NAO');
 const TABELA_IMPOSSIBILIDADE_TEMPORARIA  =  PLANILHA_CODIGOS.getSheetByName('IMPOSSIBILIDADE_TEMPORARIA');
@@ -47,6 +48,7 @@ const BUFFER_IDENTIDADES_DE_GENERO  =  TABELA_IDENTIDADES_DE_GENERO.getDataRange
 const BUFFER_ORIENTACOES_SEXUAIS    =  TABELA_ORIENTACOES_SEXUAIS.getDataRange().getDisplayValues().splice(1);
 const BUFFER_PARAMETROS             =  TABELA_PARAMETROS.getDataRange().getDisplayValues().splice(1);
 const BUFFER_PERFIS                 =  TABELA_PERFIS.getDataRange().getDisplayValues().splice(1);
+const BUFFER_SITUACOES_QUESTIONARIO      =  TABELA_SITUACOES_QUESTIONARIO.getDataRange().getDisplayValues().splice(1);
 const BUFFER_ETAPA_ACESSO                =  TABELA_ETAPA_ACESSO.getDataRange().getDisplayValues().splice(1);
 const BUFFER_ACOMPANHAMENTO_NAO          =  TABELA_ACOMPANHAMENTO_NAO.getDataRange().getDisplayValues().splice(1);
 const BUFFER_IMPOSSIBILIDADE_TEMPORARIA  =  TABELA_IMPOSSIBILIDADE_TEMPORARIA.getDataRange().getDisplayValues().splice(1);
@@ -61,6 +63,7 @@ const NUM_IDENTIDADES_DE_GENERO  =  BUFFER_IDENTIDADES_DE_GENERO.length;
 const NUM_ORIENTACOES_SEXUAIS    =  BUFFER_ORIENTACOES_SEXUAIS.length;
 const NUM_PARAMETROS             =  BUFFER_PARAMETROS.length;
 const NUM_PERFIS                 =  BUFFER_PERFIS.length;
+const NUM_SITUACOES_QUESTIONARIO      =  BUFFER_SITUACOES_QUESTIONARIO.length; 
 const NUM_ETAPA_ACESSO                =  BUFFER_ETAPA_ACESSO.length;
 const NUM_ACOMPANHAMENTO_NAO          =  BUFFER_ACOMPANHAMENTO_NAO.length;
 const NUM_IMPOSSIBILIDADE_TEMPORARIA  =  BUFFER_IMPOSSIBILIDADE_TEMPORARIA.length;
@@ -147,6 +150,9 @@ function obterTabelaCompleta( nomeTabela ) {
     case "ORIENTACOES_SEXUAIS":      bufferTabela = BUFFER_ORIENTACOES_SEXUAIS;
                                      break;    
 
+    case "SITUACOES_QUESTIONARIO":   bufferTabela = BUFFER_SITUACOES_QUESTIONARIO;
+                                     break;                                     
+
     case "PARAMETROS":               bufferTabela = BUFFER_PARAMETROS;
                                      break;
 
@@ -220,7 +226,11 @@ function idToNome( id, nomeTabela ) {
 
     case "ORIENTACOES_SEXUAIS":      bufferTabela = BUFFER_ORIENTACOES_SEXUAIS;
                                      tamanhoTabela = NUM_ORIENTACOES_SEXUAIS;
-                                     break;                         
+                                     break;
+                                     
+    case "SITUACOES_QUESTIONARIO":   bufferTabela = BUFFER_SITUACOES_QUESTIONARIO;
+                                     tamanhoTabela = NUM_SITUACOES_QUESTIONARIO;
+                                     break;                                     
 
     case "PARAMETROS":               bufferTabela = BUFFER_PARAMETROS;
                                      tamanhoTabela = NUM_PARAMETROS;

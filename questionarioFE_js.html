@@ -232,13 +232,16 @@
                 break; 
 
       case "2": // SIM
+       
+                if( cache_CasoEmVisualizacao.id_situacao_beneficio == 3 ) {
 
-                // Mostra campos referentes à opção SIM
-                document.getElementById("etapa_acesso").style.display  =  "";                   
-
-                // Esconde campo referente à opção Não
-                document.getElementById("acompanhamento_nao").style.display  =  "none";                  
-                document.getElementsByName("radio_acompanhamento_nao").forEach( opcao => {opcao.checked = false;} );
+                  // Mostra campos referentes à opção SIM
+                  document.getElementById("etapa_acesso").style.display  =  "";                   
+  
+                  // Esconde campo referente à opção Não
+                  document.getElementById("acompanhamento_nao").style.display  =  "none";                  
+                  document.getElementsByName("radio_acompanhamento_nao").forEach( opcao => {opcao.checked = false;} );                  
+                }
        
                 break;
     }
