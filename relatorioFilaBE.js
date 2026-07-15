@@ -37,13 +37,13 @@ function limparRelatorio() {
     
       // Limpa a fila
       let range;
-      for( let linha=2; linha<=NUM_RELATORIOS+1; ++linha ) {
+      for( let linha=2; linha<=TAMANHO_FILA+1; ++linha ) {
         bufferCasosNulos.push(casoNulo);
       }    
       
       
       // Grava o buffer de casos nulos na planilha RELATORIO
-      TABELA_RELATORIO.getRange( 2, 1, bufferCasosNulos.length, NUM_COLUNAS_TABELA_RELATORIO ).setValues( bufferCasosNulos );  
+      TABELA_RELATORIO.getRange( 2, 1, bufferCasosNulos.length, NUM_COLUNAS_TABELA_RELATORIO ).setNumberFormat("@").setValues( bufferCasosNulos );  
       PLANILHA_RELATORIO.waitForAllDataExecutionsCompletion(2);      
       SpreadsheetApp.flush();  
   
@@ -106,7 +106,7 @@ function gerarRelatorio() {
 
         bufferRelatorioCaso[0] = caso[ ID ];
         bufferRelatorioCaso[1] = caso[ REFERENCIA_FAMILIAR ];
-        bufferRelatorioCaso[2] = caso[ CPF_RF ];
+        bufferRelatorioCaso[2] = caso[ CPF_RF ].padStart(11, "0");
         bufferRelatorioCaso[3] = idToNome( caso[SITUACAO_BENEFICIO], "SITUACOES_BENEFICIO" );
 
         // Situação Vistoria
@@ -138,7 +138,7 @@ function gerarRelatorio() {
   
 
       // Grava o buffer do relatório na planilha RELATORIO
-      TABELA_RELATORIO.getRange( 2, 1, relatorio.length, NUM_COLUNAS_TABELA_RELATORIO ).setValues( relatorio );
+      TABELA_RELATORIO.getRange( 2, 1, relatorio.length, NUM_COLUNAS_TABELA_RELATORIO ).setNumberFormat("@").setValues( relatorio );
       PLANILHA_RELATORIO.waitForAllDataExecutionsCompletion(2);      
       SpreadsheetApp.flush();  
   
