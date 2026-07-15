@@ -314,35 +314,44 @@
                document.querySelector('input[name="radio_acompanhamento_beneficiario"]:checked').value :
                "";
 
-    const q2 = document.querySelector('input[name="radio_etapa_acesso"]:checked') ? 
-               document.querySelector('input[name="radio_etapa_acesso"]:checked').value : 
-               "";
+    if(q1 == "") {
 
-    const q3 = document.querySelector('input[name="radio_impossibilidade_temporaria"]:checked') ? 
-               document.querySelector('input[name="radio_impossibilidade_temporaria"]:checked').value : 
-               "";               
+      // Exibe modal de erro caso a primeira questão do questionário esteja vazia
+      mostrarModalErro( "A primeira questão do questionário é obrigatória!" );                            
 
-    const q4 = document.querySelector('input[name="radio_nao_acesso_definitivo"]:checked') ? 
-               document.querySelector('input[name="radio_nao_acesso_definitivo"]:checked').value : 
-               "";               
+    } else {
 
-    const q5 = document.querySelector('input[name="radio_acompanhamento_nao"]:checked') ? 
-               document.querySelector('input[name="radio_acompanhamento_nao"]:checked').value : 
-               "";      
-               
-    const observacoes = document.getElementById("campo_observacoes").value;
+      const q2 = document.querySelector('input[name="radio_etapa_acesso"]:checked') ? 
+                 document.querySelector('input[name="radio_etapa_acesso"]:checked').value : 
+                 "";
+  
+      const q3 = document.querySelector('input[name="radio_impossibilidade_temporaria"]:checked') ? 
+                 document.querySelector('input[name="radio_impossibilidade_temporaria"]:checked').value : 
+                 "";               
+  
+      const q4 = document.querySelector('input[name="radio_nao_acesso_definitivo"]:checked') ? 
+                 document.querySelector('input[name="radio_nao_acesso_definitivo"]:checked').value : 
+                 "";               
+  
+      const q5 = document.querySelector('input[name="radio_acompanhamento_nao"]:checked') ? 
+                 document.querySelector('input[name="radio_acompanhamento_nao"]:checked').value : 
+                 "";      
+                 
+      const observacoes = document.getElementById("campo_observacoes").value;
+  
+      const respostasQuestionario = {
+        "idCaso" : id_CasoEmVisualizacao,
+        "q1" : q1,
+        "q2" : q2,
+        "q3" : q3,
+        "q4" : q4,
+        "q5" : q5,
+        "observacoes" : observacoes
+      };
+      
+      salvarQuestionarioFE( respostasQuestionario )
 
-    const respostasQuestionario = {
-      "idCaso" : id_CasoEmVisualizacao,
-      "q1" : q1,
-      "q2" : q2,
-      "q3" : q3,
-      "q4" : q4,
-      "q5" : q5,
-      "observacoes" : observacoes
-    };
-    
-    salvarQuestionarioFE( respostasQuestionario )
+    }// Fim else
 
   } // Fim da função handlerBotaoSalvarQuestionario
 

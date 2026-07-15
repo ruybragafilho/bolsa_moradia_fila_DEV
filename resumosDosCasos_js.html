@@ -15,16 +15,17 @@
     if( usuarioLogado.instituicao != "0" ) {           
 
       // Esconde o campo evolução dos trabalhadores da ponta e gestores externos
-      document.getElementById("evolucao").style.display = "none";   
+      document.getElementById("evolucao").style.display = "none";         
 
       // Esconde os gráficos, apenas para trabalhadores da ponta
       if(usuarioLogado.instituicao != "-1") {
-        document.getElementById("graficos").style.display = "none";   
+        document.getElementById("graficos").style.display = "none"; 
+        document.getElementById("gerarRelatorio").style.display = "none";     
       }
 
     // Configura a página para trabalhador da DPOP 
     } else {
-      cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;
+      cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;      
     }
 
 

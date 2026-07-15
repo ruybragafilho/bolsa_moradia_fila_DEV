@@ -119,10 +119,10 @@ function gerarRelatorio() {
         bufferRelatorioCaso[5] = idToNome( idSituacaoQuestionario, "SITUACOES_QUESTIONARIO" );
 
         // Situação acompanhamento
-        idsRespostasQuestionario = idSituacaoQuestionario == "3" ?
+        idsRespostasQuestionarios = idSituacaoQuestionario == "3" ?
                                     getRespostasQuestionario( caso[ID] ) : "";
-        idSituacaoAcompanhamento = idsRespostasQuestionario != "" ?
-                                   idsRespostasQuestionario.q1 : "";
+        idSituacaoAcompanhamento = idsRespostasQuestionarios != "" ?
+                                   idsRespostasQuestionarios.q1 : "";
         switch( idSituacaoAcompanhamento ) {
           case "1":  bufferRelatorioCaso[6] = "NÃO acompanhado pelo serviço"; break;
           case "2":  bufferRelatorioCaso[6] = "Acompanhado pelo serviço"; break;
