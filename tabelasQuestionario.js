@@ -13,9 +13,23 @@
 const PLANILHA_QUESTIONARIO_ID  =  "1Lu69-a1VHgWcCEXRt9RKjmoVfOTmHFXBqpfM2G0pMnE";
 const PLANILHA_QUESTIONARIO     =  SpreadsheetApp.openById(PLANILHA_QUESTIONARIO_ID);
 
-const TABELA_QUESTIONARIO  =  PLANILHA_QUESTIONARIO.getSheetByName('QUESTIONARIO');
-const BUFFER_QUESTIONARIO  =  TABELA_QUESTIONARIO.getDataRange().getDisplayValues().splice(1);
-const NUM_QUESTIONARIO     =  BUFFER_QUESTIONARIO.length;
+const TABELA_QUESTIONARIO   =  PLANILHA_QUESTIONARIO.getSheetByName('QUESTIONARIO');
+const BUFFER_QUESTIONARIO   =  TABELA_QUESTIONARIO.getDataRange().getDisplayValues().splice(1);
+const TAMANHO_QUESTIONARIO  =  BUFFER_QUESTIONARIO.length;
+
+const NUM_COLUNAS_TABELA_QUESTIONARIO = 6
+
+
+/**
+ * Planilha HISTORICO
+ */
+const PLANILHA_HISTORICO_ID  =  "1Cr2DHFagtHqQIc9fXFECPXXnZ7YsD5kTfYv7fbUWDYQ";
+const PLANILHA_HISTORICO     =  SpreadsheetApp.openById(PLANILHA_HISTORICO_ID);
+
+const TABELA_HISTORICO   =  PLANILHA_HISTORICO.getSheetByName('HISTORICO');
+const BUFFER_HISTORICO   =  TABELA_HISTORICO.getDataRange().getDisplayValues().splice(1);
+const TAMANHO_HISTORICO  =  BUFFER_HISTORICO.length;
+
 
 
 
@@ -206,4 +220,54 @@ function salvarQuestionarioBE( jsonRespostasQuestionario ) {
   return true;
 
 } // Fim da função salvarQuestionarioBE
+
+
+
+/**
+ * Função backend para enviar o último questionário para o histórico
+ */       
+function enviarQuestionarioParaHistorico() {
+
+
+  // Grava os dados do questionário na planilha HISTORICO
+
+  // TENTA PEGAR O LOCK
+  const lock = LockService.getScriptLock();    
+
+  try {
+
+    lock.waitLock(10000);  
+    
+    
+    // SE PEGAR O LOCK, PROSSEGUE COM A GRAVAÇÃO DO QUESTIONÁRIO NO HISTÓRICO
+    if( lock.hasLock() ) {
+
+
+      TABELA_HISTORICO.getRange( TAMANHO_HISTORICO+2, 1, TAMANHO_QUESTIONARIO, NUM_COLUNAS_TABELA_QUESTIONARIO ).setValues( BUFFER_QUESTIONARIO );  
+      PLANILHA_HISTORICO.waitForAllDataExecutionsCompletion(2);      
+      SpreadsheetApp.flush();  
+      
+    } else {
+  
+      // SE NAO CONSEGUIR PEGAR O LOCK, LANCA UMA EXCESSAO
+      throw( new Error( "enviarQuestionarioParaHistorico - Nao foi possivel pegar o LOCK" ) );
+    } 
+
+
+  } catch( error ) {
+
+    console.log( "enviarQuestionarioParaHistorico - " + error.message );
+    throw( "enviarQuestionarioParaHistorico - " + error.message );
+
+  } finally {
+
+    // Always release the lock for other waiting instances
+    lock.releaseLock(); 
+  }    
+
+  return true;
+
+} // Fim da função enviarQuestionarioParaHistorico
+
+
 
