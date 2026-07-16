@@ -20,18 +20,6 @@ const TAMANHO_QUESTIONARIO  =  BUFFER_QUESTIONARIO.length;
 const NUM_COLUNAS_TABELA_QUESTIONARIO = 6
 
 
-/**
- * Planilha HISTORICO
- */
-const PLANILHA_HISTORICO_ID  =  "1Cr2DHFagtHqQIc9fXFECPXXnZ7YsD5kTfYv7fbUWDYQ";
-const PLANILHA_HISTORICO     =  SpreadsheetApp.openById(PLANILHA_HISTORICO_ID);
-
-const TABELA_HISTORICO   =  PLANILHA_HISTORICO.getSheetByName('HISTORICO');
-const BUFFER_HISTORICO   =  TABELA_HISTORICO.getDataRange().getDisplayValues().splice(1);
-const TAMANHO_HISTORICO  =  BUFFER_HISTORICO.length;
-
-
-
 
 /**
  * Constantes que armazenam as posições das colunas da tabela QUESTIONARIO
@@ -223,51 +211,7 @@ function salvarQuestionarioBE( jsonRespostasQuestionario ) {
 
 
 
-/**
- * Função backend para enviar o último questionário para o histórico
- */       
-function enviarQuestionarioParaHistorico() {
 
-
-  // Grava os dados do questionário na planilha HISTORICO
-
-  // TENTA PEGAR O LOCK
-  const lock = LockService.getScriptLock();    
-
-  try {
-
-    lock.waitLock(10000);  
-    
-    
-    // SE PEGAR O LOCK, PROSSEGUE COM A GRAVAÇÃO DO QUESTIONÁRIO NO HISTÓRICO
-    if( lock.hasLock() ) {
-
-
-      TABELA_HISTORICO.getRange( TAMANHO_HISTORICO+2, 1, TAMANHO_QUESTIONARIO, NUM_COLUNAS_TABELA_QUESTIONARIO ).setValues( BUFFER_QUESTIONARIO );  
-      PLANILHA_HISTORICO.waitForAllDataExecutionsCompletion(2);      
-      SpreadsheetApp.flush();  
-      
-    } else {
-  
-      // SE NAO CONSEGUIR PEGAR O LOCK, LANCA UMA EXCESSAO
-      throw( new Error( "enviarQuestionarioParaHistorico - Nao foi possivel pegar o LOCK" ) );
-    } 
-
-
-  } catch( error ) {
-
-    console.log( "enviarQuestionarioParaHistorico - " + error.message );
-    throw( "enviarQuestionarioParaHistorico - " + error.message );
-
-  } finally {
-
-    // Always release the lock for other waiting instances
-    lock.releaseLock(); 
-  }    
-
-  return true;
-
-} // Fim da função enviarQuestionarioParaHistorico
 
 
 
