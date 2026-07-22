@@ -93,7 +93,10 @@ function gerarRelatorio() {
 
       const relatorio = [];
       let vistoriasCaso;
+
       let idSituacaoVistoria;
+      let nomeSituacaoVistoria
+
       let idSituacaoQuestionario;
       let idsRespostasQuestionarios;
   
@@ -111,13 +114,20 @@ function gerarRelatorio() {
 
         // Situação benefício
         bufferRelatorioCaso[3] = idToNome( caso[SITUACAO_BENEFICIO], "SITUACOES_BENEFICIO" );
-        bufferRelatorioCaso[4] = caso[DATA_ULTIMA_EVOLUCAO];
-        bufferRelatorioCaso[5] = caso[DATA_LIMITE];
+        bufferRelatorioCaso[4] = caso[DATA_ULTIMA_EVOLUCAO] != "" ?
+                                 caso[DATA_ULTIMA_EVOLUCAO]  :
+                                 "Sem Informação";
+        bufferRelatorioCaso[5] = caso[DATA_LIMITE] != "" ?
+                                 caso[DATA_LIMITE]  :
+                                 "Sem Informação";
 
         // Situação Vistoria
         vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
         idSituacaoVistoria = getSituacaoVistoria( vistoriasCaso );
-        bufferRelatorioCaso[6] = idToNome( idSituacaoVistoria, "SITUACOES_VISTORIA" );
+        nomeSituacaoVistoria = idToNome( idSituacaoVistoria, "SITUACOES_VISTORIA" )
+        bufferRelatorioCaso[6] = nomeSituacaoVistoria  != "" ?
+                                 nomeSituacaoVistoria  :
+                                 "Sem Informação";;
 
         // Situação questionário
         idSituacaoQuestionario = getSituacaoQuestionario( caso[ID] );
@@ -129,13 +139,13 @@ function gerarRelatorio() {
         idSituacaoAcompanhamento = idsRespostasQuestionarios != "" ?
                                    idsRespostasQuestionarios.q1 : "";
         switch( idSituacaoAcompanhamento ) {
-          case "1":  bufferRelatorioCaso[6] = "NÃO acompanhado pelo serviço"; break;
-          case "2":  bufferRelatorioCaso[6] = "Acompanhado pelo serviço"; break;
-          default:   bufferRelatorioCaso[6] = "Sem Informação"; break;
+          case "1":  bufferRelatorioCaso[8] = "NÃO acompanhado pelo serviço"; break;
+          case "2":  bufferRelatorioCaso[8] = "Acompanhado pelo serviço"; break;
+          default:   bufferRelatorioCaso[8] = "Sem Informação"; break;
         }                                    
 
         // Órgão encaminhador
-        bufferRelatorioCaso[7] = idToNome( caso[ORGAO_ENCAMINHADOR], "ORGAOS_ENCAMINHADORES" );
+        bufferRelatorioCaso[9] = idToNome( caso[ORGAO_ENCAMINHADOR], "ORGAOS_ENCAMINHADORES" );
          
         relatorio.push( bufferRelatorioCaso );        
   
