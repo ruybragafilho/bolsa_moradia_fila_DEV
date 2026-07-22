@@ -8,7 +8,7 @@ const TABELA_RELATORIO          =  PLANILHA_RELATORIO.getSheetByName('RELATORIO'
 const TABELA_QUANTITATIVOS      =  PLANILHA_RELATORIO.getSheetByName('QUANTITATIVOS');
 let BUFFER_RELATORIO            =  TABELA_RELATORIO.getDataRange().getDisplayValues().splice(1);
 let NUM_RELATORIOS              =  BUFFER_RELATORIO.length;
-const NUM_COLUNAS_TABELA_RELATORIO  =  8;
+const NUM_COLUNAS_TABELA_RELATORIO  =  10;
 
 
 
@@ -104,19 +104,24 @@ function gerarRelatorio() {
     
         bufferRelatorioCaso = new Array(NUM_COLUNAS_TABELA_RELATORIO).fill("");
 
+        // Dados de Identificação
         bufferRelatorioCaso[0] = caso[ ID ];
         bufferRelatorioCaso[1] = caso[ REFERENCIA_FAMILIAR ];
         bufferRelatorioCaso[2] = caso[ CPF_RF ].padStart(11, "0");
+
+        // Situação benefício
         bufferRelatorioCaso[3] = idToNome( caso[SITUACAO_BENEFICIO], "SITUACOES_BENEFICIO" );
+        bufferRelatorioCaso[4] = caso[DATA_ULTIMA_EVOLUCAO];
+        bufferRelatorioCaso[5] = caso[DATA_LIMITE];
 
         // Situação Vistoria
         vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
         idSituacaoVistoria = getSituacaoVistoria( vistoriasCaso );
-        bufferRelatorioCaso[4] = idToNome( idSituacaoVistoria, "SITUACOES_VISTORIA" );
+        bufferRelatorioCaso[6] = idToNome( idSituacaoVistoria, "SITUACOES_VISTORIA" );
 
         // Situação questionário
         idSituacaoQuestionario = getSituacaoQuestionario( caso[ID] );
-        bufferRelatorioCaso[5] = idToNome( idSituacaoQuestionario, "SITUACOES_QUESTIONARIO" );
+        bufferRelatorioCaso[7] = idToNome( idSituacaoQuestionario, "SITUACOES_QUESTIONARIO" );
 
         // Situação acompanhamento
         idsRespostasQuestionarios = idSituacaoQuestionario == "3" ?
