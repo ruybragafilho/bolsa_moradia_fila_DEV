@@ -232,6 +232,22 @@ function idToNome( id, nomeTabela ) {
                                      tamanhoTabela = NUM_SITUACOES_QUESTIONARIO;
                                      break;                                     
 
+    case "ETAPA_ACESSO":             bufferTabela = BUFFER_ETAPA_ACESSO;
+                                     tamanhoTabela = NUM_ETAPA_ACESSO;
+                                     break;
+
+    case "ACOMPANHAMENTO_NAO":       bufferTabela = BUFFER_ACOMPANHAMENTO_NAO;
+                                     tamanhoTabela = NUM_ACOMPANHAMENTO_NAO;
+                                     break;                                     
+
+    case "IMPOSSIBILIDADE_TEMPORARIA":    bufferTabela = BUFFER_IMPOSSIBILIDADE_TEMPORARIA;
+                                          tamanhoTabela = NUM_IMPOSSIBILIDADE_TEMPORARIA;
+                                          break;
+
+    case "NAO_ACESSO_DEFINITIVO":    bufferTabela = BUFFER_NAO_ACESSO_DEFINITIVO;
+                                     tamanhoTabela = NUM_NAO_ACESSO_DEFINITIVO;
+                                     break;                                          
+
     case "PARAMETROS":               bufferTabela = BUFFER_PARAMETROS;
                                      tamanhoTabela = NUM_PARAMETROS;
                                      break;      
