@@ -8,7 +8,7 @@ const TABELA_RELATORIO          =  PLANILHA_RELATORIO.getSheetByName('RELATORIO'
 const TABELA_QUANTITATIVOS      =  PLANILHA_RELATORIO.getSheetByName('QUANTITATIVOS');
 let BUFFER_RELATORIO            =  TABELA_RELATORIO.getDataRange().getDisplayValues().splice(1);
 let NUM_RELATORIOS              =  BUFFER_RELATORIO.length;
-const NUM_COLUNAS_TABELA_RELATORIO  =  14;
+const NUM_COLUNAS_TABELA_RELATORIO  =  15;
 
 
 
@@ -18,19 +18,20 @@ const RELATORIO_COLUNA_NOME_RF       =  2;
 const RELATORIO_COLUNA_CPF_RF        =  3;
 
 const RELATORIO_COLUNA_ORGAO_ENCAMINHADOR  =  4;
-const RELATORIO_COLUNA_SITUACAO_BENEFICIO  =  5;
+const RELATORIO_COLUNA_COMPLEXIDADE        =  5
 
-const RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO  =  6;
-const RELATORIO_COLUNA_DATA_LIMITE           =  7;
+const RELATORIO_COLUNA_SITUACAO_BENEFICIO    =  6;
+const RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO  =  7;
+const RELATORIO_COLUNA_DATA_LIMITE           =  8;
 
-const RELATORIO_COLUNA_SITUACAO_VISTORIA        =  8;
-const RELATORIO_COLUNA_SITUACAO_QUESTIONARIO    =  9;
-const RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO  = 10;
+const RELATORIO_COLUNA_SITUACAO_VISTORIA        =  9;
+const RELATORIO_COLUNA_SITUACAO_QUESTIONARIO    = 10;
+const RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO  = 11;
 
-const RELATORIO_COLUNA_JUSTIFICATIVA_1  = 11;
-const RELATORIO_COLUNA_JUSTIFICATIVA_2  = 12;
+const RELATORIO_COLUNA_JUSTIFICATIVA_1  = 12;
+const RELATORIO_COLUNA_JUSTIFICATIVA_2  = 13;
 
-const RELATORIO_COLUNA_OBSERVACAO  = 13;
+const RELATORIO_COLUNA_OBSERVACAO  = 14;
 
 
 
@@ -142,11 +143,15 @@ function gerarRelatorio() {
         // Órgão encaminhador
         bufferRelatorioCaso[RELATORIO_COLUNA_ORGAO_ENCAMINHADOR] = idToNome( caso.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" );                                         
 
+        // Complexidade
+        bufferRelatorioCaso[RELATORIO_COLUNA_COMPLEXIDADE] = caso.id_complexidade ? 
+                                                             idToNome( caso.id_complexidade, "COMPLEXIDADES" ) :
+                                                             "Sem Informação";                
+
         // Situação benefício
         bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_BENEFICIO] = caso.id_situacao_beneficio ? 
                                                                    idToNome( caso.id_situacao_beneficio, "SITUACOES_BENEFICIO" ) :
                                                                    "Sem Informação";
-
         // Data última evolução                         
         bufferRelatorioCaso[RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO] = caso.data_ultima_evolucao != "" ?
                                                                      caso.data_ultima_evolucao  :
