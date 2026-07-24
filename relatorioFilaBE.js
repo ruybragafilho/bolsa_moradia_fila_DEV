@@ -8,7 +8,29 @@ const TABELA_RELATORIO          =  PLANILHA_RELATORIO.getSheetByName('RELATORIO'
 const TABELA_QUANTITATIVOS      =  PLANILHA_RELATORIO.getSheetByName('QUANTITATIVOS');
 let BUFFER_RELATORIO            =  TABELA_RELATORIO.getDataRange().getDisplayValues().splice(1);
 let NUM_RELATORIOS              =  BUFFER_RELATORIO.length;
-const NUM_COLUNAS_TABELA_RELATORIO  =  10;
+const NUM_COLUNAS_TABELA_RELATORIO  =  14;
+
+
+
+const RELATORIO_COLUNA_ID            =  0;
+const RELATORIO_COLUNA_POSICAO_FILA  =  1;
+const RELATORIO_COLUNA_NOME_RF       =  2;
+const RELATORIO_COLUNA_CPF_RF        =  3;
+
+const RELATORIO_COLUNA_ORGAO_ENCAMINHADOR  =  4;
+const RELATORIO_COLUNA_SITUACAO_BENEFICIO  =  5;
+
+const RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO  =  6;
+const RELATORIO_COLUNA_DATA_LIMITE           =  7;
+
+const RELATORIO_COLUNA_SITUACAO_VISTORIA        =  8;
+const RELATORIO_COLUNA_SITUACAO_QUESTIONARIO    =  9;
+const RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO  = 10;
+
+const RELATORIO_COLUNA_JUSTIFICATIVA_1  = 11;
+const RELATORIO_COLUNA_JUSTIFICATIVA_2  = 12;
+
+const RELATORIO_COLUNA_OBSERVACAO  = 13;
 
 
 
@@ -87,77 +109,150 @@ function gerarRelatorio() {
     // SE PEGAR O LOCK, PROSSEGUE COM A GERAÇÃO DOS DADOS DO RELATÓRIO
     if( lock.hasLock() ) {
       
-      console.log( "gerarRelatorioFila - Início" );
-  
-      let caso;
+      console.log( "gerarRelatorio - Início" );  
 
-      const relatorio = [];
-      let vistoriasCaso;
+      let bufferRelatorioCaso = [];      
+      const bufferRelatorios  = [];      
 
-      let idSituacaoVistoria;
       let nomeSituacaoVistoria
-
-      let idSituacaoQuestionario;
       let idsRespostasQuestionarios;
-  
+
+      let jsonFilaOrdenada = obterFila();
+      let filaOrdenada = JSON.parse( jsonFilaOrdenada );
+      console.log( "filaOrdenada" );
+
+      let posicaoFila = 0;
+
       // Percorre todos os casos da fila, gerando o relatório de cada caso
-      for( let idCaso=1; idCaso<=TAMANHO_FILA; ++idCaso ) {
-      
-        caso = BUFFER_FILA[idCaso - 1];
-    
+      filaOrdenada.forEach( caso => {
+        
         bufferRelatorioCaso = new Array(NUM_COLUNAS_TABELA_RELATORIO).fill("");
 
-        // Dados de Identificação
-        bufferRelatorioCaso[0] = caso[ ID ];
-        bufferRelatorioCaso[1] = caso[ REFERENCIA_FAMILIAR ];
-        bufferRelatorioCaso[2] = caso[ CPF_RF ].padStart(11, "0");
+        // Id do caso no sistema de filas
+        bufferRelatorioCaso[RELATORIO_COLUNA_ID] = caso.id;
 
-        // Situação benefício
-        bufferRelatorioCaso[3] = idToNome( caso[SITUACAO_BENEFICIO], "SITUACOES_BENEFICIO" );
-        bufferRelatorioCaso[4] = caso[DATA_ULTIMA_EVOLUCAO] != "" ?
-                                 caso[DATA_ULTIMA_EVOLUCAO]  :
-                                 "Sem Informação";
-        bufferRelatorioCaso[5] = caso[DATA_LIMITE] != "" ?
-                                 caso[DATA_LIMITE]  :
-                                 "Sem Informação";
+        // Posição do caso na fila
+        ++posicaoFila;
+        bufferRelatorioCaso[RELATORIO_COLUNA_POSICAO_FILA] = posicaoFila;
 
-        // Situação Vistoria
-        vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
-        idSituacaoVistoria = getSituacaoVistoria( vistoriasCaso );
-        nomeSituacaoVistoria = idToNome( idSituacaoVistoria, "SITUACOES_VISTORIA" )
-        bufferRelatorioCaso[6] = nomeSituacaoVistoria  != "" ?
-                                 nomeSituacaoVistoria  :
-                                 "Sem Informação";;
-
-        // Situação questionário
-        idSituacaoQuestionario = getSituacaoQuestionario( caso[ID] );
-        bufferRelatorioCaso[7] = idToNome( idSituacaoQuestionario, "SITUACOES_QUESTIONARIO" );
-
-        // Situação acompanhamento
-        idsRespostasQuestionarios = idSituacaoQuestionario == "3" ?
-                                    getRespostasQuestionario( caso[ID] ) : "";
-        idSituacaoAcompanhamento = idsRespostasQuestionarios != "" ?
-                                   idsRespostasQuestionarios.q1 : "";
-        switch( idSituacaoAcompanhamento ) {
-          case "1":  bufferRelatorioCaso[8] = "NÃO acompanhado pelo serviço"; break;
-          case "2":  bufferRelatorioCaso[8] = "Acompanhado pelo serviço"; break;
-          default:   bufferRelatorioCaso[8] = "Sem Informação"; break;
-        }                                    
+        // Dados de Identificação        
+        bufferRelatorioCaso[RELATORIO_COLUNA_NOME_RF] = caso.referencia_familiar;
+        bufferRelatorioCaso[RELATORIO_COLUNA_CPF_RF] = caso.cpf_rf.padStart(11, "0");
 
         // Órgão encaminhador
-        bufferRelatorioCaso[9] = idToNome( caso[ORGAO_ENCAMINHADOR], "ORGAOS_ENCAMINHADORES" );
+        bufferRelatorioCaso[RELATORIO_COLUNA_ORGAO_ENCAMINHADOR] = idToNome( caso.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" );                                         
+
+        // Situação benefício
+        bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_BENEFICIO] = caso.id_situacao_beneficio ? 
+                                                                   idToNome( caso.id_situacao_beneficio, "SITUACOES_BENEFICIO" ) :
+                                                                   "Sem Informação";
+
+        // Data última evolução                         
+        bufferRelatorioCaso[RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO] = caso.data_ultima_evolucao != "" ?
+                                                                     caso.data_ultima_evolucao  :
+                                                                     "Sem Informação";
+
+        // data limite                                 
+        bufferRelatorioCaso[RELATORIO_COLUNA_DATA_LIMITE] = caso.data_limite != "" ?
+                                                            caso.data_limite  :
+                                                            "Sem Informação";        
+
+        // Situação vistoria
+        nomeSituacaoVistoria = idToNome( caso.id_situacao_vistoria, "SITUACOES_VISTORIA" )
+        bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_VISTORIA] = nomeSituacaoVistoria != "" ?
+                                                                  nomeSituacaoVistoria :
+                                                                  "Sem Informação";
          
-        relatorio.push( bufferRelatorioCaso );        
-  
-      } // Fim do for que percorre todos os casos da fila
-  
+        // Situação questionário
+        nomeSituacaoQuestionario = idToNome( caso.id_situacao_questionario, "SITUACOES_QUESTIONARIO" );
+        bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_QUESTIONARIO] = nomeSituacaoQuestionario != "" ?
+                                                                      nomeSituacaoQuestionario :
+                                                                      "Sem Informação";
+
+        // Situação acompanhamento
+        idsRespostasQuestionarios = caso.ids_respostas_questionarios;
+        
+        idSituacaoAcompanhamento = idsRespostasQuestionarios != "" ?
+                                   idsRespostasQuestionarios.q1 : 
+                                   "";
+
+        // Switch - ACOMPANHAMENTO DO CASO - (NÃO / SIM)                                   
+        switch( idSituacaoAcompanhamento ) {
+           
+          case "1":  // CASO NÃO ACOMPANHADO
+                     bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "NÃO acompanhado pelo serviço"; 
+
+                     // Justificativa de não acompanhamento
+                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q5 != "" ?
+                                                                             idToNome( idsRespostasQuestionarios.q5, "ACOMPANHAMENTO_NAO" ) :
+                                                                             "Sem Informação"; 
+                     // Sem justificativa 2                                                                             
+                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Sem Informação";                                                                              
+
+                     break;
+
+
+          case "2":  // CASO ACOMPANHADO
+                     bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Acompanhado pelo serviço"; 
+
+                     // Switch - ETAPAS DE ACESSO
+                     switch(idsRespostasQuestionarios.q2) {
+
+                       case "5":  // O beneficiário está impossibilitado de acessar temporariamente
+                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
+                                                                                          idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
+                                                                                          "Sem Informação" ;
+                                  // Justificativa - não acesso temporário
+                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = idsRespostasQuestionarios.q3 != "" ? 
+                                                                                          idToNome( idsRespostasQuestionarios.q3, "IMPOSSIBILIDADE_TEMPORARIA" ) :
+                                                                                          "Sem Informação" ;
+
+                                  break;
+
+                       case "6":  // O beneficiário não acessará o benefício de forma definitiva
+                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
+                                                                                          idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
+                                                                                          "Sem Informação" ;
+                                  // Justificativa - não acesso definitivo
+                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = idsRespostasQuestionarios.q4 != "" ? 
+                                                                                          idToNome( idsRespostasQuestionarios.q4, "NAO_ACESSO_DEFINITIVO" ) :
+                                                                                          "Sem Informação" ;
+
+                                  break;                                 
+
+                       default:   // Opções de 1 à 4 - sem justificativas
+                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
+                                                                                          idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
+                                                                                          "Sem Informação" ;                                  
+                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Sem Informação";                                                                                 
+
+                                  break;                                 
+
+                     }  
+
+                     break;
+
+          default:   bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Sem Informação"; 
+                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = "Sem Informação";                                                                                        
+                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Sem Informação";                                                                                        
+                     break;
+        }                                
+        
+        // Obsercvações caso
+        bufferRelatorioCaso[RELATORIO_COLUNA_OBSERVACAO] = idsRespostasQuestionarios.observacoes; 
+
+        // Acrescenta 1 caso ao buffer relatórios
+        bufferRelatorios.push( bufferRelatorioCaso );        
+
+      }); // Fim do for que percorre todos os casos da fila
+
 
       // Grava o buffer do relatório na planilha RELATORIO
-      TABELA_RELATORIO.getRange( 2, 1, relatorio.length, NUM_COLUNAS_TABELA_RELATORIO ).setNumberFormat("@").setValues( relatorio );
+      TABELA_RELATORIO.getRange( 2, 1, bufferRelatorios.length, NUM_COLUNAS_TABELA_RELATORIO ).setNumberFormat("@").setValues( bufferRelatorios );
       PLANILHA_RELATORIO.waitForAllDataExecutionsCompletion(2);      
       SpreadsheetApp.flush();  
   
-      console.log( "gerarRelatorioFila - Fim" );
+      console.log( "gerarRelatorio - Fim" );
 
     } else {
 
@@ -167,7 +262,7 @@ function gerarRelatorio() {
 
   } catch( error ) {
 
-    throw( "gerarRelatorioFila: " + error.message );
+    throw( "gerarRelatorio: " + error.message );
 
   } finally {
 
