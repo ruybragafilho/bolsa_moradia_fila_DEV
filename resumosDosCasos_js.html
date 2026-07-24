@@ -206,12 +206,14 @@
   function filtrar() {
 
     // Obtém os checkbox selecionados dos filtros
+    const complexidades = Array.from(document.getElementsByName("checkbox_complexidades")).filter(c => c.checked).map(c => c.value);
     const orgaosEncaminhadores = Array.from(document.getElementsByName("checkbox_OrgaosEncaminhadores")).filter(c => c.checked).map(c => c.value);
     const situacaoBeneficio    = Array.from(document.getElementsByName("checkbox_SituacaoBeneficio")).filter(c => c.checked).map(c => c.value);
     const documentacaoPendente = Array.from(document.getElementsByName("checkbox_DocumentacaoPendente")).filter(c => c.checked).map(c => c.value);
     
     // Se algum checkbox de filtro tiver sido marcado
-    if( orgaosEncaminhadores.length ||
+    if( complexidades ||
+        orgaosEncaminhadores.length ||
         situacaoBeneficio.length     ||
         documentacaoPendente.length ) {
 
@@ -232,9 +234,12 @@
         const regra3 = ((documentacaoPendente.length == 0)  ||  
                          documentacaoPendente.filter(DocPendente => caso.id_doc_pendente.split(";").includes(DocPendente)).length > 0 );
 
+        const regra4 = ((complexidades.length == 0)  ||  
+                         complexidades.filter(complexidade => caso.id_complexidade.split(";").includes(complexidade)).length > 0 );                         
+
         // Se caso atual atende todas as regras,
         // o insere na tabela de casos filtrados
-        if( regra1 && regra2 && regra3 ) {
+        if( regra1 && regra2 && regra3 && regra4 ) {
           casosFiltrados.push( caso );
         }
       }); 

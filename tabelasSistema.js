@@ -88,6 +88,9 @@ const PESO_PARAMETRO = 3;
 const PONTUACAO_PARAMETRO = 4;
 const EMAIL_INSTITUICAO = 3;
 
+const ID_COMPLEXIDADE = 4;
+const COMUNICACAO_ATIVA = 5
+
 
 // Posições das colunas da planilha USUARIOS
 const EMAIL             = 1;
