@@ -388,11 +388,13 @@ function obterFila() {
 
       referencia_familiar: caso[REFERENCIA_FAMILIAR],
 
-      cpf_rf: caso[CPF_RF].padStart(11, "0"),
+      cpf_rf: caso[CPF_RF].padStart(11, "0"),      
  
       id_orgao_encaminhador: caso[ORGAO_ENCAMINHADOR],
       
       email_orgao_encaminhador: caso[EMAIL_ORGAO_ENCAMINHADOR],
+
+      id_complexidade: BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(caso[ORGAO_ENCAMINHADOR]) - 1 ][ID_COMPLEXIDADE],
             
       ids_parametros_caso: caso[IDS_PARAMETROS_CASO] != "" ? caso[IDS_PARAMETROS_CASO].split(";") : "",
 
