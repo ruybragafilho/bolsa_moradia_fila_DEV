@@ -25,6 +25,7 @@ const PLANILHA_CODIGOS_ID  =  "1eba9uB4QpIpLI7HJQWxJeUuR_pIG3bxI07deoirgN7k";
 const PLANILHA_CODIGOS     =  SpreadsheetApp.openById(PLANILHA_CODIGOS_ID);
 
 const TABELA_RESPOSTAS_SIMPLES      =  PLANILHA_CODIGOS.getSheetByName('RESPOSTAS_SIMPLES');
+const TABELA_COMPLEXIDADES          =  PLANILHA_CODIGOS.getSheetByName('COMPLEXIDADES');
 const TABELA_ORGAOS_ENCAMINHADORES  =  PLANILHA_CODIGOS.getSheetByName('ORGAOS_ENCAMINHADORES');
 const TABELA_SITUACOES_BENEFICIO    =  PLANILHA_CODIGOS.getSheetByName('SITUACOES_BENEFICIO');
 const TABELA_SITUACOES_VISTORIA     =  PLANILHA_CODIGOS.getSheetByName('SITUACOES_VISTORIA');
@@ -40,6 +41,7 @@ const TABELA_IMPOSSIBILIDADE_TEMPORARIA  =  PLANILHA_CODIGOS.getSheetByName('IMP
 const TABELA_NAO_ACESSO_DEFINITIVO       =  PLANILHA_CODIGOS.getSheetByName('NAO_ACESSO_DEFINITIVO');
 
 const BUFFER_RESPOSTAS_SIMPLES      =  TABELA_RESPOSTAS_SIMPLES.getDataRange().getDisplayValues().splice(1);
+const BUFFER_COMPLEXIDADES          =  TABELA_COMPLEXIDADES.getDataRange().getDisplayValues().splice(1);
 const BUFFER_ORGAOS_ENCAMINHADORES  =  TABELA_ORGAOS_ENCAMINHADORES.getDataRange().getDisplayValues().splice(1);
 const BUFFER_SITUACOES_BENEFICIO    =  TABELA_SITUACOES_BENEFICIO.getDataRange().getDisplayValues().splice(1);
 const BUFFER_SITUACOES_VISTORIA     =  TABELA_SITUACOES_VISTORIA.getDataRange().getDisplayValues().splice(1);
@@ -55,6 +57,7 @@ const BUFFER_IMPOSSIBILIDADE_TEMPORARIA  =  TABELA_IMPOSSIBILIDADE_TEMPORARIA.ge
 const BUFFER_NAO_ACESSO_DEFINITIVO       =  TABELA_NAO_ACESSO_DEFINITIVO.getDataRange().getDisplayValues().splice(1);
 
 const NUM_RESPOSTAS_SIMPLES      =  BUFFER_RESPOSTAS_SIMPLES.length;
+const NUM_COMPLEXIDADES          =  BUFFER_COMPLEXIDADES.length;
 const NUM_ORGAOS_ENCAMINHADORES  =  BUFFER_ORGAOS_ENCAMINHADORES.length;
 const NUM_SITUACOES_BENEFICIO    =  BUFFER_SITUACOES_BENEFICIO.length;
 const NUM_SITUACOES_VISTORIA     =  BUFFER_SITUACOES_VISTORIA.length;
@@ -132,6 +135,9 @@ function obterTabelaCompleta( nomeTabela ) {
     case "RESPOSTAS_SIMPLES":        bufferTabela = BUFFER_RESPOSTAS_SIMPLES;
                                      break;     
 
+    case "COMPLEXIDADES":            bufferTabela = BUFFER_COMPLEXIDADES;
+                                     break;
+
     case "ORGAOS_ENCAMINHADORES":    bufferTabela = BUFFER_ORGAOS_ENCAMINHADORES;
                                      break;
 
@@ -202,6 +208,10 @@ function idToNome( id, nomeTabela ) {
 
     case "RESPOSTAS_SIMPLES":        bufferTabela = BUFFER_RESPOSTAS_SIMPLES;
                                      tamanhoTabela = NUM_RESPOSTAS_SIMPLES;
+                                     break;
+                                     
+    case "COMPLEXIDADES":            bufferTabela = BUFFER_COMPLEXIDADES;
+                                     tamanhoTabela = NUM_COMPLEXIDADES;
                                      break;                                     
 
     case "ORGAOS_ENCAMINHADORES":    bufferTabela = BUFFER_ORGAOS_ENCAMINHADORES;
