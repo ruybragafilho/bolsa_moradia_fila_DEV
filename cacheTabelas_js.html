@@ -58,9 +58,14 @@
 
 
   // Cache da tabela com os casos, carregadas via chamada 
-  // da função backend obterCasos  
+  // da função backend obterFila  
   let cache_TabelaCasos = [];
   let numCasos = 0;
+
+  // Cache da tabela com os casos antigos, carregadas via chamada 
+  // da função backend obterFilaCasosAntigos  
+  let cache_TabelaCasosAntigos = [];
+  let numCasosAntigos = 0;  
 
 
 
@@ -77,6 +82,7 @@
   let flagCache_TabelaParametros            = 0;
   let flagCache_TabelaPerfis                = 0;  
   let flagCache_TabelaCasos                 = 0;
+  let flagCache_TabelaCasosAntigos          = 0;
   
 
 
@@ -130,7 +136,8 @@
         flagCache_TabelaOrientacoesSexuais    && 
         flagCache_TabelaParametros            &&
         flagCache_TabelaPerfis                &&
-        flagCache_TabelaCasos      ) {
+        flagCache_TabelaCasos                 &&
+        flagCache_TabelaCasosAntigos      ) {
 
       return true;
 

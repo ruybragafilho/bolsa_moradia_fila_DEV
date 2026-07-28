@@ -23,6 +23,22 @@ function refreshBufferFila() {
 }
 
 
+/**
+ * Planilha FILA CASOS ANTIGOS
+ */
+const PLANILHA_FILA_CASOS_ANTIGOS_ID        =  "1pJRLfcg4ZObSJRO3TGODL3S6ZM3nr9Z47LmSJY8yGGI";
+const PLANILHA_FILA_CASOS_ANTIGOS           =  SpreadsheetApp.openById(PLANILHA_FILA_CASOS_ANTIGOS_ID);
+const TABELA_FILA_CASOS_ANTIGOS             =  PLANILHA_FILA_CASOS_ANTIGOS.getSheetByName('FILA_CASOS_ANTIGOS');
+let BUFFER_FILA_CASOS_ANTIGOS               =  TABELA_FILA_CASOS_ANTIGOS.getDataRange().getDisplayValues().splice(1);
+let TAMANHO_FILA_CASOS_ANTIGOS              =  BUFFER_FILA_CASOS_ANTIGOS.length;
+const NUM_COLUNAS_TABELA_FILA_CASOS_ANTIGOS =  18;
+
+function refreshBufferFila() {
+  BUFFER_FILA_CASOS_ANTIGOS  =  TABELA_FILA_CASOS_ANTIGOS.getDataRange().getDisplayValues().splice(1);
+  TAMANHO_FILA_CASOS_ANTIGOS = BUFFER_FILA_CASOS_ANTIGOS.length;
+}
+
+
 
 // Posições das colunas da planilha FILA
 const REFERENCIA_FAMILIAR        =  1;
@@ -502,9 +518,8 @@ function obterFila() {
   });
 
 
-  // Retorna a fila filtrada
-  //return fila;
-  return JSON.stringify( fila );
+  // Retorna a fila   
+  return fila;
 
 } // Fim da Função obterFila 
 
@@ -557,6 +572,93 @@ function atualizarFila() {
 
 
 
+/**
+ * Função que retorna a fila com os casos antigos registrados no sistema
+ * 
+ * @return Uma fila em que cada posição contém um objeto com os dados de um caso antigo
+ */
+function obterFilaCasosAntigos() {    
+
+
+  // RETORNA NULL, SE TABELA DE CASOS ESTIVER VAZIA
+  if( TAMANHO_FILA_CASOS_ANTIGOS < 1 ) return null;
+    
+  
+  // Obtém os casos na fila
+  let fila = BUFFER_FILA_CASOS_ANTIGOS.map( caso => {    
+
+    let vistoriasCaso = "";
+    let idSituacaoVistoria = "";
+    if( caso[CPF_RF] != "" ) {
+      vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
+      idSituacaoVistoria = getSituacaoVistoria( vistoriasCaso );
+    }
+        
+    return {
+
+      id: "old_" + caso[ID],
+
+      referencia_familiar: caso[REFERENCIA_FAMILIAR],
+
+      cpf_rf: caso[CPF_RF].padStart(11, "0"),      
+ 
+      id_orgao_encaminhador: caso[ORGAO_ENCAMINHADOR],
+      
+      email_orgao_encaminhador: caso[EMAIL_ORGAO_ENCAMINHADOR],
+
+      id_complexidade: caso[ORGAO_ENCAMINHADOR] != "" ?
+                       BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(caso[ORGAO_ENCAMINHADOR]) - 1 ][ID_COMPLEXIDADE] :
+                       "",          
+
+      idade_RF: calcularIdade( caso[DATA_NASCIMENTO_RF] ),
+
+      data_nascimento_RF: caso[DATA_NASCIMENTO_RF],      
+
+      id_situacao_beneficio: caso[SITUACAO_BENEFICIO], 
+        
+      data_ultima_evolucao: caso[DATA_ULTIMA_EVOLUCAO],
+        
+      data_limite: caso[DATA_LIMITE],
+
+      justificativa_alteracao_data_limite: caso[JUSTIFICATIVA_ALTERACAO_DATA_LIMITE],      
+
+      id_doc_pendente: caso[DOC_PENDENTE],
+
+      vistorias: vistoriasCaso,
+
+      id_situacao_vistoria: idSituacaoVistoria,
+
+    };// Fim return       
+  });
+
+  
+  // Retorna a fila   
+  return fila;
+
+} // Fim da Função obterFilaCasosAntigos 
+
+
+
+/**
+ * Função que retorna as duas filas com os casos antigos registrados no sistema
+ * 
+ * @return Um objeto com as duas filas, fila processo atual e fila processo antigo
+ */
+function obterFilas() {
+
+  let f = obterFila();
+  let f_old = obterFilaCasosAntigos();
+
+  const filas = {
+    fila: f,
+    fila_old: f_old 
+  };
+
+  return JSON.stringify( filas );   
+
+} // Fim da Função obterFilas 
+
+
 
 
 /** 
@@ -571,7 +673,7 @@ function atualizarFila() {
 
 
 /**
- * Função para testar a função principal obterFila
+ * Função para testar a função obterFila
  */
 function teste_obterFila() {
 
@@ -580,6 +682,51 @@ function teste_obterFila() {
   console.log(fila);    
 
 } // Fim da Função teste_obterFila 
+
+
+
+
+/**
+ * Função para testar a função obterFilaCasosAntigos
+ */
+function teste_obterFilaCasosAntigos() {
+
+  const fila = obterFilaCasosAntigos();
+
+  const arrayCasos = JSON.parse( fila );
+  
+  for( let i=1; i<=10; ++i ) {
+    console.log( arrayCasos[i] );
+  }  
+
+} // Fim da Função teste_obterFilaCasosAntigos 
+
+
+
+
+/**
+ * Função para testar a função teste_obterFilaCasosAntigos
+ */
+function teste_obterFilas() {
+
+  const filas = obterFilas();
+  const filas_obj = JSON.parse( filas );
+
+  let f = filas_obj.fila;
+  let f_old = filas_obj.fila_old;
+
+  console.log( "\n\nFILA\n" );
+  for( let i=1; i<=5; ++i ) {
+    console.log( f[i] );
+  }  
+
+  console.log( "\n\nFILA ANTIGA\n" );
+  for( let i=1; i<=5; ++i ) {
+    console.log( f_old[i] );
+  }    
+
+} // Fim da Função teste_obterFilas 
+
 
 
 

@@ -47,9 +47,11 @@
 
     // Obtém a tabela de resumos dos casos
     let tabelaResumoDosCasos = document.getElementById('resumosDosCasos');
+    let tabelaResumoDosCasos_antigos = document.getElementById('resumosDosCasos_antigos');
 
     // Exibe a tabela, caso estivesse oculta
     tabelaResumoDosCasos.style.display = 'table';
+    tabelaResumoDosCasos_antigos.style.display = 'table';
 
     // Adiciona o listener à tabela inteira - Delegação de eventos
     tabelaResumoDosCasos.addEventListener( 'click', function(event) { 
@@ -82,6 +84,27 @@
       } // Fim teste target evento - tabela ou botão designar caso
         
     }); // Fim do tabelaResumoDosCasos.addEventListener    
+
+
+    
+    // Adiciona o listener à tabela inteira - Delegação de eventos
+    tabelaResumoDosCasos_antigos.addEventListener( 'click', function(event) { 
+
+      // Obtém o elemento onde ocorreu o evento clique
+      let clickedElement = event.target;
+
+      if( clickedElement.classList.contains('clicavel') ) {
+
+        // Obtém o id do caso 
+        id_CasoEmVisualizacao = clickedElement.parentElement.id;                  
+
+        // Exibe a página de visualização
+        console.log( "Mostrar caso" );        
+        exibirPagina('visualizarCaso');
+
+      } // Fim teste target evento - tabela ou botão designar caso
+        
+    }); // Fim do tabelaResumoDosCasos_antigos.addEventListener    
 
 
   } // Fim da função configurarPaginaResumosDosCasos
@@ -202,6 +225,7 @@
 
   // Referância que apontará para os casos filtrados
   let casosFiltrados;
+  let casosAntigosFiltrados;
 
   function filtrar() {
 
@@ -290,21 +314,30 @@
       cache_TabelaCasos = [];
 
       google.script.run
-                   .withSuccessHandler( fila => {
+                   .withSuccessHandler( f => {
+  
+                     const filas = JSON.parse( f );
 
                      console.log( "redirecionarParaTelaResumosDosCasos - SUCCESS HANDLER" );
 
                      // mostra modal com mensagem de operação concluída                     
                      mostrarModalMensagem( "Operação concluída! " );                    
   
-                     // Atualiza o cache de resumos de casos com a tabela carregada do servidor
-                     cache_TabelaCasos = JSON.parse( fila );   
+                     // Atualiza o cache das filas de casos com as filas carregadas do servidor
+                     cache_TabelaCasos = filas.fila;   
                      numCasos = cache_TabelaCasos.length;
 
-                     casosFiltrados = cache_TabelaCasos;
+                     cache_TabelaCasosAntigos = filas.fila_old;
+                     numCasosAntigos = cache_TabelaCasosAntigos.length;
 
-                     // Sinaliza que a tabela de casos já está na cache
+                     // Sinaliza que as tabelas de casos já estão na cache
                      flagCache_TabelaCasos = 1;
+                     flagCache_TabelaCasosAntigos = 1;
+
+                     // Aponta as filas filtradas para as filas carregadas do servidor
+                     casosFiltrados = cache_TabelaCasos;
+                     casosAntigosFiltrados = cache_TabelaCasosAntigos;
+
 
                      // Carrega a página de resumos de casos
                      exibirPagina("resumosDosCasos");
@@ -319,7 +352,7 @@
                      
                    })
                    // Chama a função backend para gerar e retornar a tabela de resumos de casos
-                   .obterFila();
+                   .obterFilas();
 
     // Se flag == 0, apenas carrega a página de resumo de casos, sem recarregar a tabela
     } else {
