@@ -53,7 +53,7 @@
     tabelaResumoDosCasos.style.display = 'table';
     tabelaResumoDosCasos_antigos.style.display = 'table';
 
-    // Adiciona o listener à tabela inteira - Delegação de eventos
+    // Adiciona o listener à tabela casos (tabela inteira) - Delegação de eventos
     tabelaResumoDosCasos.addEventListener( 'click', function(event) { 
 
       // Obtém o elemento onde ocorreu o evento clique
@@ -87,7 +87,7 @@
 
 
     
-    // Adiciona o listener à tabela inteira - Delegação de eventos
+    // Adiciona o listener à tabela casos_antigos (tabela inteira) - Delegação de eventos
     tabelaResumoDosCasos_antigos.addEventListener( 'click', function(event) { 
 
       // Obtém o elemento onde ocorreu o evento clique
@@ -120,7 +120,7 @@
 
     // Se tabela vazia, mostra mensagem TABELA VAZIA e sai da função
     if( !tabelaCasos ) {
-      document.getElementById("headerResumosDosCasos").innerHTML += '<br><h3 class="text-center mt-5 mb-4 text-danger">TABELA VAZIA</h3><br>';
+      document.getElementById("headerResumosDosCasos").innerHTML += '<br><h3 class="text-center mt-5 mb-4 text-danger">FILA CASOS VAZIA</h3><br>';
       return;   
     }
 
@@ -216,6 +216,82 @@
     document.getElementById('totalizacaoResumosDosCasos').innerHTML = `TOTAL DE CASOS ATIVOS: ${numCasosAtivos}`;
 
   } // Fim da função gerarTabelaResumosCasos    
+
+
+
+  /**
+   * Gera a tabela com os resumos dos casos antigos
+   *
+   * @param {Array} tabelaCasosAntigos - Tabela com os casos antigos
+   */
+  function gerarTabelaResumosCasosAntigos( tabelaCasosAntigos ) {
+
+    // Se tabela vazia, mostra mensagem TABELA VAZIA e sai da função
+    if( !tabelaCasosAntigos ) {
+      document.getElementById("headerResumosDosCasos").innerHTML += '<br><h3 class="text-center mt-5 mb-4 text-danger">FILA CASOS ANTIGOS - VAZIA</h3><br>';
+      return;   
+    }
+
+    // Seleciona o corpo da tabela onde os dados serão inseridos    
+    const tbody = document.getElementById("conteudoResumosDosCasos_antigos");
+
+    // Número de casos ativos
+    let numCasosAtivos = 0;
+
+    // Limpa o conteúdo da tabela
+    tbody.innerHTML = ''; 
+
+    // Para cada item nos resumosDosCasos, cria uma linha na tabela
+    tabelaCasosAntigos.forEach( item => {
+
+      ++numCasosAtivos;
+
+      // Testa se o item não está inativo ou se o usuário é da DPOP
+      if( item.id_situacao_beneficio != "1" || usuarioLogado.instituicao == "0" ) {
+
+        // Cria uma linha da tabela
+        const tr = document.createElement('tr');
+  
+        // Seta o id da linha com o id do caso
+        tr.id = item.id;
+  
+        
+        // insere a célula contendo o checkbox de seleção para evolução múltipla
+        // se o trabalhador logado for um trabalhador da DPOP
+        if( usuarioLogado.instituicao == "0" ) {      
+ 
+          tr.innerHTML =           
+           `<td class="align-middle">
+              <input class="form-check-input border border-secondary rounded-1 me-1" type="checkbox" name="checkbox_evolucao_multipla" value="${item.id}">
+            </td>`;          
+
+        } else {
+          tr.innerHTML = "";
+        }
+
+
+        tr.innerHTML +=           
+         `<td class="clicavel align-middle">${item.referencia_familiar}</td>
+          <td class="clicavel align-middle">${ idToNomeFE( item.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" ) }</td>
+    
+          <td class="clicavel align-middle">${ idToNomeFE( item.id_situacao_beneficio, "SITUACOES_BENEFICIO" ) }</td>        
+          <td class="clicavel align-middle">${item.data_ultima_evolucao}</td>
+          <td class="clicavel align-middle">${item.data_limite}</td>   
+          
+          <td class="clicavel align-middle">${ idToNomeFE( item.id_situacao_vistoria, "SITUACOES_VISTORIA" ) }</td>`; 
+       
+        // Adiciona a linha na tabela
+        tbody.appendChild(tr);
+
+      } // Fim do teste item ativo
+
+
+    }); // Fim do dados.forEach
+
+    // Mostra o total de casos
+    //document.getElementById('totalizacaoResumosDosCasos').innerHTML = `TOTAL DE CASOS ANTIGOS ATIVOS: ${numCasosAtivos}`;
+
+  } // Fim da função gerarTabelaResumosCasosAntigos    
 
 
 
