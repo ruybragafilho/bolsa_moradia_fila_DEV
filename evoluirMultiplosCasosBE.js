@@ -44,6 +44,7 @@ function evoluirMultiplosCasosBE( idsCasos, idEvolucao, dataLimite ) {
 
       // Aguarda sincronização de dados
       PLANILHA_FILA.waitForAllDataExecutionsCompletion(3);          
+      PLANILHA_FILA_CASOS_ANTIGOS.waitForAllDataExecutionsCompletion(3);
       SpreadsheetApp.flush();    
       
     } else {

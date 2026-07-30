@@ -10,6 +10,7 @@
 
     // Título da tabela de resumos dos casos
     let cabecalhoTabela = document.getElementById("titulosResumosDosCasos");
+    let cabecalhoTabela_casosAntigos = document.getElementById("titulosResumosDosCasos_antigos");
 
     // Configura a página para trabalhadores da ponta e gestores externos
     if( usuarioLogado.instituicao != "0" ) {           
@@ -26,6 +27,7 @@
     // Configura a página para trabalhador da DPOP 
     } else {
       cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;      
+      cabecalhoTabela_casosAntigos.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela_casosAntigos.innerHTML;      
     }
 
 
@@ -34,7 +36,7 @@
     document.getElementById("data_limite").style.display = "none";  
 
 
-    // Configura a página para trabalhador da root
+    // Configura a página para trabalhador root
     if( usuarioLogado.tipo == "0" ) {            
 
       cabecalhoTabela.innerHTML += 
@@ -313,8 +315,8 @@
     const situacaoBeneficio    = Array.from(document.getElementsByName("checkbox_SituacaoBeneficio")).filter(c => c.checked).map(c => c.value);
     const documentacaoPendente = Array.from(document.getElementsByName("checkbox_DocumentacaoPendente")).filter(c => c.checked).map(c => c.value);
     
-    // Se algum checkbox de filtro tiver sido marcado
-    if( complexidades ||
+    // Se algum checkbox de filtro tiver sido marcado - Casos Novos
+    if( complexidades.length ||
         orgaosEncaminhadores.length ||
         situacaoBeneficio.length     ||
         documentacaoPendente.length ) {
@@ -344,20 +346,51 @@
         if( regra1 && regra2 && regra3 && regra4 ) {
           casosFiltrados.push( caso );
         }
-      }); 
+
+      }); // Fim forEach casos 
+
+
+      // Reset nos casos antigos filtrados
+      casosAntigosFiltrados = [];            
+
+      // Percorre todos os casos, selecionando os que atendem aos filtros
+      cache_TabelaCasosAntigos.forEach( casoAntigo => {                                                       
+
+        // Verifica as regras de cada filtro individualmente
+        // para o caso atual
+        const regra1 = ((orgaosEncaminhadores.length == 0)  ||  
+                         orgaosEncaminhadores.filter(orgao => casoAntigo.id_orgao_encaminhador.split(";").includes(orgao)).length > 0 );
+                           
+        const regra2 = ((situacaoBeneficio.length == 0)  ||  
+                         situacaoBeneficio.filter(situacaoB => casoAntigo.id_situacao_beneficio.split(";").includes(situacaoB)).length > 0 );
+
+        const regra4 = ((complexidades.length == 0)  ||  
+                         complexidades.filter(complexidade => casoAntigo.id_complexidade.split(";").includes(complexidade)).length > 0 );                         
+
+        // Se caso atual atende todas as regras,
+        // o insere na tabela de casos filtrados
+        if( regra1 && regra2 && regra4 ) {
+          casosAntigosFiltrados.push( casoAntigo );
+        }
+
+      }); // Fim forEach casos antigos
+
 
     } else { 
       casosFiltrados = cache_TabelaCasos; 
+      casosAntigosFiltrados = cache_TabelaCasosAntigos;
     } // Fim do if
 
 
     // Aplica o filtro pelo nome da RF       
     let nomeRFPesquisado = document.getElementById("inputTextPesquisaCaso").value.trim().toUpperCase();      
     let casosPesquisados = casosFiltrados.filter( caso => { return caso.referencia_familiar.trim().toUpperCase().includes( nomeRFPesquisado ) } ) ;        
+    let casosAntigosPesquisados = casosAntigosFiltrados.filter( casoAntigo => { return casoAntigo.referencia_familiar.trim().toUpperCase().includes( nomeRFPesquisado ) } ) ;        
 
 
     // Gera a tabela de casos filtrados
     gerarTabelaResumosCasos( casosPesquisados );
+    gerarTabelaResumosCasosAntigos( casosAntigosPesquisados );
 
     // Gera os gráficos quantitativos
     gerarGraficoQuantitativoSituacaoBeneficio();

@@ -18,7 +18,7 @@
 
     // Não mostra os campos referentes às vistorias por padrão. Mostra apenas para 
     // técnicas da DPOP    
-    document.getElementById("headerVistoriasDoCaso").style.display  =  "none";    
+    document.getElementById("headerVistoriasDoCaso").style.display  =  "none";
     document.getElementById("vistoriasDoCaso").style.display        =  "none";    
     document.getElementById("vistoria_traco_inicio").style.display  =  "none";   
     document.getElementById("vistoria_traco_fim").style.display     =  "none";   
@@ -81,7 +81,13 @@
         // Mostra pontuação total do caso
         document.getElementById('totalizacaoParametrosDoCaso').innerHTML = `PONTUAÇÃO DO CASO: ${cache_CasoEmVisualizacao.pontuacao}`;        
 
-      } // Fim if campos visíveis apenas para fila nova
+      } else {
+
+        document.getElementById("questionario").style.display  =  "none";
+        document.getElementById("parametros").style.display  =  "none";
+
+
+      }// Fim if campos visíveis apenas para fila nova
       
 
       // Mostra as vistorias do caso
