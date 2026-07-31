@@ -54,14 +54,6 @@
     // Obtém a tabela de resumos dos casos
     let tabelaResumoDosCasos = document.getElementById('resumosDosCasos');
     let tabelaResumoDosCasos_antigos = document.getElementById('resumosDosCasos_antigos');
-    let graficos = document.getElementById("graficos");
-
-    // Exibe a tabela, caso estivesse oculta
-    tabelaResumoDosCasos.style.display = 'table';
-    tabelaResumoDosCasos_antigos.style.display = 'none';
-    graficos.style.display = 'none';
-
-    document.getElementById("abaFilaAtual").classList.add('active');
     
     
     // Adiciona o listener à tabela casos (tabela inteira) - Delegação de eventos
@@ -117,6 +109,10 @@
         
     }); // Fim do tabelaResumoDosCasos_antigos.addEventListener    
 
+
+    // Mostra a aba com a fila de casos, inicialmente
+    mostrarFila();
+    
 
   } // Fim da função configurarPaginaResumosDosCasos
 
