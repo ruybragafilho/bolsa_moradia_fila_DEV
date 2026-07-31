@@ -14,12 +14,38 @@
  * @param {String} justificativa: Justificativa para alteração da data limite do caso
  */
 function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
+  
+  let id;
+  let PLANILHA
+  let TABELA;
+  let BUFFER;
+  let ID_MAXIMO;
 
-  // Converte o id para Integer
-  const id = parseInt(idCaso);  
+
+  // CASO ATUAL
+  if( !idCaso.includes("old_") ) {
+    
+    // Converte o id para Integer
+    id = parseInt( idCaso );  
+    PLANILHA = PLANILHA_FILA;
+    TABELA = TABELA_FILA;
+    BUFFER = BUFFER_FILA;
+    ID_MAXIMO = TAMANHO_FILA;
+
+  // CASO ANTIGO  
+  } else {
+
+    // Converte o id para Integer
+    id = parseInt( idCaso.split("_")[1] );  
+    PLANILHA = PLANILHA_FILA_CASOS_ANTIGOS;
+    TABELA = TABELA_FILA_CASOS_ANTIGOS;
+    BUFFER = BUFFER_FILA_CASOS_ANTIGOS;    
+    ID_MAXIMO = TAMANHO_FILA_CASOS_ANTIGOS;
+
+  }  
 
   // Se id inválido, retorna uma exceção
-  if( id < 1  ||  id > TAMANHO_FILA ) {
+  if( id < 1  ||  id > ID_MAXIMO ) {
     throw( new Error( "alterarDataLimiteBE - ID Inválido" ) );
   }  
 
@@ -40,7 +66,7 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
     if( lock.hasLock() ) {
 
       // Grava a nova data limite 
-      const campo_data_limite = TABELA_FILA.getRange( id+1, DATA_LIMITE+1 );
+      const campo_data_limite = TABELA.getRange( id+1, DATA_LIMITE+1 );
       let auxDataLimite = new Date( dataLimite );  
       auxDataLimite.setDate( auxDataLimite.getDate() + 1 );   
       let dataLimiteFormatada = new Date(auxDataLimite).toLocaleString("pt-BR", {dateStyle: "short"});   
@@ -51,18 +77,18 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
       let justificativaFormatada = justificativa.length > 0 ? 
                                    justificativa.trim().toUpperCase().substring(0, 512) :
                                    "SEM JUSTIFICATIVA";
-      const campo_justificativa = TABELA_FILA.getRange( id+1, JUSTIFICATIVA_ALTERACAO_DATA_LIMITE+1 );
+      const campo_justificativa = TABELA.getRange( id+1, JUSTIFICATIVA_ALTERACAO_DATA_LIMITE+1 );
       campo_justificativa.setValue( justificativaFormatada );            
 
 
       // Aguarda sincronização dos dados na planilha 
-      PLANILHA_FILA.waitForAllDataExecutionsCompletion(3);          
+      PLANILHA.waitForAllDataExecutionsCompletion(3);                 
       SpreadsheetApp.flush();      
 
 
       // Envia email para o órgão encaminhador e para a instituição,
       // caso a evolução seja diferente de INATIVAÇÃO
-      let idEvolucao = BUFFER_FILA[id-1][SITUACAO_BENEFICIO];
+      let idEvolucao = BUFFER[id-1][SITUACAO_BENEFICIO];
 
       if( idEvolucao != "1" ) {
 
@@ -77,12 +103,12 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
           mensagemDataLimite = "";
         }
 
-        const emailOrgaoEncaminhador = BUFFER_FILA[id-1][EMAIL_ORGAO_ENCAMINHADOR];
-        const cpfRFCaso = (BUFFER_FILA[id-1][CPF_RF]).padStart(11, "0");
-        const nomeRFCaso = BUFFER_FILA[id-1][REFERENCIA_FAMILIAR];
+        const emailOrgaoEncaminhador = BUFFER[id-1][EMAIL_ORGAO_ENCAMINHADOR];
+        const cpfRFCaso = (BUFFER[id-1][CPF_RF]).padStart(11, "0");
+        const nomeRFCaso = BUFFER[id-1][REFERENCIA_FAMILIAR];
         const evolucaoCaso = idToNome( idEvolucao,  "SITUACOES_BENEFICIO" );
     
-        const idInstituicao = parseInt(BUFFER_FILA[id-1][ORGAO_ENCAMINHADOR]);
+        const idInstituicao = parseInt(BUFFER[id-1][ORGAO_ENCAMINHADOR]);
         const emailInstituicao = BUFFER_ORGAOS_ENCAMINHADORES[idInstituicao-1][EMAIL_INSTITUICAO];
     
         const emails = [];

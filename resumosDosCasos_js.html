@@ -12,18 +12,22 @@
     let cabecalhoTabela = document.getElementById("titulosResumosDosCasos");
     let cabecalhoTabela_casosAntigos = document.getElementById("titulosResumosDosCasos_antigos");
 
+
     // Configura a página para trabalhadores da ponta e gestores externos
     if( usuarioLogado.instituicao != "0" ) {           
 
       // Esconde o campo evolução dos trabalhadores da ponta e gestores externos
       document.getElementById("evolucao").style.display = "none";         
 
+
+
+/**
       // Esconde os gráficos, apenas para trabalhadores da ponta
       if(usuarioLogado.instituicao != "-1") {
         document.getElementById("graficos").style.display = "none"; 
         document.getElementById("gerarRelatorio").style.display = "none";     
       }
-
+*/
     // Configura a página para trabalhador da DPOP 
     } else {
       cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;      
@@ -50,12 +54,15 @@
     // Obtém a tabela de resumos dos casos
     let tabelaResumoDosCasos = document.getElementById('resumosDosCasos');
     let tabelaResumoDosCasos_antigos = document.getElementById('resumosDosCasos_antigos');
+    let graficos = document.getElementById("graficos");
 
     // Exibe a tabela, caso estivesse oculta
     tabelaResumoDosCasos.style.display = 'table';
-    tabelaResumoDosCasos_antigos.style.display = 'table';
+    tabelaResumoDosCasos_antigos.style.display = 'none';
+    graficos.style.display = 'none';
 
-
+    document.getElementById("abaFilaAtual").classList.add('active');
+    
     
     // Adiciona o listener à tabela casos (tabela inteira) - Delegação de eventos
     tabelaResumoDosCasos.addEventListener( 'click', function(event) { 
@@ -293,10 +300,51 @@
     }); // Fim do dados.forEach
 
     // Mostra o total de casos
-    //document.getElementById('totalizacaoResumosDosCasos').innerHTML = `TOTAL DE CASOS ANTIGOS ATIVOS: ${numCasosAtivos}`;
+    document.getElementById('totalizacaoResumosDosCasos_antigos').innerHTML = `TOTAL DE CASOS ANTIGOS ATIVOS: ${numCasosAtivos}`;
 
   } // Fim da função gerarTabelaResumosCasosAntigos    
 
+
+
+  /** 
+   * Funções para controlar qual aba será mostrada na tela
+  */
+
+  function mostrarFila() {
+
+    document.getElementById("resumosDosCasos").style.display = "table";     
+    document.getElementById("resumosDosCasos_antigos").style.display = "none"; 
+    document.getElementById("graficos").style.display = "none"; 
+
+    document.getElementById("abaFilaAtual").classList.add('active');
+    document.getElementById("abaFilaAnterior").classList.remove('active');
+    document.getElementById("abaGraficos").classList.remove('active');    
+  }
+
+  function mostrarFilaAnterior() {
+
+    document.getElementById("resumosDosCasos").style.display = "none";     
+    document.getElementById("resumosDosCasos_antigos").style.display = "table"; 
+    document.getElementById("graficos").style.display = "none"; 
+
+    document.getElementById("abaFilaAtual").classList.remove('active');
+    document.getElementById("abaFilaAnterior").classList.add('active');
+    document.getElementById("abaGraficos").classList.remove('active');    
+  }  
+
+  function mostrarGraficos() {
+
+    document.getElementById("resumosDosCasos").style.display = "none";     
+    document.getElementById("resumosDosCasos_antigos").style.display = "none"; 
+    document.getElementById("graficos").style.display = ""; 
+
+    document.getElementById("abaFilaAtual").classList.remove('active');
+    document.getElementById("abaFilaAnterior").classList.remove('active');
+    document.getElementById("abaGraficos").classList.add('active');        
+  }    
+
+  // Fim das funções para controlar qual aba será mostrada na tela
+  
 
 
   /**

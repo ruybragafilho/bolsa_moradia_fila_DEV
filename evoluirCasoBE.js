@@ -18,6 +18,7 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
   let id;
   let TABELA;
   let BUFFER;
+  let ID_MAXIMO;
 
 
   // CASO ATUAL
@@ -27,6 +28,7 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
     id = parseInt( idCaso );  
     TABELA = TABELA_FILA;
     BUFFER = BUFFER_FILA;
+    ID_MAXIMO = TAMANHO_FILA;
 
   // CASO ANTIGO  
   } else {
@@ -35,12 +37,13 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
     id = parseInt( idCaso.split("_")[1] );  
     TABELA = TABELA_FILA_CASOS_ANTIGOS;
     BUFFER = BUFFER_FILA_CASOS_ANTIGOS;    
+    ID_MAXIMO = TAMANHO_FILA_CASOS_ANTIGOS;
 
   }
 
 
   // Se id inválido, retorna uma exceção
-  if( id < 1  ||  id > TAMANHO_FILA ) {
+  if( id < 1  ||  id > ID_MAXIMO ) {
     throw( new Error( "evoluirCasoBE - ID Inválido" ) );
   }  
 
@@ -73,38 +76,43 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
 
     // Envia email para o órgão encaminhador e para a instituição,
     // caso a evolução seja diferente de INATIVAÇÃO
-    if( idEvolucao != "1" ) {
 
-      let mensagemDataLimite;
-      if( idEvolucao == "3"  &&  dataLimite != "" ) {          
+    if( BUFFER[id-1][ORGAO_ENCAMINHADOR] != "" ) {
 
-        mensagemDataLimite = `<br>Atentem-se à data limite de conclusão do acesso ao benefício: <b>${dataLimiteFormatada}</b>. 
-                              Após este período, o beneficiário perderá a sua reserva da vaga e só poderá ser inserido novamente
-                              em um novo processo de habilitação. Caso o beneficiário já esteja com o benefício liberado, o 
-                              prazo pode ser desconsiderado.<br>`;
+      if( idEvolucao != "1" ) {
+  
+        let mensagemDataLimite;
+        if( idEvolucao == "3"  &&  dataLimite != "" ) {          
+  
+          mensagemDataLimite = `<br>Atentem-se à data limite de conclusão do acesso ao benefício: <b>${dataLimiteFormatada}</b>. 
+                                Após este período, o beneficiário perderá a sua reserva da vaga e só poderá ser inserido novamente
+                                em um novo processo de habilitação. Caso o beneficiário já esteja com o benefício liberado, o 
+                                prazo pode ser desconsiderado.<br>`;
+  
+        } else {
+          mensagemDataLimite = "";
+        }
+  
+        const emailOrgaoEncaminhador = BUFFER[id-1][EMAIL_ORGAO_ENCAMINHADOR];
+        const cpfRFCaso = (BUFFER[id-1][CPF_RF]).padStart(11, "0");
+        const nomeRFCaso = BUFFER[id-1][REFERENCIA_FAMILIAR];
+        const evolucaoCaso = idToNome( idEvolucao,  "SITUACOES_BENEFICIO" );
+      
+        const idInstituicao = parseInt(BUFFER[id-1][ORGAO_ENCAMINHADOR]);
+        const emailInstituicao = BUFFER_ORGAOS_ENCAMINHADORES[idInstituicao-1][EMAIL_INSTITUICAO];
+      
+        const emails = [];
+        if( isEmailValidBE(emailOrgaoEncaminhador) ) { emails.push(emailOrgaoEncaminhador) }
+        if( isEmailValidBE(emailInstituicao) ) { emails.push(emailInstituicao) }
+  
+        console.log( "\nevoluirCasoBE - chamada enviarEmailBE - ANTES" );               
+        enviarEmailBE( emails.join(","), cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );    
+        console.log( "\nevoluirCasoBE - chamada enviarEmailBE - DEPOIS" );       
+  
+      } // Fim if   
+      console.log( "\nevoluirCasoBE - enviar Email" );      
 
-      } else {
-        mensagemDataLimite = "";
-      }
-
-      const emailOrgaoEncaminhador = BUFFER[id-1][EMAIL_ORGAO_ENCAMINHADOR];
-      const cpfRFCaso = (BUFFER[id-1][CPF_RF]).padStart(11, "0");
-      const nomeRFCaso = BUFFER[id-1][REFERENCIA_FAMILIAR];
-      const evolucaoCaso = idToNome( idEvolucao,  "SITUACOES_BENEFICIO" );
-    
-      const idInstituicao = parseInt(BUFFER[id-1][ORGAO_ENCAMINHADOR]);
-      const emailInstituicao = BUFFER_ORGAOS_ENCAMINHADORES[idInstituicao-1][EMAIL_INSTITUICAO];
-    
-      const emails = [];
-      if( isEmailValidBE(emailOrgaoEncaminhador) ) { emails.push(emailOrgaoEncaminhador) }
-      if( isEmailValidBE(emailInstituicao) ) { emails.push(emailInstituicao) }
-
-      console.log( "\nevoluirCasoBE - chamada enviarEmailBE - ANTES" );               
-      enviarEmailBE( emails.join(","), cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );    
-      console.log( "\nevoluirCasoBE - chamada enviarEmailBE - DEPOIS" );       
-
-    } // Fim if   
-    console.log( "\nevoluirCasoBE - enviar Email" );       
+    } // Fim if 
 
 
   } catch( error ) {
