@@ -54,10 +54,10 @@
     if( cache_CasoEmVisualizacao.id_orgao_encaminhador == usuarioLogado.instituicao ||
         usuarioLogado.instituicao == "0" ) {
 
-      // Exibe os dados na página de visualização de caso
+      // Exibe os dados do cidadão + situação do benefício na página de visualização de caso
       document.getElementById( "nome_referenciaFamiliarInput" ).value = cache_CasoEmVisualizacao.referencia_familiar;
       document.getElementById( "cpf_referenciaFamiliarInput" ).value  = cache_CasoEmVisualizacao.cpf_rf;
-      document.getElementById( "situacaoBeneficioInput" ).value  = idToNomeFE( cache_CasoEmVisualizacao.id_situacao_beneficio, "SITUACOES_BENEFICIO" );
+      document.getElementById( "situacaoBeneficioInput" ).value       = idToNomeFE( cache_CasoEmVisualizacao.id_situacao_beneficio, "SITUACOES_BENEFICIO" );
         
       // Mostra os campos referentes à data limite
       // apenas para situação == Convocado para Acesso
@@ -72,6 +72,14 @@
       // Campos visíveis apenas para fila nova
       if( !flagCasoAntigo ) {
 
+        // Exibe os dados do órgão encaminhador na página de visualização de caso        
+        document.getElementById( "nome_orgaoEncaminhadorInput" ).value  = idToNomeFE( cache_CasoEmVisualizacao.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" );
+        document.getElementById( "email_orgaoEncaminhadorInput" ).value = cache_CasoEmVisualizacao.email_orgao_encaminhador;  
+        document.getElementById( "dataEncaminhamentoInput" ).value      = cache_CasoEmVisualizacao.data_encaminhamento;        
+
+        // Mostra os serviços de referência
+        visualizarServicosReferencia( cache_CasoEmVisualizacao )
+
         // Mostra a situação do questionário
         visualizarSituacaoQuestionario( cache_CasoEmVisualizacao );
 
@@ -83,9 +91,9 @@
 
       } else {
 
+        document.getElementById("servicoReferencia").style.display  =  "none";
         document.getElementById("questionario").style.display  =  "none";
         document.getElementById("parametros").style.display  =  "none";
-
 
       }// Fim if campos visíveis apenas para fila nova
       
@@ -129,6 +137,39 @@
     justificativa.value = caso.justificativa_alteracao_data_limite;
 
   } // Fim da função visualizarDataLimite
+
+
+
+  /**
+   * Função que mostra os serviços de referência do caso
+   */    
+  function visualizarServicosReferencia( caso ) {
+
+    // Seleciona o corpo da tabela onde os dados serão inseridos    
+    const tbody = document.getElementById("conteudoServicoReferencia");
+
+    // Limpa o conteúdo da tabela
+    tbody.innerHTML = ''; 
+    
+
+    caso.servicos_referencias.forEach( item => {
+
+      // Cria uma linha da tabela
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+          <td class="clicavel align-middle">${ idToNomeFE( item.idServico, "ORGAOS_ENCAMINHADORES" )}</td>
+          <td class="clicavel align-middle"> - </td>    
+          <td class="clicavel align-middle">${ item.dataInformacao }</td>        
+          <td class="clicavel align-middle">${ item.idResponsavelInformacao }</td>`; 
+
+      // Adiciona a linha na tabela
+      tbody.appendChild(tr);
+
+    });
+
+  } // Fim da função visualizarServicosReferencia
+
+
 
 
 

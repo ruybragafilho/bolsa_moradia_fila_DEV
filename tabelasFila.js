@@ -391,16 +391,24 @@ function obterFila() {
   // Obtém os casos na fila
   let fila = BUFFER_FILA.map( caso => {    
 
+    let idCaso = caso[ID];
+    
+    let dataEncaminhamento = caso[DATA_ENCAMINHAMENTO].split("-");
+    let dataEncaminhamentoFormatada = `${dataEncaminhamento[2]}/${dataEncaminhamento[1]}/${dataEncaminhamento[0]}`;
+
+    let servicosReferencia = obterServicosReferenciaDoCaso( idCaso );
+    let servicoReferenciaAtivo = obterServicoReferenciaAtivo( servicosReferencia );
+
     let vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
     let idSituacaoVistoria = getSituacaoVistoria( vistoriasCaso );
 
-    let idSituacaoQuestionario = getSituacaoQuestionario( caso[ID] );
+    let idSituacaoQuestionario = getSituacaoQuestionario( idCaso );
     let idsRespostasQuestionarios = idSituacaoQuestionario == "3" ?
-                                    getRespostasQuestionario( caso[ID] ) : "";
+                                    getRespostasQuestionario( idCaso ) : "";
         
     return {
 
-      id: caso[ID],
+      id: idCaso,
 
       referencia_familiar: caso[REFERENCIA_FAMILIAR],
 
@@ -410,7 +418,15 @@ function obterFila() {
       
       email_orgao_encaminhador: caso[EMAIL_ORGAO_ENCAMINHADOR],
 
+      data_encaminhamento: dataEncaminhamentoFormatada,
+
       id_complexidade: BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(caso[ORGAO_ENCAMINHADOR]) - 1 ][ID_COMPLEXIDADE],
+
+      servicos_referencias: servicosReferencia,
+
+      servico_referencia_ativo: servicoReferenciaAtivo,
+
+      id_complexidade_servico_referencia_ativo: BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(servicoReferenciaAtivo.idServico) - 1 ][ID_COMPLEXIDADE],
             
       ids_parametros_caso: caso[IDS_PARAMETROS_CASO] != "" ? caso[IDS_PARAMETROS_CASO].split(";") : "",
 
