@@ -151,21 +151,21 @@
     // Limpa o conteúdo da tabela
     tbody.innerHTML = ''; 
     
-
+    // Loop gerando as linhas da tabela
     caso.servicos_referencias.forEach( item => {
 
       // Cria uma linha da tabela
       const tr = document.createElement('tr');
       tr.innerHTML = `
-          <td class="clicavel align-middle">${ idToNomeFE( item.idServico, "ORGAOS_ENCAMINHADORES" )}</td>
-          <td class="clicavel align-middle"> - </td>    
+          <td class="clicavel align-middle">${ idToNomeFE( item.idServico, "ORGAOS_ENCAMINHADORES" ) }</td>
+          <td class="clicavel align-middle">${ emailInstituicao( item.idServico ) }</td>    
           <td class="clicavel align-middle">${ item.dataInformacao }</td>        
-          <td class="clicavel align-middle">${ item.idResponsavelInformacao }</td>`; 
+          <td class="clicavel align-middle">${ item.emailResponsavelInformacao }</td>`; 
 
       // Adiciona a linha na tabela
       tbody.appendChild(tr);
 
-    });
+    }); // Fim do forEach
 
   } // Fim da função visualizarServicosReferencia
 

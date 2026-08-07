@@ -73,14 +73,15 @@ function obterServicosReferenciaDoCaso( idCaso ) {
         {         
           idServico: relacionamento[ID_SERVICO_RELACIONAMENTO],
           dataInformacao: relacionamento[DATA_INFORMACAO],
-          idResponsavelInformacao: relacionamento[ID_RESPONSAVEL_INFORMACAO] 
+          idResponsavelInformacao: relacionamento[ID_RESPONSAVEL_INFORMACAO], 
+          emailResponsavelInformacao: emailUsuario( relacionamento[ID_RESPONSAVEL_INFORMACAO] )
         }
       );
     }
     
   }); // Fim do forEach
 
-  return servicosReferencia;
+  return servicosReferencia.reverse();
 
 } // Fim da função obterServicosReferenciaDoCaso
 

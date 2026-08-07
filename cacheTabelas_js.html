@@ -91,6 +91,7 @@
   const COLUNA_NOME  = 1;
   const COLUNA_ATIVO = 2;  
 
+  const COLUNA_EMAIL_INSTITUICAO   = 3;
   const COLUNA_PESO_PARAMETRO      = 3;
   const COLUNA_PONTUACAO_PARAMETRO = 4;
 
@@ -309,6 +310,36 @@
   
   
   } // Fim da função idToNomeFE
+
+
+
+
+  /**
+   * Função que recebe o id da instituição e retorna seu e-mail   
+   */
+  function emailInstituicao( idInstituicao ) {
+    
+    // Validação de parâmetros da função
+    
+    if( !isStringValidFE(idInstituicao) ) {
+      return "";
+    } 
+   
+    // Converte o idInstituicao para Integer
+    const idItem = parseInt(idInstituicao);
+    if( !isIntegerValidFE(idItem) ) {
+      throw( new Error( "emailInstituicao - ID Inválido: " + idItem ) );      
+    }
+  
+    // Se id está fora dos limites inferior ou superior, lança uma exceção
+    if( idItem < 1  ||  idItem > numOrgaosEncaminhadores ) {
+      throw( new Error( "emailInstituicao - ID inválido" ) );      
+    }
+  
+    // Retorna o nome referente ao ID
+    return cache_TabelaOrgaosEncaminhadores[idItem-1][COLUNA_EMAIL_INSTITUICAO];    
+  
+  } // Fim da função emailInstituicao
 
 
 

@@ -293,6 +293,36 @@ function idToNome( id, nomeTabela ) {
 
 
 
+  /**
+   * Função que recebe o id do usuario e retorna seu e-mail   
+   */
+  function emailUsuario( idUsuario ) {
+    
+    // Validação de parâmetros da função
+    
+    if( !isStringValidBE(idUsuario) ) {
+      return "";
+    } 
+   
+    // Converte o idUsuario para Integer
+    const idItem = parseInt(idUsuario);
+    if( !isIntegerValidBE(idItem) ) {
+      throw( new Error( "emailUsuario - ID Inválido: " + idItem ) );      
+    }
+  
+    // Se id está fora dos limites inferior ou superior, lança uma exceção
+    if( idItem < 1  ||  idItem > NUM_USUARIOS ) {
+      throw( new Error( "emailUsuario - ID inválido" ) );      
+    }
+  
+    // Retorna o nome referente ao ID
+    return BUFFER_USUARIOS[idItem-1][EMAIL];    
+  
+  } // Fim da função emailUsuario
+
+
+
+
 /** 
  *  #################################################
  *  #####                                       ##### 
