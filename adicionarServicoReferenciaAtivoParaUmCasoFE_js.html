@@ -10,7 +10,51 @@
     console.log( "adicionarServicoReferenciaAtivoParaUmCasoFE_js - INÍCIO" );
 
 
+    const idServicoReferencia = document.getElementById("select_adicionarServicoReferencia").value;         
+    console.log( "Id Serviço Referência: " + idServicoReferencia );
 
+
+    if( !idServicoReferencia ) {
+
+      // Exibe modal de erro caso o serviço de referência não tenha sido selecionado
+      mostrarModalErro( "O campo Serviço Referência é obrigatório!" );                            
+
+    } else {
+
+      // Se serviço de referência tiver sido informado, prossegue 
+
+      // mostra modal com mensagem de evolução de caso
+      mostrarModalMensagem( "Registrando novo serviço de referência, por favor aguarde..." );
+
+
+      const obj_relacionamentoServicoCaso = {
+        idCaso: id_CasoEmVisualizacao,
+        idServicoReferencia: idServicoReferencia,
+        idResponsavelInformacao: usuarioLogado.id
+      };
+   
+      const json_relacionamentoServicoCaso = JSON.stringify( obj_relacionamentoServicoCaso );
+            
+
+      // Chama a função back end para evoluir multiplos casos          
+      google.script.run
+                   .withSuccessHandler( () => {
+  
+                     // Volta para a tela de resumos de casos                     
+                     redirecionarParaTelaResumosDosCasos( 1 );                     
+  
+                   })
+                   .withFailureHandler( erro => {
+  
+                     // mostra modal com mensagem de erro
+                     mostrarModalErro( "adicionarServicoReferenciaAtivoParaUmCasoFE_js - " + erro.message );
+                     redirecionarParaTelaResumosDosCasos( 0 );
+  
+                   })
+                   // Chama a função backend que registra novo serviço de referência ativo para o caso
+                   .adicionarServicoReferenciaAtivoParaUmCasoBE( json_relacionamentoServicoCaso );  
+
+    } // Fim do if-else
 
     
     console.log( "adicionarServicoReferenciaAtivoParaUmCasoFE_js - FIM" );
