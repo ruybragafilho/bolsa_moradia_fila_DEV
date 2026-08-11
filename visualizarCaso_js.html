@@ -16,6 +16,10 @@
     // situação == Convocado para Acesso E para técnicas da DPOP
     document.getElementById("data_limite_edicao").style.display   =  "none";
 
+    // Não mostra o botão para adicionar serviço de referência por padrão. 
+    // Mostra apenas para técnicas da DPOP        
+    document.getElementById("adicionarServicoReferencia").style.display  =  "none";
+
     // Não mostra os campos referentes às vistorias por padrão. Mostra apenas para 
     // técnicas da DPOP    
     document.getElementById("headerVistoriasDoCaso").style.display  =  "none";
@@ -98,13 +102,15 @@
       }// Fim if campos visíveis apenas para fila nova
       
 
-      // Mostra as vistorias do caso
+      // Mostra o botão para adicionar serviço de referência e as vistorias do caso
+      // apenas para as técnicas da DPOP
       if( usuarioLogado.instituicao == "0") {      
-        visualizarVistoriasCaso( cache_CasoEmVisualizacao )
+        document.getElementById("adicionarServicoReferencia").style.display = "";
+        visualizarVistoriasCaso( cache_CasoEmVisualizacao );                
       }
 
     } else {
-      // Exibe modal de erro caso o tipo de evolução não tenha sido selecionado
+      // Exibe modal de erro caso o usuário tente acessar um caso que não pertence à sua instituição
       mostrarModalErro( "Informações disponíveis apenas para a entidade que encaminhou esse cidadão!" );   
       redirecionarParaTelaResumosDosCasos( 0 );                   
     }
@@ -151,8 +157,22 @@
     // Limpa o conteúdo da tabela
     tbody.innerHTML = ''; 
     
+    // Número de serviços de referência do caso
+    const numServicosReferencia = caso.servicos_referencia.length;
+    let i = 1;
+    let status;
+    let statusColor;
+
     // Loop gerando as linhas da tabela
-    caso.servicos_referencias.forEach( item => {
+    caso.servicos_referencia.forEach( item => {
+      
+      if( i == 1 ) {
+        status = "Ativo";
+        statusColor = "text-primary";
+      } else {
+        status = "Inativo";
+        statusColor = "text-danger";
+      }
 
       // Cria uma linha da tabela
       const tr = document.createElement('tr');
@@ -160,10 +180,12 @@
           <td class="clicavel align-middle">${ idToNomeFE( item.idServico, "ORGAOS_ENCAMINHADORES" ) }</td>
           <td class="clicavel align-middle">${ emailInstituicao( item.idServico ) }</td>    
           <td class="clicavel align-middle">${ item.dataInformacao }</td>        
-          <td class="clicavel align-middle">${ item.emailResponsavelInformacao }</td>`; 
-
+          <td class="clicavel align-middle">${ item.emailResponsavelInformacao }</td>
+          <td class="clicavel align-middle ${statusColor}">${ status }</td>`; 
       // Adiciona a linha na tabela
       tbody.appendChild(tr);
+
+      ++i;
 
     }); // Fim do forEach
 

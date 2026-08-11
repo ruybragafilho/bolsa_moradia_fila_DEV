@@ -422,7 +422,7 @@ function obterFila() {
 
       id_complexidade: BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(caso[ORGAO_ENCAMINHADOR]) - 1 ][ID_COMPLEXIDADE],
 
-      servicos_referencias: servicosReferencia,
+      servicos_referencia: servicosReferencia,
 
       servico_referencia_ativo: servicoReferenciaAtivo,
 
