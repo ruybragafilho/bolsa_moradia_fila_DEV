@@ -603,6 +603,11 @@ function obterFilaCasosAntigos() {
   // Obtém os casos na fila
   let fila = BUFFER_FILA_CASOS_ANTIGOS.map( caso => {    
 
+    let idCaso = caso[ID];
+
+    let servicosReferencia = obterServicosReferenciaDoCaso( idCaso );
+    let servicoReferenciaAtivo = obterServicoReferenciaAtivo( servicosReferencia );
+
     let vistoriasCaso = "";
     let idSituacaoVistoria = "";
     if( caso[CPF_RF] != "" ) {
@@ -622,9 +627,17 @@ function obterFilaCasosAntigos() {
       
       email_orgao_encaminhador: caso[EMAIL_ORGAO_ENCAMINHADOR],
 
+      data_encaminhamento: "",
+
       id_complexidade: caso[ORGAO_ENCAMINHADOR] != "" ?
                        BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(caso[ORGAO_ENCAMINHADOR]) - 1 ][ID_COMPLEXIDADE] :
                        "",          
+
+      servicos_referencia: servicosReferencia,
+
+      servico_referencia_ativo: servicoReferenciaAtivo,
+
+      id_complexidade_servico_referencia_ativo: BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(servicoReferenciaAtivo.idServico) - 1 ][ID_COMPLEXIDADE],
 
       idade_RF: calcularIdade( caso[DATA_NASCIMENTO_RF] ),
 

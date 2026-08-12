@@ -22,6 +22,27 @@ const TAMANHO_RELACIONAMENTO_CASO_SERVICO      =  BUFFER_RELACIONAMENTO_CASO_SER
 const TAMANHO_INDICE_INVERTIDO_RELACIONAMENTO  =  BUFFER_INDICE_INVERTIDO_RELACIONAMENTO.length;
 
 
+
+
+/**
+ * Planilha RELACIONAMENTO CASO ANTIGO SERVICO
+ */
+const PLANILHA_RELACIONAMENTO_CASO_ANTIGO_SERVICO_ID  =  "1-emkLx1CGV8BeanAykTVSKv8xJj5XQI7TFC89H22EWc";
+const PLANILHA_RELACIONAMENTO_CASO_ANTIGO_SERVICO     =  SpreadsheetApp.openById(PLANILHA_RELACIONAMENTO_CASO_ANTIGO_SERVICO_ID);
+
+const TABELA_RELACIONAMENTO_CASO_SERVICO_ANTIGO       =  PLANILHA_RELACIONAMENTO_CASO_SERVICO.getSheetByName('RELACIONAMENTO');
+const TABELA_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO   =  PLANILHA_RELACIONAMENTO_CASO_SERVICO.getSheetByName('INDICE_INVERTIDO_RELACIONAMENTO');
+
+const BUFFER_RELACIONAMENTO_CASO_SERVICO_ANTIGO       =  TABELA_RELACIONAMENTO_CASO_SERVICO.getDataRange().getDisplayValues().splice(1);
+const BUFFER_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO   =  TABELA_INDICE_INVERTIDO_RELACIONAMENTO.getDataRange().getDisplayValues().splice(1);
+
+const TAMANHO_RELACIONAMENTO_CASO_SERVICO_ANTIGO      =  BUFFER_RELACIONAMENTO_CASO_SERVICO.length;
+const TAMANHO_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO  =  BUFFER_INDICE_INVERTIDO_RELACIONAMENTO.length;
+
+
+
+
+
 // Posições das colunas da planilha RELACIONAMENTO CASO SERVICO
 // const ID_CASO = 0;  Já declarado em tabelasQuestionario.js
 
@@ -54,13 +75,39 @@ const ID_RESPONSAVEL_INFORMACAO  =  4;
  */
 function obterServicosReferenciaDoCaso( idCaso ) {
 
-  // Se id caso inválido, retorna uma exceção
-  let auxIDCaso = parseInt( idCaso );  
-  if( auxIDCaso < 1  ||  auxIDCaso > TAMANHO_FILA ) {
+
+  let id;
+  let BUFFER_INDICE;
+  let BUFFER_RELACIONAMENTO;
+  let ID_MAXIMO;      
+  
+
+  // CASO ATUAL
+  if( !idCaso.includes("old_") ) {
+      
+    // Converte o id para Integer
+    id = parseInt( idCaso );  
+    BUFFER_INDICE = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO;
+    BUFFER_RELACIONAMENTO = BUFFER_RELACIONAMENTO_CASO_SERVICO
+    ID_MAXIMO = TAMANHO_FILA;
+  
+    // CASO ANTIGO  
+  } else {
+  
+    // Converte o id para Integer
+    id = parseInt( idCaso.split("_")[1] );  
+    BUFFER_INDICE = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO;
+    BUFFER_RELACIONAMENTO = BUFFER_RELACIONAMENTO_CASO_SERVICO_ANTIGO
+    ID_MAXIMO = TAMANHO_FILA_CASOS_ANTIGOS;
+  
+  }  
+
+  // Se id caso inválido, retorna uma exceção  
+  if( id < 1  ||  id > ID_MAXIMO ) {
     throw( new Error( "obterServicosReferenciaDoCaso - ID Caso Inválido" ) );
   }    
 
-  const indicesRelacionamentos = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO[auxIDCaso-1][IDS_RELACIONAMENTOS].split(";").map(id => parseInt(id));
+  const indicesRelacionamentos = BUFFER_INDICE[id-1][IDS_RELACIONAMENTOS].split(";").map(id => parseInt(id));
 
   let servicosReferencia = []  
   let relacionamento;
@@ -68,7 +115,7 @@ function obterServicosReferenciaDoCaso( idCaso ) {
     
     if( ir != 0 ) {
 
-      relacionamento = BUFFER_RELACIONAMENTO_CASO_SERVICO[ parseInt(ir) - 1 ];
+      relacionamento = BUFFER_RELACIONAMENTO[ parseInt(ir) - 1 ];
       servicosReferencia.push(
         {         
           idServico: relacionamento[ID_SERVICO_RELACIONAMENTO],
@@ -94,7 +141,7 @@ function obterServicosReferenciaDoCaso( idCaso ) {
  */
 function obterServicoReferenciaAtivo( servicosReferencia ) {
 
-  const servicoAtivo = servicosReferencia[servicosReferencia.length - 1];
+  const servicoAtivo = servicosReferencia[0];
   
   return servicoAtivo;
 

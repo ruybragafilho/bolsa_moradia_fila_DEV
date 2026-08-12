@@ -82,7 +82,7 @@
         document.getElementById( "dataEncaminhamentoInput" ).value      = cache_CasoEmVisualizacao.data_encaminhamento;        
 
         // Mostra os serviços de referência
-        visualizarServicosReferencia( cache_CasoEmVisualizacao )
+        visualizarServicosReferencia( cache_CasoEmVisualizacao );
 
         // Mostra a situação do questionário
         visualizarSituacaoQuestionario( cache_CasoEmVisualizacao );
@@ -95,7 +95,9 @@
 
       } else {
 
-        document.getElementById("servicoReferencia").style.display  =  "none";
+        // Mostra os serviços de referência
+        visualizarServicosReferencia( cache_CasoEmVisualizacao );        
+
         document.getElementById("questionario").style.display  =  "none";
         document.getElementById("parametros").style.display  =  "none";
 
