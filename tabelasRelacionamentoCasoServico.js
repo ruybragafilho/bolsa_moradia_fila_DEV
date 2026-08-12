@@ -30,14 +30,14 @@ const TAMANHO_INDICE_INVERTIDO_RELACIONAMENTO  =  BUFFER_INDICE_INVERTIDO_RELACI
 const PLANILHA_RELACIONAMENTO_CASO_ANTIGO_SERVICO_ID  =  "1-emkLx1CGV8BeanAykTVSKv8xJj5XQI7TFC89H22EWc";
 const PLANILHA_RELACIONAMENTO_CASO_ANTIGO_SERVICO     =  SpreadsheetApp.openById(PLANILHA_RELACIONAMENTO_CASO_ANTIGO_SERVICO_ID);
 
-const TABELA_RELACIONAMENTO_CASO_SERVICO_ANTIGO       =  PLANILHA_RELACIONAMENTO_CASO_SERVICO.getSheetByName('RELACIONAMENTO');
-const TABELA_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO   =  PLANILHA_RELACIONAMENTO_CASO_SERVICO.getSheetByName('INDICE_INVERTIDO_RELACIONAMENTO');
+const TABELA_RELACIONAMENTO_CASO_ANTIGO_SERVICO       =  PLANILHA_RELACIONAMENTO_CASO_ANTIGO_SERVICO.getSheetByName('RELACIONAMENTO');
+const TABELA_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO   =  PLANILHA_RELACIONAMENTO_CASO_ANTIGO_SERVICO.getSheetByName('INDICE_INVERTIDO_RELACIONAMENTO');
 
-const BUFFER_RELACIONAMENTO_CASO_SERVICO_ANTIGO       =  TABELA_RELACIONAMENTO_CASO_SERVICO.getDataRange().getDisplayValues().splice(1);
-const BUFFER_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO   =  TABELA_INDICE_INVERTIDO_RELACIONAMENTO.getDataRange().getDisplayValues().splice(1);
+const BUFFER_RELACIONAMENTO_CASO_ANTIGO_SERVICO       =  TABELA_RELACIONAMENTO_CASO_ANTIGO_SERVICO.getDataRange().getDisplayValues().splice(1);
+const BUFFER_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO   =  TABELA_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO.getDataRange().getDisplayValues().splice(1);
 
-const TAMANHO_RELACIONAMENTO_CASO_SERVICO_ANTIGO      =  BUFFER_RELACIONAMENTO_CASO_SERVICO.length;
-const TAMANHO_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO  =  BUFFER_INDICE_INVERTIDO_RELACIONAMENTO.length;
+const TAMANHO_RELACIONAMENTO_CASO_ANTIGO_SERVICO      =  BUFFER_RELACIONAMENTO_CASO_ANTIGO_SERVICO.length;
+const TAMANHO_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO  =  BUFFER_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO.length;
 
 
 
@@ -79,16 +79,17 @@ function obterServicosReferenciaDoCaso( idCaso ) {
   let id;
   let BUFFER_INDICE;
   let BUFFER_RELACIONAMENTO;
+  let TAMANHO_RELACIONAMENTO;
   let ID_MAXIMO;      
   
 
   // CASO ATUAL
-  if( !idCaso.includes("old_") ) {
+  if( !String(idCaso).includes("old_") ) {
       
     // Converte o id para Integer
     id = parseInt( idCaso );  
     BUFFER_INDICE = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO;
-    BUFFER_RELACIONAMENTO = BUFFER_RELACIONAMENTO_CASO_SERVICO
+    BUFFER_RELACIONAMENTO = BUFFER_RELACIONAMENTO_CASO_SERVICO;    
     ID_MAXIMO = TAMANHO_FILA;
   
     // CASO ANTIGO  
@@ -97,7 +98,7 @@ function obterServicosReferenciaDoCaso( idCaso ) {
     // Converte o id para Integer
     id = parseInt( idCaso.split("_")[1] );  
     BUFFER_INDICE = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO;
-    BUFFER_RELACIONAMENTO = BUFFER_RELACIONAMENTO_CASO_SERVICO_ANTIGO
+    BUFFER_RELACIONAMENTO = BUFFER_RELACIONAMENTO_CASO_ANTIGO_SERVICO;    
     ID_MAXIMO = TAMANHO_FILA_CASOS_ANTIGOS;
   
   }  
@@ -163,9 +164,42 @@ function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso 
   const idResponsavelInformacao  =  obj_relacionamentoServicoCaso.idResponsavelInformacao;
   
 
-  // Se id caso inválido, retorna uma exceção
-  let auxID = parseInt( idCaso );  
-  if( auxID < 1  ||  auxID > TAMANHO_FILA ) {
+  let auxID;
+  let id;
+  let TABELA_INDICE;
+  let BUFFER_INDICE;
+  let TABELA_RELACIONAMENTO;
+  let TAMANHO_RELACIONAMENTO;
+  let ID_MAXIMO;      
+  
+
+  // CASO ATUAL
+  if( !String(idCaso).includes("old_") ) {
+      
+    // Converte o id para Integer
+    id = parseInt( idCaso );  
+    TABELA_INDICE = TABELA_INDICE_INVERTIDO_RELACIONAMENTO;
+    BUFFER_INDICE = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO;    
+    TABELA_RELACIONAMENTO = TABELA_RELACIONAMENTO_CASO_SERVICO;
+    TAMANHO_RELACIONAMENTO = TAMANHO_RELACIONAMENTO_CASO_SERVICO;
+    ID_MAXIMO = TAMANHO_FILA;
+  
+    // CASO ANTIGO  
+  } else {
+  
+    // Converte o id para Integer
+    id = parseInt( idCaso.split("_")[1] );  
+    TABELA_INDICE = TABELA_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO;
+    BUFFER_INDICE = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO;    
+    TABELA_RELACIONAMENTO = TABELA_RELACIONAMENTO_CASO_ANTIGO_SERVICO;
+    TAMANHO_RELACIONAMENTO = TAMANHO_RELACIONAMENTO_CASO_ANTIGO_SERVICO;
+    ID_MAXIMO = TAMANHO_FILA_CASOS_ANTIGOS;
+  
+  }  
+
+
+  // Se id caso inválido, retorna uma exceção  
+  if( id < 1  ||  id > ID_MAXIMO ) {
     throw( new Error( "adicionarServicoReferenciaAtivoParaUmCaso - ID Caso Inválido" ) );
   }  
 
@@ -193,30 +227,29 @@ function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso 
     // Gera o novo id do relacionamento
     // Gera da data da informação == data de hoje
     // Gera e grava a nova linha na tabela relacionamento
-    const idNovoRelacionamento = parseInt(TAMANHO_RELACIONAMENTO_CASO_SERVICO) + 1;
+    const idNovoRelacionamento = parseInt(TAMANHO_RELACIONAMENTO) + 1;
     const dataInformacao = new Date();      
     const novoRelacionamento = [ idNovoRelacionamento, 
-                                 idCaso, 
+                                 id, 
                                  idServicoReferencia, 
                                  dataInformacao.toLocaleString("pt-BR", {dateStyle: "short"}), 
                                  idResponsavelInformacao ];
-    TABELA_RELACIONAMENTO_CASO_SERVICO.appendRow( novoRelacionamento );
+    TABELA_RELACIONAMENTO.appendRow( novoRelacionamento );
 
   
 
     // Gera e grava a nova linha na tabela de índice invertido
-    let indicesServicosReferencia = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO[parseInt(idCaso)-1][IDS_RELACIONAMENTOS].split(";");
+    let indicesServicosReferencia = BUFFER_INDICE[id-1][IDS_RELACIONAMENTOS].split(";");
     if( indicesServicosReferencia[indicesServicosReferencia.length-1] == "0" ) {
       indicesServicosReferencia[indicesServicosReferencia.length-1] = idNovoRelacionamento;
     } else {
       indicesServicosReferencia.push(idNovoRelacionamento);
     }                          
-    const campo_IndicesRelacionamentos = TABELA_INDICE_INVERTIDO_RELACIONAMENTO.getRange( parseInt(idCaso)+1, IDS_RELACIONAMENTOS+1 );
+    const campo_IndicesRelacionamentos = TABELA_INDICE.getRange( id+1, IDS_RELACIONAMENTOS+1 );
     campo_IndicesRelacionamentos.setValue( indicesServicosReferencia.join(";") );                                          
 
-
   } catch( error ) {
-    throw( "adicionarServicoReferenciaAtivoParaUmCaso - " + error.message );
+    throw( "adicionarServicoReferenciaAtivoParaUmCaso - E - " + error.message );
   }                              
 
 } // Fim da função adicionarServicoReferenciaAtivoParaUmCasoBE
@@ -281,7 +314,8 @@ function formatarData() {
  */
 function testeObterServicosReferenciaDoCaso() {
 
-  const idCaso = "2";
+  //const idCaso = "2";
+  const idCaso = "old_2";
 
   const servicosReferencia = obterServicosReferenciaDoCaso( idCaso );
 

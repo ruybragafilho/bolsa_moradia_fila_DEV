@@ -396,7 +396,7 @@ function obterFila() {
     let dataEncaminhamento = caso[DATA_ENCAMINHAMENTO].split("-");
     let dataEncaminhamentoFormatada = `${dataEncaminhamento[2]}/${dataEncaminhamento[1]}/${dataEncaminhamento[0]}`;
 
-    let servicosReferencia = obterServicosReferenciaDoCaso( idCaso );
+    let servicosReferencia = obterServicosReferenciaDoCaso( String( idCaso ) );
     let servicoReferenciaAtivo = obterServicoReferenciaAtivo( servicosReferencia );
 
     let vistoriasCaso = pesquisarVistoriasPorCPF( caso[CPF_RF].padStart(11, "0") );
@@ -605,7 +605,7 @@ function obterFilaCasosAntigos() {
 
     let idCaso = caso[ID];
 
-    let servicosReferencia = obterServicosReferenciaDoCaso( idCaso );
+    let servicosReferencia = obterServicosReferenciaDoCaso( "old_" + String(idCaso) );
     let servicoReferenciaAtivo = obterServicoReferenciaAtivo( servicosReferencia );
 
     let vistoriasCaso = "";

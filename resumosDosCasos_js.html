@@ -189,7 +189,7 @@
         tr.innerHTML +=           
          `<td class="clicavel align-middle">${item.posicaoNaFila}</td>
           <td class="clicavel align-middle">${item.referencia_familiar}</td>
-          <td class="clicavel align-middle">${ idToNomeFE( item.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" ) }</td>
+          <td class="clicavel align-middle">${ idToNomeFE( item.servico_referencia_ativo.idServico, "ORGAOS_ENCAMINHADORES" ) }</td>
           <td class="clicavel align-middle">${item.pontuacao}</td>        
     
           <td class="clicavel align-middle">${ idToNomeFE( item.id_situacao_beneficio, "SITUACOES_BENEFICIO" ) }</td>        
@@ -279,7 +279,7 @@
 
         tr.innerHTML +=           
          `<td class="clicavel align-middle">${item.referencia_familiar}</td>
-          <td class="clicavel align-middle">${ idToNomeFE( item.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" ) }</td>
+          <td class="clicavel align-middle">${ idToNomeFE( item.servico_referencia_ativo.idServico, "ORGAOS_ENCAMINHADORES" ) }</td>
     
           <td class="clicavel align-middle">${ idToNomeFE( item.id_situacao_beneficio, "SITUACOES_BENEFICIO" ) }</td>        
           <td class="clicavel align-middle">${item.data_ultima_evolucao}</td>
@@ -374,7 +374,7 @@
         // Verifica as regras de cada filtro individualmente
         // para o caso atual
         const regra1 = ((orgaosEncaminhadores.length == 0)  ||  
-                         orgaosEncaminhadores.filter(orgao => caso.id_orgao_encaminhador.split(";").includes(orgao)).length > 0 );
+                         orgaosEncaminhadores.filter(orgao => caso.servico_referencia_ativo.idServico.split(";").includes(orgao)).length > 0 );
                            
         const regra2 = ((situacaoBeneficio.length == 0)  ||  
                          situacaoBeneficio.filter(situacaoB => caso.id_situacao_beneficio.split(";").includes(situacaoB)).length > 0 );
@@ -403,7 +403,7 @@
         // Verifica as regras de cada filtro individualmente
         // para o caso atual
         const regra1 = ((orgaosEncaminhadores.length == 0)  ||  
-                         orgaosEncaminhadores.filter(orgao => casoAntigo.id_orgao_encaminhador.split(";").includes(orgao)).length > 0 );
+                         orgaosEncaminhadores.filter(orgao => casoAntigo.servico_referencia_ativo.idServico.split(";").includes(orgao)).length > 0 );
                            
         const regra2 = ((situacaoBeneficio.length == 0)  ||  
                          situacaoBeneficio.filter(situacaoB => casoAntigo.id_situacao_beneficio.split(";").includes(situacaoB)).length > 0 );

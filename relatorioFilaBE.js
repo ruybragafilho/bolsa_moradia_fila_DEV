@@ -4,11 +4,11 @@
 const PLANILHA_RELATORIO_ID     =  "16OlzDZ0aI4lYav7_NS54859a_NP4HiO1l7pI4SU0yF4";
 const PLANILHA_RELATORIO        =  SpreadsheetApp.openById(PLANILHA_RELATORIO_ID);
 
-const TABELA_RELATORIO          =  PLANILHA_RELATORIO.getSheetByName('RELATORIO');
+const TABELA_RELATORIO          =  PLANILHA_RELATORIO.getSheetByName('HABILITADOS_2026');
 const TABELA_QUANTITATIVOS      =  PLANILHA_RELATORIO.getSheetByName('QUANTITATIVOS');
 let BUFFER_RELATORIO            =  TABELA_RELATORIO.getDataRange().getDisplayValues().splice(1);
 let NUM_RELATORIOS              =  BUFFER_RELATORIO.length;
-const NUM_COLUNAS_TABELA_RELATORIO  =  15;
+const NUM_COLUNAS_TABELA_RELATORIO  =  17;
 
 
 
@@ -17,21 +17,24 @@ const RELATORIO_COLUNA_POSICAO_FILA  =  1;
 const RELATORIO_COLUNA_NOME_RF       =  2;
 const RELATORIO_COLUNA_CPF_RF        =  3;
 
-const RELATORIO_COLUNA_ORGAO_ENCAMINHADOR  =  4;
-const RELATORIO_COLUNA_COMPLEXIDADE        =  5
+const RELATORIO_COLUNA_ORGAO_ENCAMINHADOR               =  4;
+const RELATORIO_COLUNA_COMPLEXIDADE_ORGAO_ENCAMINHADOR  =  5;
 
-const RELATORIO_COLUNA_SITUACAO_BENEFICIO    =  6;
-const RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO  =  7;
-const RELATORIO_COLUNA_DATA_LIMITE           =  8;
+const RELATORIO_COLUNA_SERVICO_REFERENCIA               =  6;
+const RELATORIO_COLUNA_COMPLEXIDADE_SERVICO_REFERENCIA  =  7;
 
-const RELATORIO_COLUNA_SITUACAO_VISTORIA        =  9;
-const RELATORIO_COLUNA_SITUACAO_QUESTIONARIO    = 10;
-const RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO  = 11;
+const RELATORIO_COLUNA_SITUACAO_BENEFICIO    =  8;
+const RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO  =  9;
+const RELATORIO_COLUNA_DATA_LIMITE           =  10;
 
-const RELATORIO_COLUNA_JUSTIFICATIVA_1  = 12;
-const RELATORIO_COLUNA_JUSTIFICATIVA_2  = 13;
+const RELATORIO_COLUNA_SITUACAO_VISTORIA        = 11;
+const RELATORIO_COLUNA_SITUACAO_QUESTIONARIO    = 12;
+const RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO  = 13;
 
-const RELATORIO_COLUNA_OBSERVACAO  = 14;
+const RELATORIO_COLUNA_JUSTIFICATIVA_1  = 14;
+const RELATORIO_COLUNA_JUSTIFICATIVA_2  = 15;
+
+const RELATORIO_COLUNA_OBSERVACAO  = 16;
 
 
 
@@ -118,8 +121,7 @@ function gerarRelatorio() {
       let nomeSituacaoVistoria
       let idsRespostasQuestionarios;
 
-      let jsonFilaOrdenada = obterFila();
-      let filaOrdenada = JSON.parse( jsonFilaOrdenada );
+      let filaOrdenada = obterFila();      
       console.log( "filaOrdenada" );
 
       let posicaoFila = 0;
@@ -143,30 +145,38 @@ function gerarRelatorio() {
         // Órgão encaminhador
         bufferRelatorioCaso[RELATORIO_COLUNA_ORGAO_ENCAMINHADOR] = idToNome( caso.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" );                                         
 
-        // Complexidade
-        bufferRelatorioCaso[RELATORIO_COLUNA_COMPLEXIDADE] = caso.id_complexidade ? 
-                                                             idToNome( caso.id_complexidade, "COMPLEXIDADES" ) :
-                                                             "Sem Informação";                
+        // Complexidade órgão encaminhador
+        bufferRelatorioCaso[RELATORIO_COLUNA_COMPLEXIDADE_ORGAO_ENCAMINHADOR] = caso.id_complexidade ? 
+                                                                                idToNome( caso.id_complexidade, "COMPLEXIDADES" ) :
+                                                                                "Sem informação";                
+
+        // Serviço referência ativo
+        bufferRelatorioCaso[RELATORIO_COLUNA_SERVICO_REFERENCIA] = idToNome( caso.servico_referencia_ativo.idServico, "ORGAOS_ENCAMINHADORES" );                                         
+
+        // Complexidade serviço referência ativo
+        bufferRelatorioCaso[RELATORIO_COLUNA_COMPLEXIDADE_SERVICO_REFERENCIA] = caso.id_complexidade_servico_referencia_ativo ? 
+                                                                                idToNome( caso.id_complexidade_servico_referencia_ativo, "COMPLEXIDADES" ) :
+                                                                                "Sem informação";                                                                             
 
         // Situação benefício
         bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_BENEFICIO] = caso.id_situacao_beneficio ? 
                                                                    idToNome( caso.id_situacao_beneficio, "SITUACOES_BENEFICIO" ) :
-                                                                   "Sem Informação";
+                                                                   "Sem informação";
         // Data última evolução                         
         bufferRelatorioCaso[RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO] = caso.data_ultima_evolucao != "" ?
                                                                      caso.data_ultima_evolucao  :
-                                                                     "Sem Informação";
+                                                                     "Sem informação";
 
         // data limite                                 
         bufferRelatorioCaso[RELATORIO_COLUNA_DATA_LIMITE] = caso.data_limite != "" ?
                                                             caso.data_limite  :
-                                                            "Sem Informação";        
+                                                            "Sem informação";        
 
         // Situação vistoria
         nomeSituacaoVistoria = idToNome( caso.id_situacao_vistoria, "SITUACOES_VISTORIA" )
         bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_VISTORIA] = nomeSituacaoVistoria != "" ?
                                                                   nomeSituacaoVistoria :
-                                                                  "Sem Informação";
+                                                                  "Sem vistoria solicitada";
          
         // Situação questionário
         nomeSituacaoQuestionario = idToNome( caso.id_situacao_questionario, "SITUACOES_QUESTIONARIO" );
@@ -190,9 +200,9 @@ function gerarRelatorio() {
                      // Justificativa de não acompanhamento
                      bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q5 != "" ?
                                                                              idToNome( idsRespostasQuestionarios.q5, "ACOMPANHAMENTO_NAO" ) :
-                                                                             "Sem Informação"; 
+                                                                             "Não se aplica"; 
                      // Sem justificativa 2                                                                             
-                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Sem Informação";                                                                              
+                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";                                                                              
 
                      break;
 
@@ -206,30 +216,31 @@ function gerarRelatorio() {
                        case "5":  // O beneficiário está impossibilitado de acessar temporariamente
                                   bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
                                                                                           idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
-                                                                                          "Sem Informação" ;
+                                                                                          "Não se aplica" ;
                                   // Justificativa - não acesso temporário
                                   bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = idsRespostasQuestionarios.q3 != "" ? 
                                                                                           idToNome( idsRespostasQuestionarios.q3, "IMPOSSIBILIDADE_TEMPORARIA" ) :
-                                                                                          "Sem Informação" ;
+                                                                                          "Não se aplica" ;
 
                                   break;
 
                        case "6":  // O beneficiário não acessará o benefício de forma definitiva
                                   bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
                                                                                           idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
-                                                                                          "Sem Informação" ;
+                                                                                          "Não se aplica" ;
                                   // Justificativa - não acesso definitivo
                                   bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = idsRespostasQuestionarios.q4 != "" ? 
                                                                                           idToNome( idsRespostasQuestionarios.q4, "NAO_ACESSO_DEFINITIVO" ) :
-                                                                                          "Sem Informação" ;
+                                                                                          "Não se aplica" ;
 
                                   break;                                 
 
                        default:   // Opções de 1 à 4 - sem justificativas
                                   bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
                                                                                           idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
-                                                                                          "Sem Informação" ;                                  
-                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Sem Informação";                                                                                 
+                                                                                          "Não se aplica" ;  
+
+                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";                                                                                 
 
                                   break;                                 
 

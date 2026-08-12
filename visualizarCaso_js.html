@@ -73,16 +73,17 @@
 
       }
 
+
+      // Exibe os dados do órgão encaminhador na página de visualização de caso        
+      document.getElementById( "nome_orgaoEncaminhadorInput" ).value  = idToNomeFE( cache_CasoEmVisualizacao.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" );
+      document.getElementById( "email_orgaoEncaminhadorInput" ).value = cache_CasoEmVisualizacao.email_orgao_encaminhador;  
+      document.getElementById( "dataEncaminhamentoInput" ).value      = cache_CasoEmVisualizacao.data_encaminhamento;        
+
+      // Mostra os serviços de referência
+      visualizarServicosReferencia( cache_CasoEmVisualizacao );
+
       // Campos visíveis apenas para fila nova
       if( !flagCasoAntigo ) {
-
-        // Exibe os dados do órgão encaminhador na página de visualização de caso        
-        document.getElementById( "nome_orgaoEncaminhadorInput" ).value  = idToNomeFE( cache_CasoEmVisualizacao.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" );
-        document.getElementById( "email_orgaoEncaminhadorInput" ).value = cache_CasoEmVisualizacao.email_orgao_encaminhador;  
-        document.getElementById( "dataEncaminhamentoInput" ).value      = cache_CasoEmVisualizacao.data_encaminhamento;        
-
-        // Mostra os serviços de referência
-        visualizarServicosReferencia( cache_CasoEmVisualizacao );
 
         // Mostra a situação do questionário
         visualizarSituacaoQuestionario( cache_CasoEmVisualizacao );
@@ -94,9 +95,6 @@
         document.getElementById('totalizacaoParametrosDoCaso').innerHTML = `PONTUAÇÃO DO CASO: ${cache_CasoEmVisualizacao.pontuacao}`;        
 
       } else {
-
-        // Mostra os serviços de referência
-        visualizarServicosReferencia( cache_CasoEmVisualizacao );        
 
         document.getElementById("questionario").style.display  =  "none";
         document.getElementById("parametros").style.display  =  "none";
