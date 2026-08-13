@@ -5,10 +5,16 @@ const PLANILHA_RELATORIO_ID     =  "16OlzDZ0aI4lYav7_NS54859a_NP4HiO1l7pI4SU0yF4
 const PLANILHA_RELATORIO        =  SpreadsheetApp.openById(PLANILHA_RELATORIO_ID);
 
 const TABELA_RELATORIO          =  PLANILHA_RELATORIO.getSheetByName('HABILITADOS_2026');
-const TABELA_QUANTITATIVOS      =  PLANILHA_RELATORIO.getSheetByName('QUANTITATIVOS');
+const TABELA_RELATORIO_ANTIGO   =  PLANILHA_RELATORIO.getSheetByName('HABILITADOS_ANTES_DE_2026');
+
 let BUFFER_RELATORIO            =  TABELA_RELATORIO.getDataRange().getDisplayValues().splice(1);
+let BUFFER_RELATORIO_ANTIGO     =  TABELA_RELATORIO_ANTIGO.getDataRange().getDisplayValues().splice(1);
+
 let NUM_RELATORIOS              =  BUFFER_RELATORIO.length;
-const NUM_COLUNAS_TABELA_RELATORIO  =  17;
+let NUM_RELATORIOS_ANTIGO       =  BUFFER_RELATORIO_ANTIGO.length;
+
+const NUM_COLUNAS_TABELA_RELATORIO         =  17;
+const NUM_COLUNAS_TABELA_RELATORIO_ANTIGO  =  17;
 
 
 
@@ -43,6 +49,8 @@ const RELATORIO_COLUNA_OBSERVACAO  = 16;
  */
 function limparRelatorio() {
 
+  console.log( "limparRelatorio - Início" );
+
   // Lock
   let lock;
 
@@ -54,8 +62,6 @@ function limparRelatorio() {
 
     // SE PEGAR O LOCK, PROSSEGUE A EXCLUSÃO DOS DADOS DO RELATÓRIO
     if( lock.hasLock() ) {
-
-      console.log( "limparRelatorio - Início" );
   
       // Caso nulo
       let casoNulo = new Array(NUM_COLUNAS_TABELA_RELATORIO).fill("");
@@ -72,8 +78,6 @@ function limparRelatorio() {
       TABELA_RELATORIO.getRange( 2, 1, bufferCasosNulos.length, NUM_COLUNAS_TABELA_RELATORIO ).setNumberFormat("@").setValues( bufferCasosNulos );  
       PLANILHA_RELATORIO.waitForAllDataExecutionsCompletion(2);      
       SpreadsheetApp.flush();  
-  
-      console.log( "limparRelatorio - Fim" );
 
     } else {
 
@@ -91,6 +95,8 @@ function limparRelatorio() {
     lock.releaseLock();    
   }    
 
+  console.log( "limparRelatorio - Fim" );  
+
 } // Fim da função limparRelatorio
 
 
@@ -100,6 +106,8 @@ function limparRelatorio() {
  * gravando-os na planilha RELATORIO
  */
 function gerarRelatorio() {
+
+  console.log( "gerarRelatorio - Início" );  
 
   // Lock
   let lock;
@@ -112,8 +120,6 @@ function gerarRelatorio() {
 
     // SE PEGAR O LOCK, PROSSEGUE COM A GERAÇÃO DOS DADOS DO RELATÓRIO
     if( lock.hasLock() ) {
-      
-      console.log( "gerarRelatorio - Início" );  
 
       let bufferRelatorioCaso = [];      
       const bufferRelatorios  = [];      
@@ -267,8 +273,6 @@ function gerarRelatorio() {
       TABELA_RELATORIO.getRange( 2, 1, bufferRelatorios.length, NUM_COLUNAS_TABELA_RELATORIO ).setNumberFormat("@").setValues( bufferRelatorios );
       PLANILHA_RELATORIO.waitForAllDataExecutionsCompletion(2);      
       SpreadsheetApp.flush();  
-  
-      console.log( "gerarRelatorio - Fim" );
 
     } else {
 
@@ -286,7 +290,189 @@ function gerarRelatorio() {
     lock.releaseLock();    
   }   
 
+  console.log( "gerarRelatorio - Fim" );  
+
 } // Fim da função gerarRelatorio
+
+
+
+/**
+ * Função que limpa a planilha RELATORIO ANTIGO
+ */
+function limparRelatorioAntigo() {
+
+  console.log( "limparRelatorioAntigo - Início" );
+
+  // Lock
+  let lock;
+
+  try {
+
+    // TENTA PEGAR O LOCK
+    lock = LockService.getScriptLock();
+    lock.waitLock(10000);  
+
+    // SE PEGAR O LOCK, PROSSEGUE A EXCLUSÃO DOS DADOS DO RELATÓRIO
+    if( lock.hasLock() ) {
+  
+      // Caso nulo
+      let casoNulo = new Array(NUM_COLUNAS_TABELA_RELATORIO_ANTIGO).fill("");
+      let bufferCasosNulos = [];
+    
+      // Limpa a fila
+      let range;
+      for( let linha=2; linha<=TAMANHO_FILA_CASOS_ANTIGOS+1; ++linha ) {
+        bufferCasosNulos.push(casoNulo);
+      }    
+      
+      
+      // Grava o buffer de casos nulos na planilha RELATORIO
+      TABELA_RELATORIO_ANTIGO.getRange( 2, 1, bufferCasosNulos.length, NUM_COLUNAS_TABELA_RELATORIO_ANTIGO ).setNumberFormat("@").setValues( bufferCasosNulos );  
+      PLANILHA_RELATORIO.waitForAllDataExecutionsCompletion(2);      
+      SpreadsheetApp.flush();  
+  
+    } else {
+
+      // SE NAO CONSEGUIR PEGAR O LOCK, LANCA UMA EXCESSAO
+      throw( new Error( "Nao foi possivel pegar o LOCK" ) );
+    }
+
+  } catch( error ) {
+
+    throw( "limparRelatorioAntigo: " + error.message );
+
+  } finally {
+
+    // SOLTA O LOCK
+    lock.releaseLock();    
+  }    
+
+  console.log( "limparRelatorioAntigo - Fim" );  
+
+} // Fim da função limparRelatorioAntigo
+
+
+
+/**
+ * Função que gera os relatórios de todos os casos da fila, 
+ * gravando-os na planilha RELATORIO ANTIGO
+ */
+function gerarRelatorioAntigo() {
+
+  console.log( "gerarRelatorioAntigo - Início" );  
+
+  // Lock
+  let lock;
+
+  try {
+
+    // TENTA PEGAR O LOCK
+    lock = LockService.getScriptLock();
+    lock.waitLock(10000);  
+
+    // SE PEGAR O LOCK, PROSSEGUE COM A GERAÇÃO DOS DADOS DO RELATÓRIO
+    if( lock.hasLock() ) {      
+
+      let bufferRelatorioCaso = [];      
+      const bufferRelatorios  = [];      
+
+      let nomeSituacaoVistoria;
+
+      let fila = obterFilaCasosAntigos();      
+      console.log( "fila" );
+
+      let posicaoFila = 0;
+
+      // Percorre todos os casos da fila, gerando o relatório de cada caso
+      fila.forEach( caso => {
+        
+        bufferRelatorioCaso = new Array(NUM_COLUNAS_TABELA_RELATORIO_ANTIGO).fill("");
+
+        // Id do caso no sistema de filas
+        bufferRelatorioCaso[RELATORIO_COLUNA_ID] = caso.id;
+
+        // Posição do caso na fila
+        ++posicaoFila;
+        bufferRelatorioCaso[RELATORIO_COLUNA_POSICAO_FILA] = posicaoFila;
+
+        // Dados de Identificação        
+        bufferRelatorioCaso[RELATORIO_COLUNA_NOME_RF] = caso.referencia_familiar;
+        bufferRelatorioCaso[RELATORIO_COLUNA_CPF_RF] = caso.cpf_rf.padStart(11, "0");
+
+        // Órgão encaminhador
+        bufferRelatorioCaso[RELATORIO_COLUNA_ORGAO_ENCAMINHADOR] = idToNome( caso.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" );                                         
+
+        // Complexidade órgão encaminhador
+        bufferRelatorioCaso[RELATORIO_COLUNA_COMPLEXIDADE_ORGAO_ENCAMINHADOR] = caso.id_complexidade ? 
+                                                                                idToNome( caso.id_complexidade, "COMPLEXIDADES" ) :
+                                                                                "Sem informação";                
+
+        // Serviço referência ativo
+        bufferRelatorioCaso[RELATORIO_COLUNA_SERVICO_REFERENCIA] = idToNome( caso.servico_referencia_ativo.idServico, "ORGAOS_ENCAMINHADORES" );                                         
+
+        // Complexidade serviço referência ativo
+        bufferRelatorioCaso[RELATORIO_COLUNA_COMPLEXIDADE_SERVICO_REFERENCIA] = caso.id_complexidade_servico_referencia_ativo ? 
+                                                                                idToNome( caso.id_complexidade_servico_referencia_ativo, "COMPLEXIDADES" ) :
+                                                                                "Sem informação";                                                                             
+
+        // Situação benefício
+        bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_BENEFICIO] = caso.id_situacao_beneficio ? 
+                                                                   idToNome( caso.id_situacao_beneficio, "SITUACOES_BENEFICIO" ) :
+                                                                   "Sem informação";
+        // Data última evolução                         
+        bufferRelatorioCaso[RELATORIO_COLUNA_DATA_ULTIMA_EVOLUCAO] = caso.data_ultima_evolucao != "" ?
+                                                                     caso.data_ultima_evolucao  :
+                                                                     "Sem informação";
+
+        // data limite                                 
+        bufferRelatorioCaso[RELATORIO_COLUNA_DATA_LIMITE] = caso.data_limite != "" ?
+                                                            caso.data_limite  :
+                                                            "Sem informação";        
+
+        // Situação vistoria
+        nomeSituacaoVistoria = idToNome( caso.id_situacao_vistoria, "SITUACOES_VISTORIA" )
+        bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_VISTORIA] = nomeSituacaoVistoria != "" ?
+                                                                  nomeSituacaoVistoria :
+                                                                  "Sem vistoria solicitada";
+         
+        
+        // Questionário
+        bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_QUESTIONARIO] = "Não se aplica";
+        bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Não se aplica"; 
+        bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = "Não se aplica";                                                                                        
+        bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";
+        bufferRelatorioCaso[RELATORIO_COLUNA_OBSERVACAO] = "Não se aplica"; 
+
+        // Acrescenta 1 caso ao buffer relatórios
+        bufferRelatorios.push( bufferRelatorioCaso );        
+
+      }); // Fim do for que percorre todos os casos da fila
+
+
+      // Grava o buffer do relatório na planilha RELATORIO
+      TABELA_RELATORIO_ANTIGO.getRange( 2, 1, bufferRelatorios.length, NUM_COLUNAS_TABELA_RELATORIO_ANTIGO ).setNumberFormat("@").setValues( bufferRelatorios );
+      PLANILHA_RELATORIO.waitForAllDataExecutionsCompletion(2);      
+      SpreadsheetApp.flush();  
+
+    } else {
+
+      // SE NAO CONSEGUIR PEGAR O LOCK, LANCA UMA EXCESSAO
+      throw( new Error( "Nao foi possivel pegar o LOCK" ) );
+    }
+
+  } catch( error ) {
+
+    throw( "gerarRelatorioAntigo: " + error.message );
+
+  } finally {
+
+    // SOLTA O LOCK
+    lock.releaseLock();    
+  }   
+
+  console.log( "gerarRelatorioAntigo - Fim" );  
+
+} // Fim da função gerarRelatorioAntigo
 
 
 
@@ -311,6 +497,8 @@ function getRelatorioExel() {
     console.log( "getRelatorioExel - Início" );
     limparRelatorio();  
     gerarRelatorio();    
+    limparRelatorioAntigo();  
+    gerarRelatorioAntigo();        
     console.log( "getRelatorioExel - Fim" );
 
     return `https://docs.google.com/spreadsheets/d/${PLANILHA_RELATORIO_ID}/export?format=xlsx`;
