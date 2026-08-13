@@ -27,6 +27,7 @@
       mostrarModalMensagem( "Registrando novo serviço de referência, por favor aguarde..." );
 
 
+      // Construindo o objeto com o novo serviço de referência que será adicionado
       const obj_relacionamentoServicoCaso = {
         idCaso: id_CasoEmVisualizacao,
         idServicoReferencia: idServicoReferencia,
@@ -39,14 +40,8 @@
       // Chama a função back end para evoluir multiplos casos          
       google.script.run
                    .withSuccessHandler( () => {
-  
-                     // Volta para a tela de resumos de casos                     
-                     //redirecionarParaTelaResumosDosCasos( 1 );      
-                     
 
-                     // Otimização
-
-                     // Adiciona o novo serviço de referência no front
+                     // Adiciona o novo serviço de referência no frontend
                      const dataInformacao = new Date();
 
                      const novoServicoReferencia = {         
@@ -65,8 +60,7 @@
   
                      // Esconde modal de mensagem
                      modalMensagem.hide();      
-                     window.scrollTo(0, 0);                                     
-
+                     window.scrollTo(0, 0);    
   
                    })
                    .withFailureHandler( erro => {
@@ -78,6 +72,30 @@
                    })
                    // Chama a função backend que registra novo serviço de referência ativo para o caso
                    .adicionarServicoReferenciaAtivoParaUmCasoBE( json_relacionamentoServicoCaso );  
+
+/*
+      OTIMIZAÇÃO HARD, MAS PERIGOSA
+
+      // Adiciona o novo serviço de referência no frontend
+      const dataInformacao = new Date();
+
+      const novoServicoReferencia = {         
+        idServico: idServicoReferencia,
+        dataInformacao: dataInformacao.toLocaleString("pt-BR", {dateStyle: "short"}),
+        idResponsavelInformacao: usuarioLogado.id, 
+        emailResponsavelInformacao: usuarioLogado.email
+      }                      
+      
+      cache_CasoEmVisualizacao.servicos_referencia.unshift( novoServicoReferencia );
+      cache_CasoEmVisualizacao.servico_referencia_ativo = novoServicoReferencia;
+
+      // Visualiza novo serviço de referência
+      visualizarServicosReferencia( cache_CasoEmVisualizacao );
+
+      // Esconde modal de mensagem
+      modalMensagem.hide();      
+      window.scrollTo(0, 0);    
+*/
 
     } // Fim do if-else
 
