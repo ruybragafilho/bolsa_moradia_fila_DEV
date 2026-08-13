@@ -196,7 +196,7 @@
           <td class="clicavel align-middle">${item.data_ultima_evolucao}</td>
           <td class="clicavel align-middle">${item.data_limite}</td>   
           
-          <td class="clicavel align-middle">${ idToNomeFE( item.id_situacao_vistoria, "SITUACOES_VISTORIA" ) }</td>`; 
+          <td class="clicavel align-middle">${ determinarSituacaoDoAcesso( item ) }</td>`; 
   
         tr.innerHTML += docPendente;   
 
@@ -272,8 +272,7 @@
 
         } else {
           tr.innerHTML = "";
-        }
-
+        }        
 
         tr.innerHTML +=           
          `<td class="clicavel align-middle">${item.referencia_familiar}</td>
@@ -297,6 +296,89 @@
     document.getElementById('totalizacaoResumosDosCasos_antigos').innerHTML = `TOTAL DE CASOS ANTIGOS ATIVOS: ${numCasosAtivos}`;
 
   } // Fim da função gerarTabelaResumosCasosAntigos    
+
+
+
+  /**
+   * Função que determina a situação do acesso ao benefício, de um determinado caso.
+   *   . Informação pendente 
+   *   . Beneficiário não acompanhado
+   *   . Beneficiário comunicado
+   *   . Beneficiário não comunicado
+   *   . Beneficiário impossibilitado temporariamente de acesso
+   *   . Beneficiário não acessará (casos de Desistência / Óbito)
+   *   . Vistoria solicitada
+   *   . Vistoria aprovada
+   *   . Vistoria reprovada 
+   */
+  function determinarSituacaoDoAcesso( caso )  {
+
+    let situacaoAcesso = "";
+    let idsRespostasQuestionarios = caso.ids_respostas_questionarios;
+
+
+    console.log( "\n" );
+    console.log( "ID Caso: " + caso.id );
+    console.log( "RF Caso: " + caso.referencia_familiar );
+    console.log( "Situação Benefício: " + caso.id_situacao_beneficio );    
+    console.log( "Situação Vistoria: " + caso.id_situacao_vistoria );
+    console.log( "Situação Questionário: " + caso.id_situacao_questionario );
+    console.log( "Q1: " + idsRespostasQuestionarios.q1 );
+    console.log( "Q2: " + idsRespostasQuestionarios.q2 );    
+
+
+    if( caso.id_situacao_beneficio == "1" || caso.id_situacao_beneficio == "4" || caso.id_situacao_beneficio == "6" ) {
+      return "";
+    }
+  
+    // Com movimentação de vistoria
+    if( caso.id_situacao_vistoria  !=  "" ) {
+
+      situacaoAcesso = idToNomeFE( caso.id_situacao_vistoria, "SITUACOES_VISTORIA" );
+
+    // Sem movimentação de vistoria  
+    } else {
+
+      switch( caso.id_situacao_questionario ) {
+                 
+        case "1":  // Sem questionário a responder
+                   situacaoAcesso = "Sem informação";
+                   break;
+
+        case "2":  // Questionário enviado mas não respondido
+                   situacaoAcesso = "Informação Pendente";
+                   break;
+
+        case "3":  // Questionário enviado e respondido
+                   
+                   if( idsRespostasQuestionarios.q1 == "1" ) {
+                     situacaoAcesso = "Beneficiário não acompanhado pelo serviço";
+                   } else {
+
+                     switch(idsRespostasQuestionarios.q2) {
+                       case "1":
+                       case "2":
+                       case "3": situacaoAcesso = "Beneficiário comunicado";
+                                 break;
+                       case "4": situacaoAcesso = "Beneficiário não comunicado";
+                                 break;
+                       case "5": situacaoAcesso = "Beneficiário impossibilitado temporariamente de acesso";
+                                 break;
+                       case "6": situacaoAcesso = "Beneficiário não acessará o benefício";
+                                 break;                      
+                     } // Fim switch-case interno
+
+                   } // Fim if-else
+
+                   break;                                      
+        
+      } // Fim switch-case situação questionário
+
+    } // Fim if-else situação vistoria
+    
+    return situacaoAcesso;
+
+  } // Fim da função determinarSituacaoDoAcesso  
 
 
 
@@ -538,6 +620,7 @@
     }
 
   } // Fim da função exibirCampoDataLimite
+
 
 
 </script>
