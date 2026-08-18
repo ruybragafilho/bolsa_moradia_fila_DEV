@@ -254,9 +254,9 @@ function gerarRelatorio() {
 
                      break;
 
-          default:   bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Sem Informação"; 
-                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = "Sem Informação";                                                                                        
-                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Sem Informação";                                                                                        
+          default:   bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Não se aplica"; 
+                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = "Não se aplica";                                                                                        
+                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";                                                                                        
                      break;
         }                                
         
