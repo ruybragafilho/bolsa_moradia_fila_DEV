@@ -19,6 +19,8 @@
     // Não mostra o botão para adicionar serviço de referência por padrão. 
     // Mostra apenas para técnicas da DPOP        
     document.getElementById("adicionarServicoReferencia").style.display  =  "none";
+    document.getElementById("select_adicionarServicoReferencia").style.display  =  "none";
+    document.getElementById("bt_adicionarServicoReferencia").style.display  =  "none";    
 
     // Não mostra os campos referentes às vistorias por padrão. Mostra apenas para 
     // técnicas da DPOP    
@@ -106,6 +108,8 @@
       // apenas para as técnicas da DPOP
       if( usuarioLogado.instituicao == "0") {      
         document.getElementById("adicionarServicoReferencia").style.display = "";
+        document.getElementById("select_adicionarServicoReferencia").style.display  =  "";
+        document.getElementById("bt_adicionarServicoReferencia").style.display  =  "";        
         visualizarVistoriasCaso( cache_CasoEmVisualizacao );                
       }
 
