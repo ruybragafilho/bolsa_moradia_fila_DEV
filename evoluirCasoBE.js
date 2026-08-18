@@ -91,23 +91,20 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
   
         } else {
           mensagemDataLimite = "";
-        }
-  
-        const emailOrgaoEncaminhador = BUFFER[id-1][EMAIL_ORGAO_ENCAMINHADOR];
+        }  
+
         const cpfRFCaso = (BUFFER[id-1][CPF_RF]).padStart(11, "0");
         const nomeRFCaso = BUFFER[id-1][REFERENCIA_FAMILIAR];
         const evolucaoCaso = idToNome( idEvolucao,  "SITUACOES_BENEFICIO" );
-      
+    
         const idInstituicao = parseInt(BUFFER[id-1][ORGAO_ENCAMINHADOR]);
         const emailInstituicao = BUFFER_ORGAOS_ENCAMINHADORES[idInstituicao-1][EMAIL_INSTITUICAO];
-      
-        const emails = [];
-        if( isEmailValidBE(emailOrgaoEncaminhador) ) { emails.push(emailOrgaoEncaminhador) }
-        if( isEmailValidBE(emailInstituicao) ) { emails.push(emailInstituicao) }
-  
-        console.log( "\nevoluirCasoBE - chamada enviarEmailBE - ANTES" );               
-        enviarEmailBE( emails.join(","), cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );    
-        console.log( "\nevoluirCasoBE - chamada enviarEmailBE - DEPOIS" );       
+            
+        if( isEmailValidBE(emailInstituicao) ) { 
+          enviarEmailBE( emailInstituicao, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );
+        } else {
+          throw( new Error( "alterarDataLimiteBE - E-mail inválido" ) );          
+        }
   
       } // Fim if   
       console.log( "\nevoluirCasoBE - enviar Email" );      
