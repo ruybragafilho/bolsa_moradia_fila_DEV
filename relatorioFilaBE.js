@@ -190,78 +190,94 @@ function gerarRelatorio() {
                                                                       nomeSituacaoQuestionario :
                                                                       "Sem Informação";
 
-        // Situação acompanhamento
-        idsRespostasQuestionarios = caso.ids_respostas_questionarios;
-        
-        idSituacaoAcompanhamento = idsRespostasQuestionarios != "" ?
-                                   idsRespostasQuestionarios.q1 : 
-                                   "";
+        // Se caso NÃO tem questionário a responder                                                                      
+        if( caso.id_situacao_questionario == "1" ) {
 
-        // Switch - ACOMPANHAMENTO DO CASO - (NÃO / SIM)                                   
-        switch( idSituacaoAcompanhamento ) {
-           
-          case "1":  // CASO NÃO ACOMPANHADO
-                     bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "NÃO acompanhado pelo serviço"; 
-
-                     // Justificativa de não acompanhamento
-                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q5 != "" ?
-                                                                             idToNome( idsRespostasQuestionarios.q5, "ACOMPANHAMENTO_NAO" ) :
-                                                                             "Não se aplica"; 
-                     // Sem justificativa 2                                                                             
-                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";                                                                              
-
-                     break;
+          bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Não se aplica"; 
+          bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = "Não se aplica";                                                                                        
+          bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";       
+          bufferRelatorioCaso[RELATORIO_COLUNA_OBSERVACAO] = "Não se aplica";                                                                                            
 
 
-          case "2":  // CASO ACOMPANHADO
-                     bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Acompanhado pelo serviço"; 
+        // Se caso tem questionário a responder            
+        } else {
 
-                     // Switch - ETAPAS DE ACESSO
-                     switch(idsRespostasQuestionarios.q2) {
+          // Situação acompanhamento
+          idsRespostasQuestionarios = caso.ids_respostas_questionarios;
+          
+          idSituacaoAcompanhamento = idsRespostasQuestionarios != "" ?
+                                     idsRespostasQuestionarios.q1 : 
+                                     "";
+  
+          // Switch - ACOMPANHAMENTO DO CASO - (NÃO / SIM)                                   
+          switch( idSituacaoAcompanhamento ) {
+             
+            case "1":  // CASO NÃO ACOMPANHADO
+                       bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "NÃO acompanhado pelo serviço"; 
+  
+                       // Justificativa de não acompanhamento
+                       bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q5 != "" ?
+                                                                               idToNome( idsRespostasQuestionarios.q5, "ACOMPANHAMENTO_NAO" ) :
+                                                                               "Não se aplica"; 
+                       // Sem justificativa 2                                                                             
+                       bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";                                                                              
+  
+                       break;
+  
+  
+            case "2":  // CASO ACOMPANHADO
+                       bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Acompanhado pelo serviço"; 
+  
+                       // Switch - ETAPAS DE ACESSO
+                       switch(idsRespostasQuestionarios.q2) {
+  
+                         case "5":  // O beneficiário está impossibilitado de acessar temporariamente
+                                    bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
+                                                                                            idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
+                                                                                            "Não se aplica" ;
+                                    // Justificativa - não acesso temporário
+                                    bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = idsRespostasQuestionarios.q3 != "" ? 
+                                                                                            idToNome( idsRespostasQuestionarios.q3, "IMPOSSIBILIDADE_TEMPORARIA" ) :
+                                                                                            "Não se aplica" ;
+  
+                                    break;
+  
+                         case "6":  // O beneficiário não acessará o benefício de forma definitiva
+                                    bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
+                                                                                            idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
+                                                                                            "Não se aplica" ;
+                                    // Justificativa - não acesso definitivo
+                                    bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = idsRespostasQuestionarios.q4 != "" ? 
+                                                                                            idToNome( idsRespostasQuestionarios.q4, "NAO_ACESSO_DEFINITIVO" ) :
+                                                                                            "Não se aplica" ;
+  
+                                    break;                                 
+  
+                         default:   // Opções de 1 à 4 - sem justificativas
+                                    bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
+                                                                                            idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
+                                                                                            "Não se aplica" ;  
+  
+                                    bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";                                                                                 
+  
+                                    break;                                 
+  
+                       }  
+  
+                       break;
+  
+            default:   bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Sem Informação"; 
+                       bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = "Sem Informação";                                                                                        
+                       bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Sem Informação";                                                                                        
+                       break;
 
-                       case "5":  // O beneficiário está impossibilitado de acessar temporariamente
-                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
-                                                                                          idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
-                                                                                          "Não se aplica" ;
-                                  // Justificativa - não acesso temporário
-                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = idsRespostasQuestionarios.q3 != "" ? 
-                                                                                          idToNome( idsRespostasQuestionarios.q3, "IMPOSSIBILIDADE_TEMPORARIA" ) :
-                                                                                          "Não se aplica" ;
+          } // Fim switch-case idSituacaoAcompanhamento                               
+          
+          // Obsercvações caso
+          bufferRelatorioCaso[RELATORIO_COLUNA_OBSERVACAO] = idsRespostasQuestionarios.observacoes;           
 
-                                  break;
+        } // Fim if caso.id_situacao_questionario
 
-                       case "6":  // O beneficiário não acessará o benefício de forma definitiva
-                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
-                                                                                          idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
-                                                                                          "Não se aplica" ;
-                                  // Justificativa - não acesso definitivo
-                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = idsRespostasQuestionarios.q4 != "" ? 
-                                                                                          idToNome( idsRespostasQuestionarios.q4, "NAO_ACESSO_DEFINITIVO" ) :
-                                                                                          "Não se aplica" ;
-
-                                  break;                                 
-
-                       default:   // Opções de 1 à 4 - sem justificativas
-                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = idsRespostasQuestionarios.q2 != "" ? 
-                                                                                          idToNome( idsRespostasQuestionarios.q2, "ETAPA_ACESSO" ) :
-                                                                                          "Não se aplica" ;  
-
-                                  bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";                                                                                 
-
-                                  break;                                 
-
-                     }  
-
-                     break;
-
-          default:   bufferRelatorioCaso[RELATORIO_COLUNA_SITUACAO_ACOMPANHAMENTO] = "Não se aplica"; 
-                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_1] = "Não se aplica";                                                                                        
-                     bufferRelatorioCaso[RELATORIO_COLUNA_JUSTIFICATIVA_2] = "Não se aplica";                                                                                        
-                     break;
-        }                                
-        
-        // Obsercvações caso
-        bufferRelatorioCaso[RELATORIO_COLUNA_OBSERVACAO] = idsRespostasQuestionarios.observacoes; 
 
         // Acrescenta 1 caso ao buffer relatórios
         bufferRelatorios.push( bufferRelatorioCaso );        
