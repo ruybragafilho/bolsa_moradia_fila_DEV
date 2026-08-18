@@ -416,7 +416,8 @@ function obterFila() {
  
       id_orgao_encaminhador: caso[ORGAO_ENCAMINHADOR],
       
-      email_orgao_encaminhador: caso[EMAIL_ORGAO_ENCAMINHADOR],
+      //email_orgao_encaminhador: caso[EMAIL_ORGAO_ENCAMINHADOR],
+      email_orgao_encaminhador: BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(caso[ORGAO_ENCAMINHADOR]) - 1 ][EMAIL_INSTITUICAO],      
 
       data_encaminhamento: dataEncaminhamentoFormatada,
 
@@ -625,7 +626,7 @@ function obterFilaCasosAntigos() {
  
       id_orgao_encaminhador: caso[ORGAO_ENCAMINHADOR],
       
-      email_orgao_encaminhador: caso[EMAIL_ORGAO_ENCAMINHADOR],
+      email_orgao_encaminhador: BUFFER_ORGAOS_ENCAMINHADORES[ parseInt(caso[ORGAO_ENCAMINHADOR]) - 1 ][EMAIL_INSTITUICAO],      
 
       data_encaminhamento: "",
 
