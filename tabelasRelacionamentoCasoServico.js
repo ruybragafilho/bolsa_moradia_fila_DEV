@@ -79,7 +79,6 @@ function obterServicosReferenciaDoCaso( idCaso ) {
   let id;
   let BUFFER_INDICE;
   let BUFFER_RELACIONAMENTO;
-  let TAMANHO_RELACIONAMENTO;
   let ID_MAXIMO;      
   
 

@@ -103,7 +103,7 @@ function evoluirCasoBE( idCaso, idEvolucao, dataLimite ) {
         if( isEmailValidBE(emailInstituicao) ) { 
           enviarEmailBE( emailInstituicao, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );
         } else {
-          throw( new Error( "alterarDataLimiteBE - E-mail inválido" ) );          
+          throw( new Error( "evoluirCasoBE - E-mail inválido" ) );
         }
   
       } // Fim if   
