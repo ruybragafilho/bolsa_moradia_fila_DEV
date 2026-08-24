@@ -24,9 +24,17 @@
     // Chama a função back end para alterar a data limite do caso
     google.script.run
                  .withSuccessHandler( () => {
+                       
+                   // Adiciona a nova data limite no frontend
+                   cache_CasoEmVisualizacao.data_limite = dataLimite;  
+                   cache_CasoEmVisualizacao.justificativa_alteracao_data_limite = justificativa;
+
+                   // Visualiza nova data limite
+                   visualizarDataLimite( cache_CasoEmVisualizacao );
   
-                   // Volta para a tela de resumos de casos                     
-                   redirecionarParaTelaResumosDosCasos( 1 );                     
+                   // Esconde modal de mensagem
+                   modalMensagem.hide();      
+                   window.scrollTo(0, 0);    
   
                  })
                  .withFailureHandler( erro => {
