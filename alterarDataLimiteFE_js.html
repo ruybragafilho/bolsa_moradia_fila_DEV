@@ -23,20 +23,12 @@
 
     // Chama a função back end para alterar a data limite do caso
     google.script.run
-                 .withSuccessHandler( () => {
+                 .withSuccessHandler( (retorno) => {
+
+                   console.log(`Retorno: ${retorno}` );
                        
                    // Adiciona a nova data limite no frontend
-                   const auxDataLimite = new Date( dataLimite );
-                   const BRDataLimite = auxDataLimite.toLocaleString("pt-BR", {dateStyle: "short"});  
-                   const tokensDataLimite = BRDataLimite.split("/");
-                   const dataLimiteFormatada = `${tokensDataLimite[2]}-${tokensDataLimite[1]}-${tokensDataLimite[0]}`;
-
-                   console.log(auxDataLimite);
-                   console.log(BRDataLimite);
-                   console.log(tokensDataLimite.toString());
-                   console.log(dataLimiteFormatada);
-
-                   cache_CasoEmVisualizacao.data_limite = dataLimiteFormatada;
+                   cache_CasoEmVisualizacao.data_limite = dataLimite;
                    cache_CasoEmVisualizacao.justificativa_alteracao_data_limite = justificativa;
 
                    // Visualiza nova data limite

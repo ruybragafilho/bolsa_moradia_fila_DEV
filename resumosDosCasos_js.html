@@ -316,17 +316,6 @@
     let situacaoAcesso = "";
     let idsRespostasQuestionarios = caso.ids_respostas_questionarios;
 
-
-    console.log( "\n" );
-    console.log( "ID Caso: " + caso.id );
-    console.log( "RF Caso: " + caso.referencia_familiar );
-    console.log( "Situação Benefício: " + caso.id_situacao_beneficio );    
-    console.log( "Situação Vistoria: " + caso.id_situacao_vistoria );
-    console.log( "Situação Questionário: " + caso.id_situacao_questionario );
-    console.log( "Q1: " + idsRespostasQuestionarios.q1 );
-    console.log( "Q2: " + idsRespostasQuestionarios.q2 );    
-
-
     if( caso.id_situacao_beneficio == "1" || caso.id_situacao_beneficio == "4" || caso.id_situacao_beneficio == "6" ) {
       return "";
     }

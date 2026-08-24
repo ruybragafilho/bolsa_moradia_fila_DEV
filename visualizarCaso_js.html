@@ -139,8 +139,12 @@
 
     // Exibe a data limite
     if(caso.data_limite != "") {
-      let data = caso.data_limite.split("/");
-      dataLimite.value = `${data[2]}-${data[1]}-${data[0]}`;
+      if( caso.data_limite.toString().includes("/") ) {
+        let data = caso.data_limite.split("/");
+        dataLimite.value = `${data[2]}-${data[1]}-${data[0]}`;
+      } else {
+        dataLimite.value = caso.data_limite; 
+      }
     }
     
     // Exibe a justificativa para alteração da data limite
