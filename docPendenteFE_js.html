@@ -16,8 +16,18 @@
     google.script.run
                  .withSuccessHandler( () => {
 
-                   // Volta para a tela de resumos de casos                   
-                   redirecionarParaTelaResumosDosCasos( 1 );                   
+                   // Localiza o caso de id id_CasoEmVisualizacao no array de casos 
+                   // e aponta a referência cache_CasoEmVisualizacao para ele
+                   id_CasoEmVisualizacao = idCaso;
+                   localizarCaso();
+
+                   // Atualiza o status do docPendente do caso no frontend
+                   cache_CasoEmVisualizacao.id_doc_pendente = (cache_CasoEmVisualizacao.id_doc_pendente == "2") ? "1" : "2"; 
+                   
+                   // Esconde modal de mensagem
+                   modalMensagem.hide();                         
+
+                   //redirecionarParaTelaResumosDosCasos( 1 );                   
 
                  })
                  .withFailureHandler( erro => {

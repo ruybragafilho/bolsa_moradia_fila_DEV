@@ -32,12 +32,16 @@
   } // Fim da função configurarPaginaVisualizarCaso
 
 
-
   /**
-   * Função chamada quando o usuário clica em um caso, na tela de resumos dos casos
+   * Função Localiza o caso de id id_CasoEmVisualizacao no array de casos 
+   * e aponta a referência cache_CasoEmVisualizacao para ele
+   * 
+   * Observe que o array de casos não está ordenado pelo ID.
+   * Ele está ordenado pela pontuação do caso.   * 
    */    
-  function visualizarCaso() {
+  function localizarCaso() {
 
+    // Determina se é um caso novo ou caso antigo
     const flagCasoAntigo = id_CasoEmVisualizacao.includes("old_");
 
     let tabela = flagCasoAntigo ?
@@ -53,7 +57,23 @@
         cache_CasoEmVisualizacao = tabela[ indiceCasoNaTabelaResumo ];
         break;
       }
-    }    
+    }        
+    
+  } // Fim da função localizarCaso
+
+
+
+  /**
+   * Função chamada quando o usuário clica em um caso, na tela de resumos dos casos
+   */    
+  function visualizarCaso() {
+
+    // Localiza o caso de id id_CasoEmVisualizacao no array de casos 
+    // e aponta a referência cache_CasoEmVisualizacao para ele
+    localizarCaso();
+
+    // Determina se é um caso novo ou caso antigo
+    const flagCasoAntigo = id_CasoEmVisualizacao.includes("old_");
 
     // Mostra os parâmetros do caso apenas para os trabalhadores
     // do órgão que encaminhou o cidadão
