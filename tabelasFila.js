@@ -10,7 +10,7 @@
 /**
  * Planilha FILA
  */
-const PLANILHA_FILA_ID        =  "1ByVMN2V9bk_yQTPu1TFXz4KuobKO59-aOEY7JZAUYg0";
+const PLANILHA_FILA_ID        =  PropertiesService.getScriptProperties().getProperty('PLANILHA_FILA_ID');
 const PLANILHA_FILA           =  SpreadsheetApp.openById(PLANILHA_FILA_ID);
 const TABELA_FILA             =  PLANILHA_FILA.getSheetByName('FILA');
 let BUFFER_FILA               =  TABELA_FILA.getDataRange().getDisplayValues().splice(1);
@@ -26,7 +26,7 @@ function refreshBufferFila() {
 /**
  * Planilha FILA CASOS ANTIGOS
  */
-const PLANILHA_FILA_CASOS_ANTIGOS_ID        =  "1pJRLfcg4ZObSJRO3TGODL3S6ZM3nr9Z47LmSJY8yGGI";
+const PLANILHA_FILA_CASOS_ANTIGOS_ID        =  PropertiesService.getScriptProperties().getProperty('PLANILHA_FILA_CASOS_ANTIGOS_ID');
 const PLANILHA_FILA_CASOS_ANTIGOS           =  SpreadsheetApp.openById(PLANILHA_FILA_CASOS_ANTIGOS_ID);
 const TABELA_FILA_CASOS_ANTIGOS             =  PLANILHA_FILA_CASOS_ANTIGOS.getSheetByName('FILA_CASOS_ANTIGOS');
 let BUFFER_FILA_CASOS_ANTIGOS               =  TABELA_FILA_CASOS_ANTIGOS.getDataRange().getDisplayValues().splice(1);

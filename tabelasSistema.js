@@ -10,7 +10,7 @@
 /**
  * Planilha USUARIOS
  */
-const PLANILHA_USUARIOS_ID        =  "1z1kH-MuamSlaQ_iKuwbEaSyDbULmku_jxkEK8CdNLzg";
+const PLANILHA_USUARIOS_ID        =  PropertiesService.getScriptProperties().getProperty('PLANILHA_USUARIOS_ID');
 const PLANILHA_USUARIOS           =  SpreadsheetApp.openById(PLANILHA_USUARIOS_ID);
 const TABELA_USUARIOS             =  PLANILHA_USUARIOS.getSheetByName('USUARIOS');
 const BUFFER_USUARIOS             =  TABELA_USUARIOS.getDataRange().getDisplayValues().splice(1);
@@ -21,7 +21,7 @@ const NUM_USUARIOS                =  BUFFER_USUARIOS.length;
 /**
  * Planilha CODIGOS contendo as tabelas 
  */
-const PLANILHA_CODIGOS_ID  =  "1eba9uB4QpIpLI7HJQWxJeUuR_pIG3bxI07deoirgN7k";
+const PLANILHA_CODIGOS_ID  =  PropertiesService.getScriptProperties().getProperty('PLANILHA_CODIGOS_ID');
 const PLANILHA_CODIGOS     =  SpreadsheetApp.openById(PLANILHA_CODIGOS_ID);
 
 const TABELA_RESPOSTAS_SIMPLES      =  PLANILHA_CODIGOS.getSheetByName('RESPOSTAS_SIMPLES');

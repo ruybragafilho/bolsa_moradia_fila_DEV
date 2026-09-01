@@ -9,7 +9,7 @@
 /**
  * Planilha VISTORIAS
  */
-const PLANILHA_VISTORIAS_ID  =  "1x7Gv0urjULRPa4T0xf64EKmWVLfv2VY9LkPs5S_zQ5U";
+const PLANILHA_VISTORIAS_ID  =  PropertiesService.getScriptProperties().getProperty('PLANILHA_VISTORIAS_ID');
 const PLANILHA_VISTORIAS     =  SpreadsheetApp.openById(PLANILHA_VISTORIAS_ID);
 const TABELA_VISTORIAS       =  PLANILHA_VISTORIAS.getSheetByName('VISTORIAS');
 const BUFFER_VISTORIAS       =  TABELA_VISTORIAS.getDataRange().getDisplayValues().splice(1);

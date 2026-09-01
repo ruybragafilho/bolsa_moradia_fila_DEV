@@ -1,7 +1,7 @@
 /**
  * Planilha RELATORIO
  */
-const PLANILHA_RELATORIO_ID     =  "16OlzDZ0aI4lYav7_NS54859a_NP4HiO1l7pI4SU0yF4";
+const PLANILHA_RELATORIO_ID     =  PropertiesService.getScriptProperties().getProperty('PLANILHA_RELATORIO_ID');
 const PLANILHA_RELATORIO        =  SpreadsheetApp.openById(PLANILHA_RELATORIO_ID);
 
 const TABELA_RELATORIO          =  PLANILHA_RELATORIO.getSheetByName('HABILITADOS_2026');
