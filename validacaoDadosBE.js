@@ -1,3 +1,5 @@
+"use strict";  
+
 /**
  * Módulo:    validacaoDadosBE.gs
  * Objetivo:  Módulo com funções que verificam a validade dos dados
