@@ -18,9 +18,6 @@
 
       // Esconde o campo evolução dos trabalhadores da ponta e gestores externos
       document.getElementById("evolucao").style.display = "none";         
-
-
-
 /**
       // Esconde os gráficos, apenas para trabalhadores da ponta
       if(usuarioLogado.instituicao != "-1") {
@@ -505,12 +502,9 @@
     gerarTabelaResumosCasos( casosPesquisados );
     gerarTabelaResumosCasosAntigos( casosAntigosPesquisados );
 
-    // Gera os gráficos quantitativos
-    gerarGraficoQuantitativoSituacaoBeneficio();
-    gerarGraficoQuantitativoSituacaoVistoria();
-    gerarGraficoQuantitativoPerfisGenero();
-    gerarGraficoQuantitativoPerfisOrientacaoSexual();
-    gerarGraficoQuantitativoPerfis();
+    // Gera os gráficos
+    contabilizarDados();
+    gerarGraficos();
 
   } // Fim da função filtrar
 

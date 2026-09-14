@@ -63,12 +63,9 @@
                               gerarTabelaResumosCasos(cache_TabelaCasos);   
                               gerarTabelaResumosCasosAntigos( cache_TabelaCasosAntigos );
                               
-                              // Gera os gráficos quantitativos
-                              gerarGraficoQuantitativoSituacaoBeneficio();
-                              gerarGraficoQuantitativoSituacaoVistoria();
-                              gerarGraficoQuantitativoPerfisGenero();
-                              gerarGraficoQuantitativoPerfisOrientacaoSexual();
-                              gerarGraficoQuantitativoPerfis();
+                              // Gera os gráficos
+                              contabilizarDados();
+                              gerarGraficos();
 
                               // Mostra o modal de questionários pendentes                              
                               mostrarModalQuestionariosPendentes();

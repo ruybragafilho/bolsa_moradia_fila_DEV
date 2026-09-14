@@ -126,12 +126,12 @@
 
       // Mostra o botão para adicionar serviço de referência e as vistorias do caso
       // apenas para as técnicas da DPOP
-      if( usuarioLogado.instituicao == "0") {      
-        document.getElementById("adicionarServicoReferencia").style.display = "";
-        document.getElementById("select_adicionarServicoReferencia").style.display  =  "";
-        document.getElementById("bt_adicionarServicoReferencia").style.display  =  "";        
-        visualizarVistoriasCaso( cache_CasoEmVisualizacao );                
-      }
+      // if( usuarioLogado.instituicao == "0") {      
+      document.getElementById("adicionarServicoReferencia").style.display = "";
+      document.getElementById("select_adicionarServicoReferencia").style.display  =  "";
+      document.getElementById("bt_adicionarServicoReferencia").style.display  =  "";        
+      visualizarVistoriasCaso( cache_CasoEmVisualizacao );                
+      // }
 
     } else {
       // Exibe modal de erro caso o usuário tente acessar um caso que não pertence à sua instituição
