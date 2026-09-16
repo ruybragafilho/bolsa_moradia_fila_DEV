@@ -122,7 +122,7 @@ function alterarDataLimiteBE( idCaso, dataLimite, justificativa ) {
         const emailInstituicao = BUFFER_ORGAOS_ENCAMINHADORES[idInstituicao-1][EMAIL_INSTITUICAO];
             
         if( isEmailValidBE(emailInstituicao) ) { 
-          enviarEmailBE( emailInstituicao, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );
+          enviarEmailEvolucaoBE( emailInstituicao, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );
         } else {
           throw( new Error( "alterarDataLimiteBE - E-mail inválido" ) );          
         }

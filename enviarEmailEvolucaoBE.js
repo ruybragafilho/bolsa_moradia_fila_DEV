@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * Módulo:    enviarEmailBE.gs
+ * Módulo:    enviarEmailEvolucaoBE.gs
  * Objetivo:  Envia um email para o endereço de e-mail informado
  */
 
@@ -16,7 +16,7 @@
  * @param {String} mensagemDataLimite: mensagemDataLimite Mensagem sobre a data limite  
  * 
  */
-function enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite ) {
+function enviarEmailEvolucaoBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite ) {
 
   console.log("enderecoEmail: " + enderecoEmail);
   console.log("cpfRFCaso: " + cpfRFCaso);
@@ -56,7 +56,7 @@ Telefone: (31) 3277-6373 / 3277-9994 | pbh.gov.br      <br><br> `
 
   }
 
-} // Fim da função enviarEmailBE
+} // Fim da função enviarEmailEvolucaoBE
 
 
 
@@ -75,7 +75,7 @@ function teste_enviarEmail() {
   let evolucaoCaso = "evolução";
   let mensagemDataLimite = "";
   
-  enviarEmailBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );
+  enviarEmailEvolucaoBE( enderecoEmail, cpfRFCaso, nomeRFCaso, evolucaoCaso, mensagemDataLimite );
  
 }
 
@@ -90,5 +90,5 @@ function limiteEmailDisponivel() {
 
 
 /**
- * ##### FIM DO MÓDULO enviarEmailBE.gs #####
+ * ##### FIM DO MÓDULO enviarEmailEvolucaoBE.gs #####
  */
