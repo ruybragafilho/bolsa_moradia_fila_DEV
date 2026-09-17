@@ -150,9 +150,8 @@ function obterServicoReferenciaAtivo( servicosReferencia ) {
 
 
 /**
- * Função que obtém o serviço de referência ativo associado a um caso específico.
- * @param {String} servicosReferencia 
- * @returns Serviço de referência ativo do caso
+ * Função que adiciona um novo serviço de referência para um caso.
+ * @param {String} servicosReferencia  
  */
 function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso ) {
 
@@ -169,6 +168,8 @@ function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso 
   let BUFFER_INDICE;
   let TABELA_RELACIONAMENTO;
   let TAMANHO_RELACIONAMENTO;
+  
+  let FILA;
   let ID_MAXIMO;      
   
 
@@ -181,6 +182,8 @@ function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso 
     BUFFER_INDICE = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO;    
     TABELA_RELACIONAMENTO = TABELA_RELACIONAMENTO_CASO_SERVICO;
     TAMANHO_RELACIONAMENTO = TAMANHO_RELACIONAMENTO_CASO_SERVICO;
+
+    FILA = BUFFER_FILA;
     ID_MAXIMO = TAMANHO_FILA;
   
     // CASO ANTIGO  
@@ -192,6 +195,8 @@ function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso 
     BUFFER_INDICE = BUFFER_INDICE_INVERTIDO_RELACIONAMENTO_ANTIGO;    
     TABELA_RELACIONAMENTO = TABELA_RELACIONAMENTO_CASO_ANTIGO_SERVICO;
     TAMANHO_RELACIONAMENTO = TAMANHO_RELACIONAMENTO_CASO_ANTIGO_SERVICO;
+
+    FILA = BUFFER_FILA_CASOS_ANTIGOS;
     ID_MAXIMO = TAMANHO_FILA_CASOS_ANTIGOS;
   
   }  
@@ -220,8 +225,8 @@ function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso 
     throw( new Error( "Usuário sem permissão para registrar nova entidade de referência para o caso" ) );
   } */ 
 
+  // Registrar novo serviço de referência para o caso
   try {
-
 
     // Gera o novo id do relacionamento
     // Gera da data da informação == data de hoje
@@ -234,7 +239,6 @@ function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso 
                                  dataInformacao.toLocaleString("pt-BR", {dateStyle: "short"}), 
                                  idResponsavelInformacao ];
     TABELA_RELACIONAMENTO.appendRow( novoRelacionamento );
-
   
 
     // Gera e grava a nova linha na tabela de índice invertido
@@ -247,9 +251,41 @@ function adicionarServicoReferenciaAtivoParaUmCasoBE( relacionamentoServicoCaso 
     const campo_IndicesRelacionamentos = TABELA_INDICE.getRange( id+1, IDS_RELACIONAMENTOS+1 );
     campo_IndicesRelacionamentos.setValue( indicesServicosReferencia.join(";") );                                          
 
+
   } catch( error ) {
     throw( "adicionarServicoReferenciaAtivoParaUmCaso - E - " + error.message );
-  }                              
+  }        
+
+  // Envia o email de notificação da alteração do serviço de referência ativo do caso
+  try {
+
+    // Obtém os que serão usados no email de notificação
+    const cpfRFCaso = FILA[id-1][CPF_RF];
+    const nomeRFCaso = FILA[id-1][REFERENCIA_FAMILIAR];
+
+    const servicosReferencia = obterServicosReferenciaDoCaso( idCaso );
+
+    const idServicoAnterior = parseInt( servicosReferencia[0].idServico );
+    const nomeServicoAnterior = BUFFER_ORGAOS_ENCAMINHADORES[idServicoAnterior-1][NOME];
+    const emailServicoAnterior = BUFFER_ORGAOS_ENCAMINHADORES[idServicoAnterior-1][EMAIL_INSTITUICAO];
+    
+    const idServicoNovo = parseInt( idServicoReferencia );
+    const nomeServicoNovo = BUFFER_ORGAOS_ENCAMINHADORES[idServicoNovo-1][NOME];
+    const emailServicoNovo = BUFFER_ORGAOS_ENCAMINHADORES[idServicoNovo-1][EMAIL_INSTITUICAO];
+
+
+    // Envia o email de notificação
+    const enderecoEmail = [ emailServicoAnterior, emailServicoNovo ].join(",");
+    enviarEmailAlteracaoServicoBE( enderecoEmail, 
+                                   cpfRFCaso, 
+                                   nomeRFCaso, 
+                                   nomeServicoAnterior, 
+                                   nomeServicoNovo );
+    
+
+  } catch( error ) {
+    throw( "adicionarServicoReferenciaAtivoParaUmCaso - E - " + error.message );
+  }
 
 } // Fim da função adicionarServicoReferenciaAtivoParaUmCasoBE
 
