@@ -13,23 +13,38 @@
     let cabecalhoTabela_casosAntigos = document.getElementById("titulosResumosDosCasos_antigos");
 
 
-    // Configura a página para trabalhadores da ponta e gestores externos
-    if( usuarioLogado.instituicao != "0" ) {           
+    // Mostra gráficos e relatórios apenas para root, DPOP e gestores internos
+    if( usuarioLogado.tipo == "0"  ||  // root
+        usuarioLogado.tipo == "1"  ||  // dpop
+        usuarioLogado.tipo == "2" ) {  // gestores internos
 
-      // Esconde o campo evolução dos trabalhadores da ponta e gestores externos
-      document.getElementById("evolucao").style.display = "none";         
-/**
-      // Esconde os gráficos, apenas para trabalhadores da ponta
-      if(usuarioLogado.instituicao != "-1") {
-        document.getElementById("graficos").style.display = "none"; 
-        document.getElementById("gerarRelatorio").style.display = "none";     
-      }
-*/
-    // Configura a página para trabalhador da DPOP 
+      document.getElementById("graficos").style.display       = ""; 
+      document.getElementById("gerarRelatorio").style.display = "";     
+
+
+      // Mostra recurso de evolução do caso
+      // Mostra os check boxes de seleção de caso para evolução
+      // apenas para root e DPOP
+      if( usuarioLogado.tipo != "2" ) {  
+  
+        document.getElementById("evolucao").style.display = "";      
+  
+        cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;      
+        cabecalhoTabela_casosAntigos.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela_casosAntigos.innerHTML;            
+  
+      } else {
+  
+        document.getElementById("evolucao").style.display = "none";      
+
+      } // Fim if-else evolução e checkbox
+
+
     } else {
-      cabecalhoTabela.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela.innerHTML;      
-      cabecalhoTabela_casosAntigos.innerHTML = `<th scope="col" class="align-middle">SELECIONAR</th>` + cabecalhoTabela_casosAntigos.innerHTML;      
-    }
+      
+      document.getElementById("graficos").style.display       = "none"; 
+      document.getElementById("gerarRelatorio").style.display = "none";           
+
+    } // Fim if-else gráficos e relatórios
 
 
     // Esconde o campo data limite, que só deve ser exibido para evolução
@@ -142,8 +157,10 @@
 
       if( item.posicaoNaFila != 0 ) ++numCasosAtivos;
 
-      // Testa se o item não está inativo ou se o usuário é da DPOP
-      if( item.id_situacao_beneficio != "1" || usuarioLogado.instituicao == "0" ) {
+      // Testa se o item NÃO está inativo ou se o usuário é da DPOP ou root
+      if( item.id_situacao_beneficio != "1" ||  // caso ativo
+          usuarioLogado.tipo == "1"         ||  // DPOP
+          usuarioLogado.tipo == "0" ) {         // root
 
         // Cria uma linha da tabela
         const tr = document.createElement('tr');
@@ -151,38 +168,41 @@
         // Seta o id da linha com o id do caso
         tr.id = item.id;
   
-        // Gera a informação sobre o status da documentação pendente.
-        // Para gestores da DPOP, mostra checkbox para alterar o status.
-        // Para trabalhadores da ponta, mostra apenas a informação ( Sim / Não ).
+
+        // Para gestores da DPOP e root
+        //   Mostra checkbox para alterar o status da documentação pendente;
+        //   Insere a célula contendo o checkbox de seleção para evolução múltipla;
+        //
+        // Para outros
+        //   Mostra apenas a informação ( Sim / Não ) sobre o status da documentação pendente.
+        //   NÃO insere a célula contendo o checkbox de seleção para evolução múltipla;
         let docPendente;      
                 
-        if( usuarioLogado.instituicao == "0" ) {
+        if( usuarioLogado.tipo == "1" ||   // DPOP
+            usuarioLogado.tipo == "0" ) {  // root
           
+
           let statusCheck = item.id_doc_pendente == "2" ? "checked" : "";
           let check = `<input class="check-docPendente form-check-input border border-secondary rounded-1 me-1" type="checkbox" ${statusCheck}>`;
           docPendente = `<td class="clicavel align-middle">${check}</td>` ;
+
+
+          tr.innerHTML =           
+           `<td class="align-middle">
+              <input class="form-check-input border border-secondary rounded-1 me-1" type="checkbox" name="checkbox_evolucao_multipla" value="${item.id}">
+            </td>`;                    
+
                                                                
         } else {
   
           let statusColor = item.id_doc_pendente == "2" ? "text-danger" : "text-primary";        
-          docPendente = `<td class="clicavel align-middle ${statusColor}">${ idToNomeFE( item.id_doc_pendente, "RESPOSTAS_SIMPLES" ) }</td>`;        
+          docPendente = `<td class="clicavel align-middle ${statusColor}">${ idToNomeFE( item.id_doc_pendente, "RESPOSTAS_SIMPLES" ) }</td>`;     
+          
+          tr.innerHTML = "";
         }           
 
         
-        // insere a célula contendo o checkbox de seleção para evolução múltipla
-        // se o trabalhador logado for um trabalhador da DPOP
-        if( usuarioLogado.instituicao == "0" ) {      
- 
-          tr.innerHTML =           
-           `<td class="align-middle">
-              <input class="form-check-input border border-secondary rounded-1 me-1" type="checkbox" name="checkbox_evolucao_multipla" value="${item.id}">
-            </td>`;          
-
-        } else {
-          tr.innerHTML = "";
-        }
-
-
+        // Insere as colunas visíveis a todos os trabalhadores
         tr.innerHTML +=           
          `<td class="clicavel align-middle">${item.posicaoNaFila}</td>
           <td class="clicavel align-middle">${item.referencia_familiar}</td>
@@ -248,8 +268,10 @@
 
       ++numCasosAtivos;
 
-      // Testa se o item não está inativo ou se o usuário é da DPOP
-      if( item.id_situacao_beneficio != "1" || usuarioLogado.instituicao == "0" ) {
+      // Testa se o item NÃO está inativo ou se o usuário é da DPOP ou root
+      if( item.id_situacao_beneficio != "1" ||  // caso ativo
+          usuarioLogado.tipo == "1"         ||  // DPOP
+          usuarioLogado.tipo == "0" ) {         // root
 
         // Cria uma linha da tabela
         const tr = document.createElement('tr');
@@ -259,8 +281,9 @@
   
         
         // insere a célula contendo o checkbox de seleção para evolução múltipla
-        // se o trabalhador logado for um trabalhador da DPOP
-        if( usuarioLogado.instituicao == "0" ) {      
+        // se o trabalhador logado for um trabalhador da DPOP ou root
+        if( usuarioLogado.tipo == "1"  ||  // DPOP
+            usuarioLogado.tipo == "0" ) {  // root    
  
           tr.innerHTML =           
            `<td class="align-middle">
@@ -502,9 +525,14 @@
     gerarTabelaResumosCasos( casosPesquisados );
     gerarTabelaResumosCasosAntigos( casosAntigosPesquisados );
 
-    // Gera os gráficos
-    contabilizarDados();
-    gerarGraficos();
+    // Gera gráficos e relatórios apenas para root, DPOP e gestores internos
+    if( usuarioLogado.tipo == "0"  ||  // root
+        usuarioLogado.tipo == "1"  ||  // dpop
+        usuarioLogado.tipo == "2" ) {  // gestores internos    
+
+      contabilizarDados();
+      gerarGraficos();
+    }
 
   } // Fim da função filtrar
 

@@ -87,7 +87,9 @@
       case "2": // Questionário Pendente
         questionarioStatus.innerHTML = "Questionário Pendente";
         questionarioStatus.style.color = "red";
-        document.getElementById("btResponserQuestionario").style.display  =  "";   
+        document.getElementById("btResponserQuestionario").style.display  =  (cache_CasoEmVisualizacao.id_orgao_encaminhador == usuarioLogado.instituicao) ?
+                                                                             "" :
+                                                                             "none";
         document.getElementById("questionario_conteudo").style.display    =  "none";                     
         break;
       case "3": // Questionário Respondido
