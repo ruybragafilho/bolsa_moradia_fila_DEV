@@ -38,7 +38,7 @@ informamos que houve alteração no status do benefício de <b>${nomeRFCaso}</b>
 
 ${mensagemDataLimite}<br>
 
-Qualquer dúvida, procure a equipe da DPOP.<br><br>
+Qualquer dúvida, procure a equipe da DPOP.<br><br><br>
 
 Equipe Bolsa Moradia | Diretoria de Políticas para População em Situação de Rua, Migrantes e Refugiados | DPOP<br>
 Secretaria Municipal de Assistência Social e Direitos Humanos | SMASDH<br>
@@ -51,8 +51,8 @@ Telefone: (31) 3277-6373 / 3277-9994 | pbh.gov.br      <br><br> `
   
   } catch( error ) {
 
-    console.log( "enviarEmailBE - " + error.message );    
-    throw( "enviarEmailBE - " + error.message );
+    console.log( "enviarEmailEvolucaoBE - " + error.message );    
+    throw( "enviarEmailEvolucaoBE - " + error.message );
 
   }
 
@@ -67,7 +67,7 @@ Telefone: (31) 3277-6373 / 3277-9994 | pbh.gov.br      <br><br> `
 /**
  * Função para testar a função enviarEmail
  */
-function teste_enviarEmail() {
+function teste_enviarEmailEvolucao() {
   
   let enderecoEmail = "sigps@pbh.gov.br";
   let cpfRFCaso = "111.222.333-44";
