@@ -12,18 +12,15 @@
    */
   function configurarPaginaVisualizarCaso() {
 
-    // Não mostra os campos referentes à data limite por padrão. Mostra apenas para 
-    // situação == Convocado para Acesso E para técnicas da DPOP
+    // Não mostra os campos referentes à data limite por padrão. 
     document.getElementById("data_limite_edicao").style.display   =  "none";
 
-    // Não mostra o botão para adicionar serviço de referência por padrão. 
-    // Mostra apenas para técnicas da DPOP        
+    // Não mostra o botão para adicionar serviço de referência por padrão.     
     document.getElementById("adicionarServicoReferencia").style.display  =  "none";
     document.getElementById("select_adicionarServicoReferencia").style.display  =  "none";
     document.getElementById("bt_adicionarServicoReferencia").style.display  =  "none";    
 
-    // Não mostra os campos referentes às vistorias por padrão. Mostra apenas para 
-    // técnicas da DPOP    
+    // Não mostra os campos referentes às vistorias por padrão. 
     document.getElementById("headerVistoriasDoCaso").style.display  =  "none";
     document.getElementById("vistoriasDoCaso").style.display        =  "none";    
     document.getElementById("vistoria_traco_inicio").style.display  =  "none";   
@@ -75,10 +72,15 @@
     // Determina se é um caso novo ou caso antigo
     const flagCasoAntigo = id_CasoEmVisualizacao.includes("old_");
 
-    // Mostra os parâmetros do caso apenas para os trabalhadores
-    // do órgão que encaminhou o cidadão
-    if( cache_CasoEmVisualizacao.id_orgao_encaminhador == usuarioLogado.instituicao ||
-        usuarioLogado.instituicao == "0" ) {
+    // Acesso à página do caso. 
+    // Apenas trabalhadores: do órgão que encaminhou o caso, 
+    //                       da DPOP,
+    //                       Gestores internos
+    //                       root
+    if( cache_CasoEmVisualizacao.id_orgao_encaminhador == usuarioLogado.instituicao || // do órgão que encaminhou o caso
+        usuarioLogado.tipo == "1" ||  // DPOP
+        usuarioLogado.tipo == "2" ||  // Gestores internos
+        usuarioLogado.tipo == "0" ) { // root
 
       // Exibe os dados do cidadão + situação do benefício na página de visualização de caso
       document.getElementById( "nome_referenciaFamiliarInput" ).value = cache_CasoEmVisualizacao.referencia_familiar;
@@ -87,14 +89,13 @@
         
       // Mostra os campos referentes à data limite
       // apenas para situação == Convocado para Acesso
-      // e apenas para trabalhadores técnicas da DPOP
+      // e apenas para trabalhadores da DPOP
       if( cache_CasoEmVisualizacao.id_situacao_beneficio == "3" && 
-          usuarioLogado.instituicao == "0") {
+          usuarioLogado.tipo == "1" ) {
 
         visualizarDataLimite( cache_CasoEmVisualizacao );
 
       }
-
 
       // Exibe os dados do órgão encaminhador na página de visualização de caso        
       document.getElementById( "nome_orgaoEncaminhadorInput" ).value  = idToNomeFE( cache_CasoEmVisualizacao.id_orgao_encaminhador, "ORGAOS_ENCAMINHADORES" );
@@ -124,14 +125,21 @@
       }// Fim if campos visíveis apenas para fila nova
       
 
-      // Mostra o botão para adicionar serviço de referência e as vistorias do caso
-      // apenas para as técnicas da DPOP
-      // if( usuarioLogado.instituicao == "0") {      
-      document.getElementById("adicionarServicoReferencia").style.display = "";
-      document.getElementById("select_adicionarServicoReferencia").style.display  =  "";
-      document.getElementById("bt_adicionarServicoReferencia").style.display  =  "";        
-      visualizarVistoriasCaso( cache_CasoEmVisualizacao );                
-      // }
+      // Mostra o botão para adicionar serviço de referência
+      // Apenas trabalhadores: do órgão que encaminhou o cidadão, 
+      //                       da DPOP 
+      if( cache_CasoEmVisualizacao.id_orgao_encaminhador == usuarioLogado.instituicao ||
+          usuarioLogado.tipo == "1" ) {      
+
+        document.getElementById("adicionarServicoReferencia").style.display = "";
+        document.getElementById("select_adicionarServicoReferencia").style.display  =  "";
+        document.getElementById("bt_adicionarServicoReferencia").style.display  =  "";                
+      }
+
+
+      // Mostra as vistorias do caso      
+      visualizarVistoriasCaso( cache_CasoEmVisualizacao );  
+
 
     } else {
       // Exibe modal de erro caso o usuário tente acessar um caso que não pertence à sua instituição

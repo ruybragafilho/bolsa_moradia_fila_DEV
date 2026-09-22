@@ -63,9 +63,14 @@
                               gerarTabelaResumosCasos(cache_TabelaCasos);   
                               gerarTabelaResumosCasosAntigos( cache_TabelaCasosAntigos );
                               
-                              // Gera os gráficos
-                              contabilizarDados();
-                              gerarGraficos();
+                              // Gera gráficos e relatórios apenas para root, DPOP e gestores internos
+                              if( usuarioLogado.tipo == "0"  ||  // root
+                                  usuarioLogado.tipo == "1"  ||  // dpop
+                                  usuarioLogado.tipo == "2" ) {  // gestores internos    
+                          
+                                contabilizarDados();
+                                gerarGraficos();
+                              }
 
                               // Mostra o modal de questionários pendentes                              
                               mostrarModalQuestionariosPendentes();
