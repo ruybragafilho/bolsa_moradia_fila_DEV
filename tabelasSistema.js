@@ -186,6 +186,44 @@ function obterTabelaCompleta( nomeTabela ) {
 
 
 /**
+ * Função que retorna todas as tabelas de códigos do sistema
+ * 
+ * @return Um objeto com todas as tabelas de códigos do sistema
+ */
+function obterTabelasCodigos() {
+  
+  const tabelaRespostasSimples      = obterTabelaCompleta( "RESPOSTAS_SIMPLES" );
+  const tabelaOrgaosEncaminhadores  = obterTabelaCompleta( "ORGAOS_ENCAMINHADORES" );
+  const tabelaSituacoesBeneficio    = obterTabelaCompleta( "SITUACOES_BENEFICIO" );   
+  const tabelaSituacoesVistoria     = obterTabelaCompleta( "SITUACOES_VISTORIA" );
+  const tabelaIntervalosDeTempo     = obterTabelaCompleta( "INTERVALOS_DE_TEMPO" );
+  const tabelaIdentidadesDeGenero   = obterTabelaCompleta( "IDENTIDADES_DE_GENERO" );
+  const tabelaOrientacoesSexuais    = obterTabelaCompleta( "ORIENTACOES_SEXUAIS" );
+  const tabelaParametros            = obterTabelaCompleta( "PARAMETROS" );
+  const tabelaPerfis                = obterTabelaCompleta( "PERFIS" );      
+  
+
+  const tabelas = {
+
+    tabelaRespostasSimples: tabelaRespostasSimples,
+    tabelaOrgaosEncaminhadores: tabelaOrgaosEncaminhadores,
+    tabelaSituacoesBeneficio: tabelaSituacoesBeneficio,
+    tabelaSituacoesVistoria: tabelaSituacoesVistoria,
+    tabelaIntervalosDeTempo: tabelaIntervalosDeTempo,
+    tabelaIdentidadesDeGenero: tabelaIdentidadesDeGenero,
+    tabelaOrientacoesSexuais: tabelaOrientacoesSexuais,
+    tabelaParametros: tabelaParametros,
+    tabelaPerfis: tabelaPerfis
+
+  };
+
+  return JSON.stringify( tabelas );     
+
+} // Fim da função obterTabelasCodigos
+
+
+
+/**
  * Função que recebe um id e o nome da tabela a qual o id se refere, 
  * e retorna o nome relacionado ao ID. 
  */
@@ -292,33 +330,32 @@ function idToNome( id, nomeTabela ) {
 
 
 
-
-  /**
-   * Função que recebe o id do usuario e retorna seu e-mail   
-   */
-  function emailUsuario( idUsuario ) {
+/**
+ * Função que recebe o id do usuario e retorna seu e-mail   
+ */
+function emailUsuario( idUsuario ) {
     
-    // Validação de parâmetros da função
+  // Validação de parâmetros da função
     
-    if( !isStringValidBE(idUsuario) ) {
-      return "";
-    } 
+  if( !isStringValidBE(idUsuario) ) {
+    return "";
+  } 
    
-    // Converte o idUsuario para Integer
-    const idItem = parseInt(idUsuario);
-    if( !isIntegerValidBE(idItem) ) {
-      throw( new Error( "emailUsuario - ID Inválido: " + idItem ) );      
-    }
+  // Converte o idUsuario para Integer
+  const idItem = parseInt(idUsuario);
+  if( !isIntegerValidBE(idItem) ) {
+    throw( new Error( "emailUsuario - ID Inválido: " + idItem ) );      
+  }
   
-    // Se id está fora dos limites inferior ou superior, lança uma exceção
-    if( idItem < 1  ||  idItem > NUM_USUARIOS ) {
-      throw( new Error( "emailUsuario - ID inválido" ) );      
-    }
+  // Se id está fora dos limites inferior ou superior, lança uma exceção
+  if( idItem < 1  ||  idItem > NUM_USUARIOS ) {
+    throw( new Error( "emailUsuario - ID inválido" ) );      
+  }
   
-    // Retorna o nome referente ao ID
-    return BUFFER_USUARIOS[idItem-1][EMAIL];    
+  // Retorna o nome referente ao ID
+  return BUFFER_USUARIOS[idItem-1][EMAIL];    
   
-  } // Fim da função emailUsuario
+} // Fim da função emailUsuario
 
 
 

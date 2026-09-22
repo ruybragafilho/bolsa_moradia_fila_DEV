@@ -557,8 +557,9 @@
 
       console.log( "redirecionarParaTelaResumosDosCasos - RECARREGAR == 1" );
       // Sinaliza que a tabela de casos ainda não está na cache
-      flagCache_TabelaCasos = 0;
+      flagCache_TabelasCasos = false;
       cache_TabelaCasos = [];
+      cache_TabelaCasosAntigos = [];
 
       google.script.run
                    .withSuccessHandler( f => {
@@ -578,8 +579,7 @@
                      numCasosAntigos = cache_TabelaCasosAntigos.length;
 
                      // Sinaliza que as tabelas de casos já estão na cache
-                     flagCache_TabelaCasos = 1;
-                     flagCache_TabelaCasosAntigos = 1;
+                     flagCache_TabelasCasos = true;                     
 
                      // Aponta as filas filtradas para as filas carregadas do servidor
                      casosFiltrados = cache_TabelaCasos;
