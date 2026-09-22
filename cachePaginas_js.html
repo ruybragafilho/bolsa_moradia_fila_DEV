@@ -23,26 +23,7 @@
   // Flags que indicam se as páginas foram carregadas no cache de páginas
   //    0: ainda não foi carregada
   //    1: já foi carregada
-  let flagCache_PaginaResumosDosCasos = 0;
-  let flagCache_PaginaVisualizarCaso  = 0;
-
-
-
-  /**
-  * Função que pré carrega todas as páginas do sistema para o cache de páginas do frontend
-  */  
-  function preCarregarPaginasNaCache() {
-    
-    try {
-
-      carregarPaginaNaCache( "resumosDosCasos" );
-      carregarPaginaNaCache( "visualizarCaso" );    
-
-    } catch( error ) {
-      throw( "preCarregarPaginasNaCache: " + error.message );
-    }
-
-  } // Fim da função preCarregarPaginasNaCache
+  let flagCache_Paginas = false;
 
 
 
@@ -52,58 +33,38 @@
   */  
   function paginasCarregadasNaCache() {
     
-    if( flagCache_PaginaResumosDosCasos && 
-        flagCache_PaginaVisualizarCaso )  {
-
-      return true;
-      
-    } else {
-      return false;
-    }
+    return flagCache_Paginas;
 
   } // Fim da função paginasCarregadasNaCache  
 
 
 
   /**
-  * Função que carrega uma página do sistema para o cache de páginas do front end
-  *
-  * @param {String} nomePagina - Nome da página que será carregada   
-  */
-  function carregarPaginaNaCache( nomePagina ) {
-
-    if( !isStringValidFE(nomePagina) ) {
-      throw( new Error( "carregarPaginaNaCache - Nome de Página Inválido: " + nomePagina ) ); 
-    }
+  * Função que pré carrega todas as páginas do sistema para o cache de páginas do frontend
+  */  
+  function preCarregarPaginasNaCache() {
 
     google.script.run
-                 .withSuccessHandler( pagina => {                     
+                 .withSuccessHandler( paginasJSON => {                     
 
-                    // Atribui a página carregada ao cache apropriado
-                    switch( nomePagina ) {
+                    const paginas = JSON.parse( paginasJSON );          
+                    
+                    cache_PaginaResumosDosCasos = paginas.paginaResumoDosCasos;
+                    cache_PaginaVisualizarCaso  = paginas.paginaVisualizarCaso;
 
-                      case "resumosDosCasos":   cache_PaginaResumosDosCasos = pagina;
-                                                flagCache_PaginaResumosDosCasos = 1;
-                                                break;                      
-
-                      case "visualizarCaso":    cache_PaginaVisualizarCaso = pagina;
-                                                flagCache_PaginaVisualizarCaso = 1;
-                                                break;   
-
-                      default:                  throw( new Error( "carregarPaginaNaCache - Página Inválida: " + nomePagina ) ); 
-                    }
+                    flagCache_Paginas = true;                    
 
                  })
                  .withFailureHandler( erro => {
 
                    // Mostra modal de erro
-                   mostrarModalErro( "carregarPaginaNaCache - Failure Handler: " + erro.message );
+                   mostrarModalErro( "preCarregarPaginasNaCache - Failure Handler: " + erro.message );
 
                  })
-                 // Chama a função backend para carregar a tabela
-                 .include( nomePagina );                                          
+                 // Chama a função backend para carregar as páginas
+                 .obterPaginas();
 
-  } // Fim da função carregarPaginaNaCache
+  } // Fim da função preCarregarPaginasNaCache
 
   
 </script>
