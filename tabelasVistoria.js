@@ -18,13 +18,19 @@ const TAMANHO_VISTORIAS      =  BUFFER_VISTORIAS.length;
 
 
 // Posições das colunas da planilha VISTORIAS
-const SELO_FK                      =  1;
-const CPF_VISTORIA                 =  4;
-const DATA_SOLICITACAO_VISTORIA    =  7;
-const DATA_VISTORIA                =  8;
-const DATA_LAUDO                   = 10 ;
-const DESCRICAO_LAUDO              = 11;
-const INFORMACAO_COMPLEMENTAR      = 17;
+const SELO_FK                         =  1;
+const CPF_VISTORIA                    =  4;
+const DATA_SOLICITACAO_VISTORIA       =  7;
+const DATA_VISTORIA                   =  8;
+const DATA_LAUDO                      = 10;
+const DESCRICAO_LAUDO                 = 11;
+
+const REPAROS_SIMPLES                 = 13;
+const REPAROS_COMPLEXOS               = 14;
+const MOTIVOS_INVIABILIDADE_TECNICA   = 15;
+const MOTIVOS_VISTORIAS_PREJUDICADAS  = 16;
+
+const INFORMACAO_COMPLEMENTAR         = 17;
 
 
 
@@ -45,6 +51,12 @@ function pesquisarVistoriasPorCPF( cpf ) {
                                                           dataVistoria: v[DATA_VISTORIA],
                                                           dataLaudo: v[DATA_LAUDO],
                                                           descricaoLaudo: v[DESCRICAO_LAUDO],
+
+                                                          reparosSimples: v[REPAROS_SIMPLES],
+                                                          reparosComplexos: v[REPAROS_COMPLEXOS],
+                                                          motivosInviabilidadeTecnica: v[MOTIVOS_INVIABILIDADE_TECNICA],
+                                                          motivosVistoriasPrejudicadas: v[MOTIVOS_VISTORIAS_PREJUDICADAS],
+
                                                           informacaoComplementar: v[INFORMACAO_COMPLEMENTAR] };
                                                });
 
