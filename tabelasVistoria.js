@@ -24,7 +24,7 @@ const DATA_SOLICITACAO_VISTORIA    =  7;
 const DATA_VISTORIA                =  8;
 const DATA_LAUDO                   = 10 ;
 const DESCRICAO_LAUDO              = 11;
-const INFORMACAO_COMPLEMENTAR      = 13;
+const INFORMACAO_COMPLEMENTAR      = 17;
 
 
 
